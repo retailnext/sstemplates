@@ -29,7 +29,7 @@ public class TranslatorFactory
 
 //------------------------------------------------------------------------------
 
-  Translator getServerTranslator( ASTranslator astranslator, Object serverObject )
+  Translator getTranslatorToActionScript( ASTranslator astranslator, Object serverObject )
   {
 
     Translator translator = null;
@@ -77,7 +77,7 @@ public class TranslatorFactory
 
 //------------------------------------------------------------------------------
 
-  Translator getClientTranslator( ASTranslator astranslator, Object clientObject )
+  Translator getTranslatorFromActionScript( ASTranslator astranslator, Object clientObject )
   {
 
     Translator translator = null;

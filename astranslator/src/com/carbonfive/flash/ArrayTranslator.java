@@ -15,7 +15,7 @@ public class ArrayTranslator
   public Object translateToActionScript( Object serverObject )
   {
     List serverObjectAsList = Arrays.asList( (Object[]) serverObject );
-    Translator translator   = TranslatorFactory.getInstance().getServerTranslator( getASTranslator(), serverObjectAsList );
+    Translator translator   = TranslatorFactory.getInstance().getTranslatorToActionScript( getASTranslator(), serverObjectAsList );
     
     return translator.translateToActionScript( serverObjectAsList );
   }
