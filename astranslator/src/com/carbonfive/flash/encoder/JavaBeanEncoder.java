@@ -54,7 +54,9 @@ public class JavaBeanEncoder
       attributeName  = attributes[i].getName();
       getter  = attributes[i].getReadMethod();
 
-      if ( getter == null )  continue;
+      if ( getter == null ) continue;
+
+      if ( ctx.getFilter().doIgnoreClass(getter.getReturnType()) ) continue;
 
       try
       {

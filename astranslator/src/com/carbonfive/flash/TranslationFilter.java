@@ -77,6 +77,8 @@ public class TranslationFilter
    */
   public boolean doIgnoreClass(Class klass)
   {
+    if (klass == null) return false;
+
     boolean doIgnore = ignoreClasses.contains(klass);
 
     if (Object.class.equals(klass)) return doIgnore;
@@ -93,6 +95,8 @@ public class TranslationFilter
    */
   public boolean doIgnoreProperty(Class klass, String property)
   {
+    if (klass == null) return false;
+
     boolean doIgnore = false;
     if (ignoreProperties.containsKey(klass)) doIgnore = ((Set) ignoreProperties.get(klass)).contains(property);
 
