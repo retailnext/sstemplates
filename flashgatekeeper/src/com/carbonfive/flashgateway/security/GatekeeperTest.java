@@ -1,9 +1,8 @@
 package com.carbonfive.flashgateway.security;
 
-import java.io.*;
+import java.security.*;
 import javax.servlet.http.*;
 import junit.framework.*;
-import org.apache.cactus.*;
 import org.apache.commons.logging.*;
 import com.carbonfive.flashgateway.security.*;
 import com.carbonfive.flashgateway.security.config.*;
@@ -12,8 +11,6 @@ public class GatekeeperTest
   extends TestCase
 {
   private static final Log log = LogFactory.getLog(GatekeeperTest.class);
-
-  private SettableRoleRequest request;
 
   public GatekeeperTest(String name)
   {
@@ -28,38 +25,56 @@ public class GatekeeperTest
 
   protected void setUp() throws Exception
   {
-    request = new SettableRoleRequest();
   }
 
   protected void tearDown() throws Exception{}
 
   public void testMethodAccess()
   {
+    SettableRoleRequest request = new SettableRoleRequest();
+
     Gatekeeper gatekeeper = new Gatekeeper();
     Config config = new Config();
     gatekeeper.setConfig(config);
 
-    ServiceConfig service = new ServiceConfig();
-    service.setName("testService");
-    config.getServices().add(service);
+    Service service = new Service();
+    service.setName("com");
+    config.addService(service);
 
-    assertTrue(gatekeeper.canInvoke(request, "testService", "anyMethod"));
+    assertTrue(! gatekeeper.canInvoke(request, "com.testService", "anyMethod"));
 
-    MethodConfig method = new MethodConfig();
+    Method anyMethod = new Method();
+    anyMethod.setName("*");
+    service.addMethod(anyMethod);
+
+    assertTrue(gatekeeper.canInvoke(request, "com.testService", "anyMethod"));
+
+    service.setName("com.testService");
+
+    assertTrue(gatekeeper.canInvoke(request, "com.testService", "anyMethod"));
+
+    service.getMethods().clear();
+
+    Method method = new Method();
     method.setName("testMethod");
-    service.getMethods().add(method);
+    service.addMethod(method);
 
-    assertTrue(! gatekeeper.canInvoke(request, "testService", "anyMethod"));
-    assertTrue(gatekeeper.canInvoke(request, "testService", "testMethod"));
+    assertTrue(! gatekeeper.canInvoke(request, "com.testService", "anyMethod"));
+    assertTrue(gatekeeper.canInvoke(request, "com.testService", "testMethod"));
 
-    method.setConstraint(new AccessConstraintConfig());
-    method.getConstraint().getRoleNames().add("testRole");
+    method.setConstraint(new AccessConstraint());
+    method.getConstraint().getRoleNames().add("oneRole");
+    method.getConstraint().getRoleNames().add("twoRole");
 
-    assertTrue(! gatekeeper.canInvoke(request, "testService", "testMethod"));
+    assertTrue(! gatekeeper.canInvoke(request, "com.testService", "testMethod"));
 
-    request.setRoleName("testRole");
+    request.setRoleName("oneRole");
 
-    assertTrue(gatekeeper.canInvoke(request, "testService", "testMethod"));
+    assertTrue(gatekeeper.canInvoke(request, "com.testService", "testMethod"));
+
+    request.setRoleName("twoRole");
+
+    assertTrue(gatekeeper.canInvoke(request, "com.testService", "testMethod"));
   }
 
   private class SettableRoleRequest
@@ -80,6 +95,11 @@ public class GatekeeperTest
     public boolean isUserInRole(String roleName)
     {
       return roleName.equals(getRoleName());
+    }
+
+    public Principal getUserPrincipal()
+    {
+      return null;
     }
 
     public String getRoleName()

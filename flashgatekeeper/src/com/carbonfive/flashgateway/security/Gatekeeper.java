@@ -3,9 +3,15 @@ package com.carbonfive.flashgateway.security;
 import java.util.*;
 import javax.servlet.http.*;
 import com.carbonfive.flashgateway.security.config.*;
+import org.apache.commons.logging.*;
 
+/**
+ * Gatekeeper enforces service invocation rules based on the FlashGatekeeper configuration.
+ */
 public class Gatekeeper
 {
+  private static Log log = LogFactory.getLog(Gatekeeper.class.getName());
+
   private Config config;
 
   public Config getConfig()
@@ -20,12 +26,16 @@ public class Gatekeeper
 
   public boolean canInvoke(HttpServletRequest request, String serviceName, String methodName)
   {
-    ServiceConfig service = config.getService(serviceName);
+    if (log.isDebugEnabled())
+    {
+      log.debug("Checking access for service " + serviceName + ", method" + methodName
+                + " by user principal " + request.getUserPrincipal());
+    }
+
+    Service service = config.getService(serviceName);
     if (service == null) return false;
 
-    if (service.getMethods().isEmpty()) return true;
-
-    MethodConfig method = service.getMethod(methodName);
+    Method method = service.getMethod(methodName);
     if (method == null) return false;
 
     if (method.getConstraint() == null) return true;
@@ -33,7 +43,7 @@ public class Gatekeeper
     return userIsInRole(request, method.getConstraint());
   }
 
-  private boolean userIsInRole(HttpServletRequest request, AccessConstraintConfig constraint)
+  private boolean userIsInRole(HttpServletRequest request, AccessConstraint constraint)
   {
     for (Iterator i = constraint.getRoleNames().iterator(); i.hasNext(); )
     {

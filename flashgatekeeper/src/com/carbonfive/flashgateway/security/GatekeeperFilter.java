@@ -7,6 +7,7 @@ import javax.servlet.http.*;
 import javax.servlet.*;
 import org.apache.commons.logging.*;
 import com.carbonfive.flashgateway.security.*;
+import com.carbonfive.flashgateway.security.config.*;
 import flashgateway.action.message.*;
 import flashgateway.*;
 import flashgateway.io.*;
@@ -18,103 +19,37 @@ import flashgateway.io.*;
  * Flash Remoting MX for J2EE. GatekeeperFilter uses classes in the Flash
  * Remoting distribution to parse AMF messages.
  * <p>
- * GatekeeperFilter only allows AMF messages that are trying to invoke
- * a configured list of services to get to the Flash Remoting gateway.
- * Map this filter in your web.xml to the same URL as the Flash Remoting
- * GatewayServlet.
- * <p>
- * If it encounters an AMF request that it not allowed, it logs a warning
- * with the full details of the service request and returns a <b>403 Forbidden</b>
- * status to the client.
- * <p>
- * Configure GatekeeperFilter with a properties file that lists the services
- * that is should allow through. It looks for the properties file in its
- * classpath.
- *
- * <pre class="code">
- * &lt;filter>
- *   &lt;filter-name>GatekeeperFilter&lt;/filter-name>
- *   &lt;filter-class>com.carbonfive.flashgateway.security.GatekeeperFilter&lt;/filter-class>
- *   &lt;init-param>
- *     &lt;param-name>properties-file&lt;/param-name>
- *     &lt;param-value>remotingservices.properties&lt;/param-value>
- *   &lt;/init-param>
- * &lt;/filter>
- *
- * &lt;filter-mapping>
- *   &lt;filter-name>GatekeeperFilter&lt;/filter-name>
- *     &lt;url-pattern>/gateway&lt;/url-pattern>
- * &lt;/filter-mapping>
- * </pre>
- *
- * Put each allowed service on a new line in the properties file.
- * You may list a package name instead of a class or a JNDI context
- * instead of an object in JNDI. GatekeeperFilter only allows services
- * to be invoked whose name starts with one of the values in the
- * properties file.
- * <p>
- * A sample <i>remotingservices.properties</i> properties file:
- * <pre class="code">
- * com.carbonfive.flashservices
- * com.carbonfive.util.SampleFlashService
- * java\:comp/env/ejb
- * </pre>
- * This properties file allows only services in or below the package
- * <tt>com.carbonfive.flashservices</tt>, the service implementation
- * <tt>com.carbonfive.util.SampleFlashService</tt> and any EJB
- * services in JNDI under <tt>java:comp/env/ejb</tt>.
+ * GatekeeperFilter relies on Gatekeeper to determine if a particular service
+ * invocation is allowed.
  *
  * @web.filter name="GatekeeperFilter"
  * @web.filter-mapping url-pattern="/gateway"
- * @web.filter-init-param name="properties-file"
- *                        value="remotingservices.properties"
+ * @web.filter-init-param name="config-file"
+ *                        value="flashgatekeeper.xml"
  */
 public class GatekeeperFilter
   implements Filter
 {
   private static Log log = LogFactory.getLog(GatekeeperFilter.class.getName());
 
-  Collection serviceNames;
+  Gatekeeper gatekeeper;
 
   public void init(FilterConfig config)
       throws ServletException
   {
-    String file  = config.getInitParameter("properties-file");
-    if (file == null) throw new ServletException("init-param \"properties-file\" is required");
+    String file  = config.getInitParameter("config-file");
+    if (file == null) throw new ServletException("init-param \"config-file\" is required");
     try
     {
-      Properties services = new Properties();
-      services.load(getClass().getClassLoader().getResource(file).openStream());
-
-      serviceNames = getServiceNames(services);
-      log.info("Loaded permitted services from " + file + ": " + serviceNames);
+      gatekeeper = new Gatekeeper();
+      gatekeeper.setConfig(ConfigDigester.digest(file));
+      log.info("Loaded gatekeeper config from " + file + ": " + gatekeeper.getConfig());
     }
     catch (Exception e)
     {
-      log.error("error trying to load service names from " + file, e);
-      throw new ServletException("error trying to load service names from " + file, e);
+      log.error("error trying to load gatekeeper config from " + file, e);
+      throw new ServletException("error trying to load gatekeeper config from " + file, e);
     }
-  }
-
-  private Collection getServiceNames(Properties properties)
-  {
-    HashSet names = new HashSet();
-    for (Enumeration e = properties.propertyNames(); e.hasMoreElements(); )
-    {
-      names.add(e.nextElement());
-    }
-    return names;
-  }
-
-  private boolean isNamedService(String name)
-  {
-    if (name == null) return false;
-
-    for (Iterator i = serviceNames.iterator(); i.hasNext(); )
-    {
-      if (name.startsWith((String) i.next())) return true;
-    }
-    return false;
   }
 
   public void destroy() { }
@@ -135,9 +70,10 @@ public class GatekeeperFilter
       for (Iterator bodies = requestMessage.getBodies().iterator(); bodies.hasNext();)
       {
         MessageBody requestBody = (MessageBody) bodies.next();
-        String serviceName = requestBody.getTargetURI();
-        if (log.isDebugEnabled()) log.debug("Service invocation: " + serviceName);
-        if (!isNamedService(serviceName))
+        if (log.isDebugEnabled()) log.debug("Service invocation: " + requestBody.getTargetURI());
+        String serviceName = requestBody.getTargetURI().substring(0, requestBody.getTargetURI().lastIndexOf("."));
+        String methodName  = requestBody.getTargetURI().substring(requestBody.getTargetURI().lastIndexOf(".") + 1);
+        if (!gatekeeper.canInvoke((HttpServletRequest) request, serviceName, methodName))
         {
           String msg = serviceName + " is not a permitted service.\n"
                        + "Request Details: " + getRequestDetails(request);

@@ -1,19 +1,42 @@
 <config>
   <service>
-    <name>ServiceName</name>
+    <name>com.carbonfive.AllowAllService</name>
     <method>
-      <name>methodName</name>
+      <name>*</name>
+    </method>
+  </service>
+  <service>
+    <name>com.carbonfive.RestrictedService</name>
+    <method>
+      <name>allowAllMethod</name>
+    </method>
+    <method>
+      <name>restrictedMethod</name>
       <access-constraint>
         <role-name>ADMIN</role-name>
-        <role-name>GUEST</role-name>
+        <role-name>MANAGER</role-name>
       </access-constraint>
     </method>
+  </service>
+  <service>
+    <name>com.carbonfive.services</name>
     <method>
       <name>*</name>
       <access-constraint>
-        <role-name>ADMIN</role-name>
-        <role-name>GUEST</role-name>
+        <role-name>USER</role-name>
       </access-constraint>
+    </method>
+  </service>
+  <service>
+    <name>webapp</name>
+    <method>
+      <name>*</name>
+    </method>
+  </service>
+  <service>
+    <name>java:comp/env/ejb</name>
+    <method>
+      <name>*</name>
     </method>
   </service>
 </config>
