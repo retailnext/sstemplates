@@ -39,6 +39,7 @@ public class LoopFinder
    */
   public void add(Class klass)
   {
+    if (klass == null) return;
     if (ignore(klass)) return;
 
     int distance = buffer.indexOf(klass);
