@@ -78,4 +78,27 @@ public class ArrayDecoderTest
     assertEquals(int1, array[0]);
     assertEquals(int2, array[1]);
   }
+
+  public void testArrayListToIntArrayDecode()
+  {
+    ArrayList list = new ArrayList();
+    Double  dbl1 = new Double(1);
+    Double  dbl2 = new Double(2);
+    list.add(dbl1);
+    list.add(dbl2);
+
+    Class arrayClass = new int[2].getClass();
+
+    ActionScriptDecoder decoder = factory.getDecoder(list, arrayClass);
+    assertNotNull(decoder);
+
+    Object decodedObject = decoder.decodeObject(list, arrayClass);
+    assertTrue(decodedObject instanceof int[]);
+
+    int[] array = (int[]) decodedObject;
+    assertNotNull(array);
+    assertEquals(2, array.length);
+    assertEquals(1, array[0]);
+    assertEquals(2, array[1]);
+  }
 }

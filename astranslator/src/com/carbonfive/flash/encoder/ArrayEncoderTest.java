@@ -73,4 +73,21 @@ public class ArrayEncoderTest
     assertEquals(dbl1, list.get(0));
     assertEquals(dbl2, list.get(1));
   }
+
+  public void testIntArrayToArrayListEncode() throws Exception
+  {
+    int[] array = new int[] { 1, 2, 3 };
+    ActionScriptEncoder encoder = factory.getEncoder(Context.getBaseContext(), array);
+    assertNotNull(encoder);
+
+    Object encodedObject = encoder.encodeObject(Context.getBaseContext(), array);
+    assertNotNull(encodedObject);
+    assertTrue(encodedObject instanceof ArrayList);
+
+    ArrayList list = (ArrayList) encodedObject;
+    assertEquals(3, list.size());
+    assertEquals(new Double(1), list.get(0));
+    assertEquals(new Double(2), list.get(1));
+    assertEquals(new Double(3), list.get(2));
+  }
 }
