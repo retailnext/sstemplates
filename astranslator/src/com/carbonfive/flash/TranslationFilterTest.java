@@ -1,6 +1,8 @@
 package com.carbonfive.flash;
 
 import junit.framework.*;
+import com.carbonfive.flash.test.*;
+import com.carbonfive.flash.test.TestBean;
 
 public class TranslationFilterTest
   extends    TestCase

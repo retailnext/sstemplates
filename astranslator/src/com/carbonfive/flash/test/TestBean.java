@@ -1,4 +1,4 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.test;
 
 import java.io.*;
 

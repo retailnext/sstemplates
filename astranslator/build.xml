@@ -88,6 +88,26 @@
       <batchtest fork="yes">
         <fileset dir="${src}">
           <include name="**/*Test.java" />
+          <exclude name="com/carbonfive/flash/test/LoadTest.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="loadtest" depends="compile">
+    <junit printsummary="withOutAndErr" haltonfailure="yes" haltonerror="yes">
+
+      <sysproperty key="log4j.debug" value="false"/>
+      <sysproperty key="log4j.configuration" value="log4j-junit.properties"/>
+
+      <classpath>
+        <pathelement location="${build}"/>
+        <path refid="build.class.path"/>
+      </classpath>
+      <formatter type="plain" usefile="false"/>
+      <batchtest fork="yes">
+        <fileset dir="${src}">
+          <include name="com/carbonfive/flash/test/LoadTest.java"/>
         </fileset>
       </batchtest>
     </junit>

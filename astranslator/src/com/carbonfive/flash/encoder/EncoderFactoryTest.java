@@ -5,6 +5,7 @@ import java.math.*;
 import junit.framework.*;
 import com.carbonfive.flash.encoder.*;
 import com.carbonfive.flash.*;
+import com.carbonfive.flash.test.*;
 
 public class EncoderFactoryTest
   extends    TestCase

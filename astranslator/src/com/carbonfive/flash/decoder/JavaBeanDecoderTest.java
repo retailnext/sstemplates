@@ -2,7 +2,7 @@ package com.carbonfive.flash.decoder;
 
 import junit.framework.*;
 import flashgateway.io.ASObject;
-import com.carbonfive.flash.*;
+import com.carbonfive.flash.test.*;
 
 public class JavaBeanDecoderTest
   extends    TestCase
@@ -37,24 +37,24 @@ public class JavaBeanDecoderTest
   public void testJavaBeanDecode()
     throws Exception
   {
-    TestBean bean = TestBean.getTestBean(); // gets a filled in TestBean
+    TestBean bean = com.carbonfive.flash.test.TestBean.getTestBean(); // gets a filled in TestBean
 
     ASObject aso = new ASObject();
-    aso.setType(TestBean.class.getName());
+    aso.setType(com.carbonfive.flash.test.TestBean.class.getName());
     aso.put("intField", new Double(bean.getIntField()));
     aso.put("shortField", new Double(bean.getShortField()));
     aso.put("longField", new Double(bean.getLongField()));
     aso.put("doubleField", new Double(bean.getDoubleField()));
     aso.put("strField", bean.getStrField());
 
-    ActionScriptDecoder decoder = factory.getDecoder(aso, TestBean.class);
+    ActionScriptDecoder decoder = factory.getDecoder(aso, com.carbonfive.flash.test.TestBean.class);
     assertNotNull(decoder);
 
-    Object decodedObject = decoder.decodeObject(aso, TestBean.class);
+    Object decodedObject = decoder.decodeObject(aso, com.carbonfive.flash.test.TestBean.class);
     assertNotNull(decodedObject);
-    assertTrue(decodedObject instanceof TestBean);
+    assertTrue(decodedObject instanceof com.carbonfive.flash.test.TestBean);
 
-    TestBean decodedBean = (TestBean) decodedObject;
+    com.carbonfive.flash.test.TestBean decodedBean = (com.carbonfive.flash.test.TestBean) decodedObject;
     assertEquals(bean.getIntField(), decodedBean.getIntField());
     assertEquals(bean.getShortField(), decodedBean.getShortField());
     assertEquals(bean.getLongField(), decodedBean.getLongField());

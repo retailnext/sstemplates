@@ -4,7 +4,7 @@ import java.util.*;
 import java.math.*;
 import junit.framework.*;
 import flashgateway.io.ASObject;
-import com.carbonfive.flash.*;
+import com.carbonfive.flash.test.*;
 
 public class DecoderFactoryTest
   extends    TestCase
@@ -71,7 +71,7 @@ public class DecoderFactoryTest
     ASObject aso = new ASObject();
     aso.setType(TestBean.class.getName());
 
-    validate(aso, TestBean.class, JavaBeanDecoder.class);
+    validate(aso, com.carbonfive.flash.test.TestBean.class, JavaBeanDecoder.class);
   }
 
   private void validate(Object obj, Class desiredClass, Class decoderClass)

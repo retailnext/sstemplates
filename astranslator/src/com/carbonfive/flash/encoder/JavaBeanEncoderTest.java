@@ -4,6 +4,7 @@ import junit.framework.*;
 import flashgateway.io.ASObject;
 import com.carbonfive.flash.encoder.*;
 import com.carbonfive.flash.*;
+import com.carbonfive.flash.test.*;
 
 public class JavaBeanEncoderTest
   extends    TestCase
@@ -38,7 +39,7 @@ public class JavaBeanEncoderTest
   public void testJavaBeanDecode()
     throws Exception
   {
-    TestBean bean = TestBean.getTestBean(); // gets a filled in TestBean
+    com.carbonfive.flash.test.TestBean bean = com.carbonfive.flash.test.TestBean.getTestBean(); // gets a filled in TestBean
 
     ActionScriptEncoder encoder = factory.getEncoder(Context.getBaseContext(), bean);
     assertNotNull(encoder);
@@ -64,7 +65,7 @@ public class JavaBeanEncoderTest
 
   public void testNoObjectProperties() throws Exception
   {
-    TestBean bean = TestBean.getTestBean();
+    com.carbonfive.flash.test.TestBean bean = TestBean.getTestBean();
 
     ActionScriptEncoder encoder = factory.getEncoder(Context.getBaseContext(), bean);
     assertNotNull(encoder);

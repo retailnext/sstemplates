@@ -5,6 +5,8 @@ import java.io.*;
 import org.apache.commons.logging.*;
 import junit.framework.*;
 import flashgateway.io.ASObject;
+import com.carbonfive.flash.test.*;
+import com.carbonfive.flash.test.TestBean;
 
 public class ASTranslatorTest
   extends    TestCase
