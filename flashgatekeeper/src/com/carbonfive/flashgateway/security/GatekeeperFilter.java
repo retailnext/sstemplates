@@ -5,18 +5,18 @@ import java.util.*;
 import java.util.Date;
 import javax.servlet.http.*;
 import javax.servlet.*;
-import org.openamf.io.*;
-import org.openamf.*;
 import org.apache.commons.logging.*;
 import com.carbonfive.flashgateway.security.*;
+import flashgateway.action.message.*;
+import flashgateway.*;
+import flashgateway.io.*;
 
 /**
  * GatekeeperFilter is a standard Servlet 2.3 Filter that is designed
  * to inspect the AMF messsage sent by a Flash MX client when trying
  * to invoke a service in the servlet container through Macromedia
- * Flash Remoting MX for J2EE. GatekeeperFilter uses the
- * <a target="_new" href="http://www.openamf.org">openAMF</a>
- * library to parse AMF messages.
+ * Flash Remoting MX for J2EE. GatekeeperFilter uses classes in the Flash
+ * Remoting distribution to parse AMF messages.
  * <p>
  * GatekeeperFilter only allows AMF messages that are trying to invoke
  * a configured list of services to get to the Flash Remoting gateway.
@@ -129,16 +129,17 @@ public class GatekeeperFilter
 
     try
     {
-      AMFDeserializer des = new AMFDeserializer(new DataInputStream(buffered));
-      AMFMessage requestMessage = des.getAMFMessage();
-      for (Iterator bodies = requestMessage.getBodies(); bodies.hasNext();)
+      MessageDeserializer des = new MessageDeserializer(GatewayConstants.SERVER_J2EE);
+      des.setInputStream(buffered);
+      ActionMessage requestMessage = des.readMessage();
+      for (Iterator bodies = requestMessage.getBodies().iterator(); bodies.hasNext();)
       {
-        AMFBody requestBody = (AMFBody) bodies.next();
-        ServiceRequest serviceRequest = new ServiceRequest(requestBody);
-        if (log.isDebugEnabled()) log.debug("Service: " + serviceRequest.getServiceName());
-        if (!isNamedService(serviceRequest.getServiceName()))
+        MessageBody requestBody = (MessageBody) bodies.next();
+        String serviceName = requestBody.getTargetURI();
+        if (log.isDebugEnabled()) log.debug("Service invocation: " + serviceName);
+        if (!isNamedService(serviceName))
         {
-          String msg = serviceRequest.getServiceName() + " is not a permitted service.\n"
+          String msg = serviceName + " is not a permitted service.\n"
                        + "Request Details: " + getRequestDetails(request);
           log.warn(msg);
           ((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, msg);
@@ -148,7 +149,7 @@ public class GatekeeperFilter
     }
     catch (IOException e)
     {
-      log.error("Error inspecting request with openAMF", e);
+      log.error("Error inspecting AMF request", e);
     }
 
     // Reset and move on as if nothing happened

@@ -27,7 +27,7 @@ FlashGatekeeper is supported by <a target="_top" href="http://www.carbonfive.com
 
 <h3><a name="overview">Overview</a></h3>
 
-FlashGatekeeper gives developers the ability to configure the services that can be invoked through Flash Remoting.
+FlashGatekeeper gives developers the ability to limit the services that can be invoked through Flash Remoting.
 
 <p>
 Macromedia Flash Remoting is implemented as a servlet that uses introspection to invoke methods on a class in the application server. The class and method are both named by the Flash client. A Flash MX client can invoke any method through the Flash Remoting gateway on any class that has a no argument constructor and can therefore be created by the Flash Remoting gateway servlet using Class.forName("package.ClassName").newInstance( ). It can also invoke any method on any EJB home interface that it can find in JNDI.
@@ -50,27 +50,44 @@ The latest release of FlashGatekeeper is available for download from <a target="
 
 <h3><a name="prerequisites">Prerequisites</a></h3>
 
+<p>
 If you are not using Flash Remoting, you do not have a need for FlashGatekeeper. Get <a target="_top"  href="http://www.macromedia.com/software/flashremoting/downloads/">Flash Remoting for J2EE from Macromedia.</a>
+</p>
 
 <p>
-FlashGatekeeper also utilizes specific components from other open source project.  These libraries are provided in the distribution, and can be freely used by commercial and non-commercial applications.  More information can be found here:
+FlashGatekeeper uses classes that are part of the Flash Remoting distribution and included in Flash Remoting's flashgateway.jar. Be sure to install Flash Remoting for your application by:
+<ol>
+<li>locating flashgateway.jar in the flashgateway.ear or flashgateway.war file installed by the Macromedia installer
+<li>placing it in your web application's WEB-INF/lib/ directory
+<li>mapping the gateway for your web application by adding the following to your web application's WEB-INF/web.xml file:
+
+<pre class="code">
+  &lt;servlet>
+    &lt;servlet-name>FlashGatewayServlet&lt;/servlet-name>
+    &lt;servlet-class>flashgateway.controller.GatewayServlet&lt;/servlet-class>
+  &lt;/servlet>
+
+  &lt;servlet-mapping>
+    &lt;servlet-name>FlashGatewayServlet&lt;/servlet-name>
+    &lt;url-pattern>/gateway&lt;/url-pattern>
+  &lt;/servlet-mapping>
+</pre>
+</ol> 
+</p>
+
+<p>
+FlashGatekeeper also utilizes specific components from other open source projects.  These libraries are provided in the distribution, and can be freely used by commercial and non-commercial applications.  More information can be found here:
 <ul>
 <li>Jakarta Commons Logging - <a target="_top" href="http://jakarta.apache.org/commons/logging.html">home page</a>
-<li>openAMF - <a target="_top" href="http://www.openamf.org">home page</a>
 </ul>
 
 <h3><a name="install">Install</a></h3>
 
-To install FlashGatekeeper unzip astranslator-x.x.zip and copy the following jars to your web application's WEB-INF/lib/ directory:
+To install FlashGatekeeper unzip flashgatekeeper-x.x.zip and copy the following jars to your web application's WEB-INF/lib/ directory:
 <ul>
 <li>lib/flashgatekeeper-x.x.jar
 <li>lib/commons-logging.jar
-<li>lib/openamf.jar
 </ul>
-
-<p>
-openAMF is a rapidly evolving project. It is a good idea to get the latest distribution of openamf.jar from the openAMF project listed above in <a href="#prerequisites">Prerequisites</a> rather than the version provided with FlashGatekeeper.
-</p>
 
 <p>
 Configure FlashGatekeeper in your application's WEB-INF/web.xml file as a servlet filter mapped to the URL of the Flash Remoting gateway servlet. For example:
@@ -119,7 +136,7 @@ For support, please read and post to the <a target="_top"  href="http://sourcefo
 </p>
 
 <p>
-GatekeeperFilter is a standard Servlet 2.3 Filter that is designed to inspect the AMF messsage sent by a Flash MX client when trying to invoke a service in the servlet container through Macromedia Flash Remoting MX for J2EE. GatekeeperFilter uses the <a target="_new" href="http://www.openamf.org">openAMF</a> library to parse AMF messages.
+GatekeeperFilter is a standard Servlet 2.3 Filter that is designed to inspect the AMF messsage sent by a Flash MX client when trying to invoke a service in the servlet container through Macromedia Flash Remoting MX for J2EE. GatekeeperFilter uses classes included in the Flash Remoting flashgateway.jar distribution to parse and inspect AMF messages sent by the Flash client.
 </p>
 
 <p>
@@ -134,9 +151,6 @@ For those interesting in peeking under the hood or making changes, the <a href="
 <li> <a href="http://www.onjava.com/pub/a/onjava/2003/02/26/flash_remoting.html">Flash Remoting for J2EE Developers</a><br/>
 
 <li> <a href="http://www.macromedia.com/software/flashremoting/">Flash Remoting MX Homepage</a><br/>
-     Macromedia resource.</li>
-
-<li> <a href="http://www.macromedia.com/software/flashremoting/downloads/components/">Download Flash MX Remoting Components</a><br/>
      Macromedia resource.</li>
 
 <li> <a href="http://www.macromedia.com/software/trial_download/">Download Flash Remoting MX</a><br/>
@@ -160,7 +174,6 @@ For those interesting in peeking under the hood or making changes, the <a href="
 
 Alon J Salant, <a href="http://www.carbonfive.com">Carbon Five</a><br>
 Mike Wynholds, <a href="http://www.carbonfive.com">Carbon Five</a><br>
-The openAMF Team, <a href="http://www.openamf.org">www.openamf.org</a><br>
 
 </body>
 </html>
