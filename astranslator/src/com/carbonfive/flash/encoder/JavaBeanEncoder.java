@@ -67,7 +67,7 @@ public class JavaBeanEncoder
 
       encoder = EncoderFactory.getInstance().getEncoder(ctx, attributeValue);
       encodedAttributeValue = encoder.encodeObject(ctx, attributeValue);
-      encoded.put(attributeName, encodedAttributeValue);
+      if (encodedAttributeValue != null) encoded.put(attributeName, encodedAttributeValue);
     }
 
     return encoded;
