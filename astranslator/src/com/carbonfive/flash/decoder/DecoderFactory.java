@@ -3,6 +3,7 @@ package com.carbonfive.flash.decoder;
 import java.util.*;
 import flashgateway.io.ASObject;
 import com.carbonfive.flash.encoder.*;
+import com.carbonfive.flash.*;
 import org.apache.commons.logging.*;
 
 public class DecoderFactory
@@ -29,14 +30,15 @@ public class DecoderFactory
 
   public ActionScriptDecoder getDecoder(Object encodedObject, Class desiredClass)
   {
-    boolean isNativeObject = ( EncoderFactory.isActionScriptNative( encodedObject ) );
+    boolean isNativeObject = ( EncoderFactory.isActionScriptNative( encodedObject ) ||
+                             ( encodedObject instanceof ASObject && ASObject.class.isAssignableFrom(desiredClass) ) );
     boolean isNumber       = ( encodedObject instanceof Number );
     boolean isDate         = ( encodedObject instanceof Date );
     boolean isArray        = ( encodedObject instanceof ArrayList && desiredClass.isArray() );
     boolean isCollection   = ( encodedObject instanceof ArrayList && Collection.class.isAssignableFrom(desiredClass) );
-    boolean isMap          = ( encodedObject instanceof Map       && ! (encodedObject instanceof ASObject) ) ||
-                             ( encodedObject instanceof ASObject  && ((ASObject) encodedObject).getType() == null );
-    boolean isJavaBean     = ( encodedObject instanceof ASObject  && ((ASObject) encodedObject).getType() != null );
+    boolean isMap          = ( encodedObject instanceof Map       && Map.class.isAssignableFrom(desiredClass) &&
+                             ! ASObject.class.isAssignableFrom(desiredClass) );
+    boolean isJavaBean     = ( encodedObject instanceof ASObject  && ! Map.class.isAssignableFrom(desiredClass) );
 
     ActionScriptDecoder decoder = null;
 
@@ -47,8 +49,40 @@ public class DecoderFactory
     else if ( isCollection   ) decoder = new CachingDecoder(collectionDecoder);
     else if ( isMap          ) decoder = new CachingDecoder(mapDecoder);
     else if ( isJavaBean     ) decoder = new CachingDecoder(javaBeanDecoder);
-    else                       decoder = new CachingDecoder(nativeDecoder);
+    else
+    {
+      log.warn("Cannot determine decoder.  Using NativeDecoder: " + encodedObject.getClass().getName() + ", " +
+               desiredClass.getName());
+      decoder = new CachingDecoder(nativeDecoder);
+    }
 
     return decoder;
+  }
+
+  public static Class decideClassToTranslateInto( Object aso ) throws ASTranslationException
+  {
+    Class asoClass = null;
+
+    if (aso instanceof ASObject)
+    {
+      String classOfActionScriptObject = ( (ASObject) aso).getType();
+
+      if (classOfActionScriptObject == null) return Map.class;
+
+      try
+      {
+        asoClass = Thread.currentThread().getContextClassLoader().loadClass(classOfActionScriptObject);
+      }
+      catch ( ClassNotFoundException cnfe )
+      {
+        throw new ASTranslationException( "Unable to find Server-Side Class to match type indicated by ActionScript Object: " + classOfActionScriptObject, cnfe );
+      }
+    }
+    else
+    {
+      asoClass = aso.getClass();
+    }
+
+    return asoClass;
   }
 }

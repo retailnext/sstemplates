@@ -17,7 +17,7 @@ public class MapDecoder
     Map map = null;
     try
     {
-      ClassLoader classLoader = this.getClass().getClassLoader();
+      ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
       if (desiredClass.isInterface()) map = new HashMap();
       else                            map = (Map) Beans.instantiate( classLoader, desiredClass.getName() );
@@ -36,9 +36,10 @@ public class MapDecoder
     if (map == null) return null;
 
     ActionScriptDecoder decoder = null;
-    Object key          = null;
-    Object value        = null;
-    Object decodedValue = null;
+    Object key               = null;
+    Object value             = null;
+    Object decodedValue      = null;
+    Class  decodedValueClass = null;
     for (Iterator keys = ((Map) encodedObject).keySet().iterator(); keys.hasNext(); )
     {
       key   = keys.next();
@@ -46,8 +47,10 @@ public class MapDecoder
 
       if (value == null) { map.put(key, null); continue; }
 
-      decoder = DecoderFactory.getInstance().getDecoder( value, value.getClass() );
-      decodedValue = decoder.decodeObject(value, value.getClass());
+      decodedValueClass = DecoderFactory.decideClassToTranslateInto(value);
+
+      decoder = DecoderFactory.getInstance().getDecoder(value, decodedValueClass);
+      decodedValue = decoder.decodeObject(value, decodedValueClass);
       map.put( key, decodedValue );
     }
     

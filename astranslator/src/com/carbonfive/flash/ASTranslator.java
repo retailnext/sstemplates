@@ -151,7 +151,7 @@ public class ASTranslator
   {
     if (asObject == null) return null;
 
-    Class desiredBeanClass = decideClassToTranslateInto( asObject );
+    Class desiredBeanClass = DecoderFactory.decideClassToTranslateInto( asObject );
     return fromActionScript( asObject, desiredBeanClass );
   }
 
@@ -184,40 +184,5 @@ public class ASTranslator
     }
 
     return result;
-  }
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// p r i v a t e
-//
-////////////////////////////////////////////////////////////////////////////////
-
-  private Class decideClassToTranslateInto( Object aso ) throws ASTranslationException
-  {
-    Class asoClass = null;
-
-    if (aso instanceof ASObject)
-    {
-      String classOfActionScriptObject = ( (ASObject) aso).getType();
-
-      if (classOfActionScriptObject == null) return Map.class;
-
-      try
-      {
-        // asoClass = Class.forName( classOfActionScriptObject );
-        // asoClass = getClass().getClassLoader().loadClass(classOfActionScriptObject);
-        asoClass = Thread.currentThread().getContextClassLoader().loadClass(classOfActionScriptObject);
-      }
-      catch ( ClassNotFoundException cnfe )
-      {
-        throw new ASTranslationException( "Unable to find Server-Side Class to match type indicated by ActionScript Object: " + classOfActionScriptObject, cnfe );
-      }
-    }
-    else
-    {
-      asoClass = aso.getClass();
-    }
-
-    return asoClass;
   }
 }

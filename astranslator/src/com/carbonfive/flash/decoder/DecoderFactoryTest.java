@@ -65,6 +65,13 @@ public class DecoderFactoryTest
     validate(new ASObject(), Hashtable.class, MapDecoder.class);
   }
 
+  public void testHandleASObjectNatively() throws Exception
+  {
+    ASObject aso = new ASObject();
+    aso.setType(ASObject.class.getName());
+    validate(aso, ASObject.class, NativeDecoder.class);
+  }
+
   public void testCreateJavaBeanDecoder() throws Exception
   {
     ASObject aso = new ASObject();

@@ -221,7 +221,8 @@ public class ASTranslatorTest
     assertEquals(3, cbean.getListField().size());
     assertEquals("one", cbean.getListField().get(0));
     assertEquals("two", cbean.getListField().get(1));
-    assertTrue(cbean.getListField().get(2) instanceof TestBean);
+    assertTrue("Should be TestBean: " + cbean.getListField().get(2).getClass().getName(),
+               cbean.getListField().get(2) instanceof TestBean);
 
     TestBean tbean = (TestBean) cbean.getListField().get(2);
     assertEquals("hello", tbean.getStrField());
@@ -229,7 +230,8 @@ public class ASTranslatorTest
 
     assertNotNull(cbean.getMapField());
     assertEquals("there", cbean.getMapField().get("hi"));
-    assertTrue(cbean.getMapField().get("bean") instanceof TestBean);
+    assertTrue("Should be TestBean: " + cbean.getMapField().get("bean").getClass().getName(),
+               cbean.getMapField().get("bean") instanceof TestBean);
 
     tbean = (TestBean) cbean.getMapField().get("bean");
     assertEquals("hello", tbean.getStrField());

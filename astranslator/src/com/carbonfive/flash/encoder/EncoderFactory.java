@@ -78,7 +78,8 @@ public class EncoderFactory
    */
   public static boolean isActionScriptNative(Object obj)
   {
-    if (obj == null)                                                      return false;
+    if (obj == null)                                                      return true;
+    if (Object.class.equals(obj.getClass()))                              return true;
     if (obj instanceof Boolean)                                           return true;
     if (obj instanceof String)                                            return true;
     if (obj instanceof Character)                                         return true;

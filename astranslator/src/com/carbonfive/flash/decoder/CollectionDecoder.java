@@ -3,6 +3,8 @@ package com.carbonfive.flash.decoder;
 import java.util.*;
 import java.beans.*;
 import org.apache.commons.logging.*;
+import flashgateway.io.*;
+import com.carbonfive.flash.*;
 
 /**
  * Decodes an ActionScript list to a Java collection (list or set).
@@ -41,7 +43,8 @@ public class CollectionDecoder
         continue;
       }
 
-      desiredObjClass = ( forceClass == null ? obj.getClass() : forceClass );
+      if (forceClass != null) desiredObjClass = forceClass;
+      else desiredObjClass = DecoderFactory.decideClassToTranslateInto(obj);
 
       decoder = DecoderFactory.getInstance().getDecoder( obj, desiredObjClass );
       decodedObject = decoder.decodeObject(obj, desiredObjClass);

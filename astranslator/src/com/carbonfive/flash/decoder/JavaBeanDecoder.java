@@ -5,7 +5,6 @@ import java.beans.*;
 import flashgateway.io.ASObject;
 import org.apache.commons.beanutils.*;
 import org.apache.commons.logging.*;
-import com.carbonfive.flash.*;
 
 /**
  * Decodes an ActionScript object to a Java object.
@@ -17,17 +16,14 @@ public class JavaBeanDecoder
 
   public Object decodeShell(Object encodedObject, Class desiredClass)
   {
-    ASObject aso  = (ASObject) encodedObject;
-    String   type = aso.getType();
-
     try
     {
-      Object bean = Beans.instantiate(ASTranslator.class.getClassLoader(), type);
+      Object bean = Beans.instantiate(Thread.currentThread().getContextClassLoader(), desiredClass.getName());
       return bean;
     }
     catch (Exception e) // ClassNotFoundException, IOException, IntrospectionException
     {
-      log.warn("Cannot create bean: " + type);
+      log.warn("Cannot create bean: " + desiredClass.getName());
       return null;
     }
   }
