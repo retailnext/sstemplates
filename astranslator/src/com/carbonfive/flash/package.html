@@ -178,7 +178,7 @@ In order for ASTranslator to know what Java object type to convert the ASObject 
 
 <h3><a name="download">Download</a></h3>
 
-The latest release of ASTranslator is available for download from <a target="_top"  href="http://sourceforge.net/project/showfiles.php?group_id=52145">SourceForge.net</a>. For the adventureous, you can check out the <a href="http://sourceforge.net/cvs/?group_id=52145">latest changes from CVS</a>.
+The latest release of ASTranslator is available for download from <a target="_top"  href="http://sourceforge.net/project/showfiles.php?group_id=52145">SourceForge.net</a>. For the adventurous, you can check out the <a href="http://sourceforge.net/cvs/?group_id=52145">latest changes from CVS</a>.
 
 <h3><a name="prerequisites">Prerequisites</a></h3>
 
@@ -212,7 +212,7 @@ This will make the Remoting Gateway Service available at http://www.yourdomain.c
 
 To install ASTranslator, install Flash Remoting for J2EE MX as recommended in <a href="#prerequisites">prerequisites</a> and add astranslator-x.x.jar to your web application's WEB-INF/lib/ directory.
 <p>
-If you have installed Flash Remoting MX for J2EE in another manner, the best location for astranslator-x.x.jar will depend on the application server you are using. Here you get in to the sticky world of classloader precedence. Better to keep it all in your webapp.
+If you have installed Flash Remoting MX for J2EE in another manner, the best location for astranslator-x.x.jar will depend on the application server you are using. Here you get in to the sticky world of class loader precedence. Better to keep it all in your webapp.
 
 <h3><a name="usage">Usage</a></h3>
 
@@ -308,7 +308,7 @@ There's been some discussion of binding more than just RecordSets to UI componen
  <p>
 Here's an implementation of an ArrayDataProvider that provides a DataProvider view of an array. You can use objects of this class to bind to UI components with DataGlue.
 
-<pre style="code">
+<pre class="code">
 /**
  * ArrayDataProvider.as
  * Alon Salant, alon@carbonfive.com
@@ -348,7 +348,7 @@ ArrayDataProvider.prototype.checkLocal = function()
 Here's the code from a sample fla that has a list box UI component
 with instance name lb_people. 
 
-<pre style="code">
+<pre class="code">
 #include "DataGlue.as"
 #include "ArrayDataProvider.as"
 
@@ -366,8 +366,7 @@ people.push(new Person("Alon", "Salant"));
 
 var dataprovider = new ArrayDataProvider(people);
 
-DataGlue.BindFormatStrings(lb_people, dataprovider, "#firstName#
-#lastName#", "#firstName#-#lastName#");
+DataGlue.BindFormatStrings(lb_people, dataprovider, "#firstName# #lastName#", "#firstName#-#lastName#");
 </pre>
 
 The last two lines you would put in a remoting XXX_Result method to
