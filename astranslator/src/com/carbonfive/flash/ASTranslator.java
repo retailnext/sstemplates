@@ -92,12 +92,8 @@ import flashgateway.io.ASObject;
   * Game = function() {}
   * Object.registerClass("com.server.Game", Game);
   * 
-  * var game = new Game();
-  * game.rounds = new Array();
-  * game.rounds.push(new Round());
-  * game.rounds[0].score = 300;
-  * game.rounds.push(new Round());
-  * game.rounds[1].score = 500;
+  * Round = function() {}
+  * Object.registerClass("com.server.Round", Round);
   * 
   * NetServices.setDefaultGatewayUrl("http://localhost/gateway");
   * var gatewayConnection = NetServices.createGatewayConnection();
@@ -145,7 +141,7 @@ public class ASTranslator
 
   /**
    * Given an Object, toActionScript creates a corresponding ASObject
-   * or Collection of ASObjects that map the source object's JavaBean
+   * or Collection of ASObjects that maps the source object's JavaBean
    * properties to ASObject fields, Collections and Sets to
    * ArrayLists, and all Numbers to Doubles while maintaining object
    * references.  
@@ -183,9 +179,9 @@ public class ASTranslator
   /**
    * Given an Object that is either an ASObject or Collection of
    * ASObjects, fromActionScript creates a corresponding JavaBean or
-   * Collections of JavaBeans.  
+   * Collection of JavaBeans.  
    * <p> 
-   * The "type" field of an ASObject is identifies the class name of
+   * The "type" field of an ASObject identifies the class name of
    * the JavaBean to create. If the type field is null, an ASObject
    * becomes a HashMap. The interface of the JavaBean is more specific
    * that the relatively loosely-typed ASObject and therefore drives
