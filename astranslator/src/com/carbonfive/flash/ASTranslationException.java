@@ -2,7 +2,7 @@ package com.carbonfive.flash;
 
 import java.io.*;
 
-public class ASTranslationException extends Exception
+public class ASTranslationException extends RuntimeException
 {
 
   private Throwable rootCause = null;

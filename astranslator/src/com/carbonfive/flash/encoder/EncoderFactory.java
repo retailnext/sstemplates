@@ -33,6 +33,14 @@ public class EncoderFactory
 
     Class clazz = decodedObject.getClass();
 
+    LoopFinder loopFinder = ctx.getLoopFinder();
+    loopFinder.add(clazz);
+    if (loopFinder.isLoop())
+    {
+      throw new ASTranslationException("Detected an infinite loop with class: " +
+                                       loopFinder.getLoopingClass().getName());
+    }
+
     if (ctx.getFilter().doIgnoreClass(clazz)) return nullEncoder;
 
     boolean isNativeObject = isActionScriptNative( decodedObject );

@@ -8,7 +8,8 @@ public class Context
 {
   private static final Log log = LogFactory.getLog(Context.class);
 
-  private TranslationFilter filter = null;
+  private TranslationFilter filter     = null;
+  private LoopFinder        loopFinder = new LoopFinder();
 
   public static Context getBaseContext()
   {
@@ -30,4 +31,8 @@ public class Context
     this.filter = filter;
   }
 
+  public LoopFinder getLoopFinder()
+  {
+    return loopFinder;
+  }
 }

@@ -1,7 +1,5 @@
 package com.carbonfive.flash;
 
-import java.util.*;
-import java.io.*;
 import flashgateway.io.ASObject;
 import com.carbonfive.flash.decoder.*;
 import com.carbonfive.flash.encoder.*;
@@ -95,15 +93,8 @@ public class ASTranslator
   {
     if (asObject == null) return null;
 
-    try
-    {
-      Class desiredBeanClass = decideClassToTranslateInto( asObject );
-      return fromActionScript( asObject, desiredBeanClass );
-    }
-    catch( ASTranslationException aste )
-    {
-      return null;
-    }
+    Class desiredBeanClass = decideClassToTranslateInto( asObject );
+    return fromActionScript( asObject, desiredBeanClass );
   }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -3,12 +3,14 @@ package com.carbonfive.flash;
 import java.util.*;
 import java.io.*;
 import org.w3c.dom.*;
+import org.apache.commons.logging.*;
 import junit.framework.*;
 import flashgateway.io.ASObject;
 
 public class ASTranslatorTest
   extends    TestCase
 {
+  private static final Log log = LogFactory.getLog(ASTranslatorTest.class);
 
   /**
    * This contructor provides a new ASTranslatorTest.
@@ -440,6 +442,20 @@ public class ASTranslatorTest
     assertNull(aso.get("intField"));
   }
 
+  public void testInfiniteLoop()
+    throws Exception
+  {
+    try
+    {
+      new ASTranslator().toActionScript(new InfiniteLoopBean());
+      fail("Should have caught infinite loop");
+    }
+    catch (ASTranslationException ase)
+    {
+      log.info("GOOD: " + ase.getMessage());
+    }
+  }
+
   private void validateTestBean(TestBean bean, ASObject as)
     throws Exception
   {
@@ -521,4 +537,10 @@ public class ASTranslatorTest
     public void setMe(CircularTestBean c) { me = c; }
   }
 
+  public static class InfiniteLoopBean
+    implements Serializable
+  {
+    private InfiniteLoopBean me;
+    public InfiniteLoopBean getNewMe() { return new InfiniteLoopBean(); }
+  }
 }
