@@ -30,7 +30,7 @@ public class NativeDecoder
 
     if ((encodedObject instanceof String) && ! String.class.equals(desiredClass))
     {
-      log.info("Translating ActionScript string object to non-string Java object: " + encodedObject +
+      log.info("Converting ActionScript string object to non-string Java object: " + encodedObject +
                " --> " + desiredClass.getName());
 
       boolean isBoolean    = Boolean.class.equals(desiredClass) || Boolean.TYPE.equals(desiredClass);
