@@ -6,7 +6,7 @@
     <property name="build" value="classes"/>
     <property name="props" value="properties"/>
     <property name="dist"  value="dist"/>
-    <property name="doc"   value="doc"/>
+    <property name="doc"   value="doc/api"/>
     <property name="src"   value="src"/>
 
     <path id="build.class.path">
@@ -31,7 +31,11 @@
   <target name="javadoc" depends="prepare">
   	<mkdir dir="${doc}"/>
   	
-  	<javadoc destdir="${doc}" classpathref="build.class.path" stylesheetfile="${props}/javadoc.css" access="public">
+  	<javadoc destdir="${doc}" 
+  	         classpathref="build.class.path" 
+  	         stylesheetfile="${props}/javadoc.css" 
+  	         access="public"
+  	         windowtitle="ASTranslator for Macromedia Flash Remoting MX">
       <fileset dir="${src}">
         <include name="com/carbonfive/flash/*.java"/>
         <exclude name="**/*Test.java"/>

@@ -11,7 +11,7 @@ import flashgateway.io.ASObject;
  /**
   * ASTranslator provides the ability to translate between ASObjects used by
   * Macromedia Flash Remoting and Java objects in your application. 
-  * <a href="package-summary.html">See the project documentation</a> for details.
+  * <a href="package-summary.html#documentation">See the project documentation</a> for details.
   *
   * $Id$
   */

@@ -5,8 +5,7 @@
 <body>
 ASTranslator provides JavaBean-style mapping between Java objects in any J2EE application server and ActionScript objects in Flash MX when used with Macromedia Flash Remoting MX.
 
-<a name="documentation"> </a>
-<h2>ASTranslator For Macromedia Flash Remoting MX</h2>
+<h2><a name="documentation">ASTranslator For Macromedia Flash Remoting MX</a></h2>
 
 ASTranslator is designed to be used with <a href="http://www.macromedia.com/software/flashremoting/">Macromedia Flash Remoting MX</a> on any J2EE application server. It provides JavaBean-style mapping between Java objects in the application server and ActionScript objects in Flash MX. More information on why this is so important, <a href="#overview">read the overview</a>.
 
@@ -216,11 +215,11 @@ If you have installed Flash Remoting MX for J2EE in another manner, the best loc
 
 <h3><a name="usage">Usage</a></h3>
 
-<a href="com/carbonfive/flash/ASTranslator.html">ASTranslator</a> is the only class you will use in Java. 
+<a href="ASTranslator.html">ASTranslator</a> is the only class you will use in Java. 
 
 <h4>From Flash to Java</h4>
 
-Use <a href="com/carbonfive/flash/ASTranslator.html#fromActionScript(java.lang.Object)">ASTranslator.fromActionScript()</a> to translate ASObjects sent to remoting service methods from Flash. 
+Use <a href="ASTranslator.html#fromActionScript(java.lang.Object)">ASTranslator.fromActionScript()</a> to translate ASObjects sent to remoting service methods from Flash. 
 
 <pre class="code">
 import flashgateway.io.ASObject;
@@ -248,7 +247,7 @@ Object.registerClass("com.server.Player", Player);  // Player maps to com.server
 
 <h4>From Java to Flash</h4>
 
-Use <a href="com/carbonfive/flash/ASTranslator.html#toActionScript(java.lang.Object)">ASTranslator.toActionScript()</a> to translate Java objects to ASObjects before sending them back to flash as the result of a Flash Remoting service call.
+Use <a href="ASTranslator.html#toActionScript(java.lang.Object)">ASTranslator.toActionScript()</a> to translate Java objects to ASObjects before sending them back to flash as the result of a Flash Remoting service call.
 
 <pre class="code">
 package com.server;
@@ -301,6 +300,24 @@ getPlayer_Result(player)
 }
 </pre>
 
+<h4>Recommended Usage</h4>
+
+Flash Remoting MX provides features that we feel confuse it's best use. Yes, you can communicate directly with Session and Entity EJBs, JSPs and Servlets, and have object state persisted in the user session but just because you can does not mean you should. Here are our recommendations for using Flash Remoting to build easy to integrate and scalable Rich Internet Applications:
+
+<ul>
+<li>Install Flash Remoting MX and ASTranslator as recommended in the <a href="#install">installation instructions<a>.
+<li>Create an interface to your server-side application using a Service Oriented Architecture
+  <ul>
+  <li>Create one or more objects in your web application that expose stateless services to Flash through Flash Remoting
+  <li>Do not make these service objects Serializable or a new instance will be stored in each user's session
+  <li>These objects will have method signatures that take and return ASObjects and the other types known to Flash Remoting
+  <li>These objects will be the only place where you use ASTranslator to map ASObjects to your Java objects
+  </ul>
+<li>Create a client-side Service object that handles all communication with the Remoting service including creating the initial connection. This Service object is basically a client-side Proxy to the Remoting services.
+<li>Create client-side model objects that map to model objects in Java and use Object.registerClass() to map them to the appropriate Java class
+</ul>
+
+Using Flash Remoting in this manner to support a Service Oriented Architecture is a good idea. It creates a well-defined point of integration between the Flash client application and the J2EE server application. It exposes your J2EE application a set of services that can easily be made available to other client platforms through Web Services or to a local JSP/Servlets implementation.
 
 <h3><a name="databinding">Data Binding</a></h3>
 
@@ -311,7 +328,7 @@ Here's an implementation of an ArrayDataProvider that provides a DataProvider vi
 <pre class="code">
 /**
  * ArrayDataProvider.as
- * Alon Salant, alon@carbonfive.com
+ * Alon Salant, Carbon Five
  *
  * ArrayDataProvider implements a DataProvider view of an array
  * so that it can be bound to UI components using DataGlue.
