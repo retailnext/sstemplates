@@ -30,11 +30,10 @@ public class CachingEncoder
 
     if ( encoderCache.containsKey(decodedObject) )
     {
-//      log.debug("Found cached object: " + decodedObject.getClass().getName());
-//      if (decodedObject instanceof String)
-//        log.debug("  (String): " + decodedObject);
+      // log.debug("Cached object: " + decodedObject.getClass().getName());
       return encoderCache.get( decodedObject );
     }
+    // log.debug("Translating object: " + decodedObject.getClass().getName());
 
     Object encodedShell = nextEncoder.encodeShell(ctx, decodedObject);
     if (encodedShell != null) encoderCache.put(decodedObject, encodedShell);

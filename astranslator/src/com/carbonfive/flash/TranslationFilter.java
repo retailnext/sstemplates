@@ -41,12 +41,22 @@ public class TranslationFilter
 
   public boolean doIgnoreClass(Class klass)
   {
-    return ignoreClasses.contains(klass);
+    boolean doIgnore = ignoreClasses.contains(klass);
+
+    if (Object.class.equals(klass)) return doIgnore;
+
+    if (doIgnore) return true;
+    return doIgnoreClass(klass.getSuperclass());
   }
 
   public boolean doIgnoreProperty(Class klass, String property)
   {
-    if (! ignoreProperties.containsKey(klass)) return false;
-    return ((Set) ignoreProperties.get(klass)).contains(property);
+    boolean doIgnore = false;
+    if (ignoreProperties.containsKey(klass)) doIgnore = ((Set) ignoreProperties.get(klass)).contains(property);
+
+    if (Object.class.equals(klass)) return doIgnore;
+
+    if (doIgnore) return true;
+    return doIgnoreProperty(klass.getSuperclass(), property);
   }
 }
