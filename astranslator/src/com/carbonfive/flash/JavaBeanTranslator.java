@@ -14,7 +14,7 @@ public class JavaBeanTranslator
     super(astranslator);
   }
 
-  public Object translateForClient( Object serverObject )
+  public Object translateToActionScript( Object serverObject )
   {
       Class clazz = serverObject.getClass();
       String serverObjectType = clazz.getName();
@@ -29,7 +29,7 @@ public class JavaBeanTranslator
 
 //------------------------------------------------------------------------------
 
-  public Object translateForServer( Object clientObject, Class clazz )
+  public Object translateFromActionScript( Object clientObject, Class clazz )
   {
     ASObject aso = (ASObject) clientObject;
     String type = aso.getType();

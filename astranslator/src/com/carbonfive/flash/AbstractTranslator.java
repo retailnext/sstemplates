@@ -5,7 +5,7 @@ public abstract class AbstractTranslator
 {
   private ASTranslator astranslator = null;
   
-  public AbstractTranslator(ASTranslator ast)
+  protected AbstractTranslator(ASTranslator ast)
   {
     astranslator = ast;
   }

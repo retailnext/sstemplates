@@ -13,7 +13,7 @@ public class MapTranslator
     super(astranslator);
   }
 
-  public Object translateForClient( Object serverObject )
+  public Object translateToActionScript( Object serverObject )
   {
     Class serverObjectClass = serverObject.getClass();
     Map serverObjectAsMap = (Map) serverObject;
@@ -38,7 +38,7 @@ public class MapTranslator
 
 //------------------------------------------------------------------------------
 
-  public Object translateForServer( Object clientObject, Class clazz  )
+  public Object translateFromActionScript( Object clientObject, Class clazz  )
   {
     Map map = null;
     try

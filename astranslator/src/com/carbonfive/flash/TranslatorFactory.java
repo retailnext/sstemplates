@@ -17,7 +17,7 @@ public class TranslatorFactory
 
 //------------------------------------------------------------------------------
 
-  public synchronized static TranslatorFactory getInstance()
+  synchronized static TranslatorFactory getInstance()
   {
     if ( instance == null )
     {
@@ -29,7 +29,7 @@ public class TranslatorFactory
 
 //------------------------------------------------------------------------------
 
-  public Translator getTranslator( ASTranslator astranslator, Object serverObject )
+  Translator getServerTranslator( ASTranslator astranslator, Object serverObject )
   {
 
     Translator translator = null;
@@ -77,7 +77,7 @@ public class TranslatorFactory
 
 //------------------------------------------------------------------------------
 
-  public Translator getClientTranslator( ASTranslator astranslator, Object clientObject )
+  Translator getClientTranslator( ASTranslator astranslator, Object clientObject )
   {
 
     Translator translator = null;

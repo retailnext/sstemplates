@@ -11,7 +11,7 @@ public class DoubleTranslator
     super(astranslator);
   }
 
-  public Object translateForClient( Object serverObject )
+  public Object translateToActionScript( Object serverObject )
   {
     Number serverObjectAsNumber = (Number) serverObject;
     return new Double( serverObjectAsNumber.doubleValue() );
@@ -19,7 +19,7 @@ public class DoubleTranslator
 
 //------------------------------------------------------------------------------
 
-  public Object translateForServer( Object clientObject, Class clazz )
+  public Object translateFromActionScript( Object clientObject, Class clazz )
   {
     Double dbl = (Double) clientObject;
 

@@ -11,14 +11,14 @@ public class NativeTranslator
     super(astranslator);
   }
 
-  public Object translateForClient( Object serverObject )
+  public Object translateToActionScript( Object serverObject )
   {
     return serverObject;
   }
 
 //------------------------------------------------------------------------------
 
-  public Object translateForServer( Object clientObject, Class clazz )
+  public Object translateFromActionScript( Object clientObject, Class clazz )
   {
     return clientObject;
   }

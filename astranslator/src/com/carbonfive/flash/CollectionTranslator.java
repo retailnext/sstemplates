@@ -13,7 +13,7 @@ public class CollectionTranslator
     super(astranslator);
   }
 
-  public Object translateForClient( Object serverObject )
+  public Object translateToActionScript( Object serverObject )
   {
     Collection serverObjectAsCollection = ( Collection ) serverObject;
 
@@ -29,7 +29,7 @@ public class CollectionTranslator
 
 //------------------------------------------------------------------------------
 
-  public Object translateForServer( Object clientObject, Class clazz )
+  public Object translateFromActionScript( Object clientObject, Class clazz )
   {
     Collection    serverCollection  = createServerCollection(clazz);
     Object        translated        = null;

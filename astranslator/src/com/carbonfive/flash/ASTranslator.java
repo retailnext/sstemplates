@@ -166,8 +166,8 @@ public class ASTranslator
       return beanToASCache.get( serverObject );
     }
 
-    Translator translator = TranslatorFactory.getInstance().getTranslator( this, serverObject );
-    Object result = translator.translateForClient( serverObject );
+    Translator translator = TranslatorFactory.getInstance().getServerTranslator( this, serverObject );
+    Object result = translator.translateToActionScript( serverObject );
 
 
     if (result != null)
@@ -268,7 +268,7 @@ public class ASTranslator
     }
 
     Translator translator = TranslatorFactory.getInstance().getClientTranslator( this, clientObject );
-    Object result = translator.translateForServer( clientObject, clazz );
+    Object result = translator.translateFromActionScript( clientObject, clazz );
 
     // add to references map
     if (result != null)
