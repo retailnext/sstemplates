@@ -5,6 +5,9 @@ import java.lang.reflect.*;
 import java.beans.*;
 import flashgateway.io.ASObject;
 
+/**
+ * Decodes an ActionScript object to a Java object.
+ */
 public class JavaBeanDecoder
   implements ActionScriptDecoder
 {

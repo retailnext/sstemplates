@@ -3,6 +3,9 @@ package com.carbonfive.flash;
 import java.util.*;
 import java.beans.*;
 
+/**
+ * Decodes an ActionScript list to a Java collection (list or set).
+ */
 public class CollectionDecoder
   implements ActionScriptDecoder
 {

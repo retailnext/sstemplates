@@ -383,6 +383,16 @@ public class ASTranslatorTest
     assertTrue("should not be the same object reference", list.get(0) != list.get(1));
   }
 
+  public void testTranslateEmptySet()
+    throws Exception
+  {
+    Object encodedSet = new ASTranslator().toActionScript(new HashSet());
+    assertNotNull(encodedSet);
+
+    ArrayList list = new ArrayList();
+    assertEquals(list, encodedSet);
+  }
+
   private void validateTestBean(TestBean bean, ASObject as)
     throws Exception
   {

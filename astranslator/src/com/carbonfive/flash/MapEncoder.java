@@ -3,6 +3,9 @@ package com.carbonfive.flash;
 import flashgateway.io.ASObject;
 import java.util.*;
 
+/**
+ * Encodes a Java map to an ActionScript object.
+ */
 public class MapEncoder
   implements ActionScriptEncoder
 {

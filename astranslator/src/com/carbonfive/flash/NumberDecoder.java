@@ -2,6 +2,9 @@ package com.carbonfive.flash;
 
 import java.math.*;
 
+/**
+ * Decode an ActionScript number (a double) to a Java number (of any type).
+ */
 public class NumberDecoder
   implements ActionScriptDecoder
 {

@@ -3,6 +3,9 @@ package com.carbonfive.flash;
 import java.util.*;
 import java.lang.reflect.*;
 
+/**
+ * Decodes an ActionScript list to a Java array.
+ */
 public class ArrayDecoder
   implements ActionScriptDecoder
 {

@@ -31,9 +31,13 @@
   <target name="javadoc" depends="prepare">
   	<mkdir dir="${doc}"/>
   	
-  	<javadoc sourcepath="${src}" destdir="${doc}"
-  		classpathref="build.class.path" 
-  		packagenames="com.carbonfive.flash"/>
+  	<javadoc destdir="${doc}" classpathref="build.class.path">
+      <fileset dir="${src}">
+        <include name="com/carbonfive/flash/*.java"/>
+        <exclude name="**/*Test.java"/>
+        <exclude name="**/*TestBean.java"/>
+      </fileset>
+    </javadoc>
   </target>
 
   <target name="dist" depends="compile, javadoc">

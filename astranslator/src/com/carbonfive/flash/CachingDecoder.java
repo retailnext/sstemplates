@@ -1,5 +1,8 @@
 package com.carbonfive.flash;
 
+/**
+ * Provides referenced-based caching for ActionScript to Java decoding.
+ */
 public class CachingDecoder
   implements ActionScriptDecoder
 {

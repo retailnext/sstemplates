@@ -3,6 +3,9 @@ package com.carbonfive.flash;
 import java.util.*;
 import java.beans.*;
 
+/**
+ * Decodes an ActionScript object to a Java map.
+ */
 public class MapDecoder
   implements ActionScriptDecoder
 {

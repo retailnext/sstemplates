@@ -3,6 +3,9 @@ package com.carbonfive.flash;
 import flashgateway.io.ASObject;
 import java.util.*;
 
+/**
+ * Encodes a Java array to an ActionScript list.
+ */
 public class ArrayEncoder
   implements ActionScriptEncoder
 {

@@ -5,6 +5,9 @@ import java.lang.reflect.*;
 import java.beans.*;
 import flashgateway.io.ASObject;
 
+/**
+ * Encodes a Java object to an ActionScript object.
+ */
 public class JavaBeanEncoder
   implements ActionScriptEncoder
 {
