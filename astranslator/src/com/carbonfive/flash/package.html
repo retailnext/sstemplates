@@ -19,7 +19,9 @@ ASTranslator is supported by <a target="_top" href="http://www.carbonfive.com/op
 <li><a href="#prerequisites">Prerequisites</a>
 <li><a href="#install">Install</a>
 <li><a href="#usage">Usage</a>
+<li><a href="#errors">Error Handling</a>
 <li><a href="#databinding">Data Binding</a>
+<li><a href="#issues">Known Issues</a>
 <li><a href="#support">Support</a>
 <li><a href="#developers">Developers</a>
 <li><a href="#credits">Credits</a>
@@ -32,7 +34,7 @@ ASTranslator is supported by <a target="_top" href="http://www.carbonfive.com/op
 ASTranslator provides the ability to translate between ASObjects used by Macromedia Flash Remoting and Java objects in your application. ASObjects are essentially HashMaps where the key values are case insensitive and with an additional field "type". ASObjects are a Java representation of ActionScript objects in Flash.
 
 <p>
-We created ASTranslator because of an issue we found with Flash Remoting MX for J2EE. When returning Java objects from service calls to Flash, Flash Remoting serialized Java object according to their private member state, not using it's publicly declared property accessors as you would expect. So if you have a Java class:
+We created ASTranslator because of an issue we found with Flash Remoting MX for J2EE. When returning Java objects from service calls to Flash, Flash Remoting serializes Java objects according to their private member state, not using it's publicly declared property accessors as you would expect. So if you have a Java class:
 
 <pre class="code">
 package com.server;
@@ -319,6 +321,81 @@ Flash Remoting MX provides features that we feel confuse it's best use. Yes, you
 
 Using Flash Remoting in this manner to support a Service Oriented Architecture is a good idea. It creates a well-defined point of integration between the Flash client application and the J2EE server application. It exposes your J2EE application a set of services that can easily be made available to other client platforms through Web Services or to a local JSP/Servlets implementation.
 
+<h3><a name="errors">Error Handling</a></h3>
+
+In a Flash MX client to a Remoting service, you handle the results of a remoting call (e.g. service.doCall()) by implementing a doCall_onResult callback method for service calls that execute successfully and an doCall_onStatus callback method for exceptions thrown by the Remoting gateway. The Remoting gateway will throw exceptions when:
+<ul>
+<li>it encounters problems locating, loading, or creating the service class and the method to invoke on it
+<li>the service class itself throws an exception
+</ul>
+
+Given this behavior and our recommendation to use a service-oriented architecture with Flash Remoting, we recommend having the service implementation throw exceptions to be handled by the Flash MX client. In the simplest case we recommend having all service methods simply throw Exception.
+
+<pre class="code">
+package com.server;
+
+import flashgateway.io.ASObject;
+import com.carbonfive.flash.ASTranslator;
+  
+public class Service
+{
+  public ASObject getPlayer(String name)
+    throws Exception
+  {
+    Player player = Roster.getPlayer(name);
+    ASObject aso = (ASObject) new ASTranslator().toActionScript(player);
+    return aso;
+  }
+}
+</pre>
+
+This would allow the Flash MX client to inspect all exceptions thrown during the service invocation and determine what to do about it at runtime. This strategy is discussed in the Flash Remoting documentation at <a target="_new" href="http://livedocs.macromedia.com/frdocs/Using_Flash_Remoting_MX/UseActionScript8.jsp">http://livedocs.macromedia.com/frdocs/Using_Flash_Remoting_MX/UseActionScript8.jsp</a>.
+<p>
+The "type" field of the error object returned to getPlayer_onStatus should provide the class name of the thrown exception allowing us to implement the callback in Flash as:
+
+<pre class="code">
+getPlayer_onStatus = function (error)
+{
+  if (error.type == "com.server.PlayerNotFoundException")
+  {
+    trace("unable to find the player");
+  }
+  else
+  {
+    trace("an unknown error occurred");
+  }
+}
+</pre>
+
+One limitation to this approach is that inheritance is not taken in to account. A thrown exception that extends com.server.PlayerNotFoundException is a com.server.PlayerNotFoundException but would not be handled as one in the above ActionScript code.
+<p>
+A more significant limitation to this approach is that Flash Remoting MX for J2EE does not actually send exceptions thrown by a service class to the XXX_onStatus callback method. Because the Flash Remoting gateway uses introspection to invoke the service methods, all exceptions thrown by service calls are nested within a java.lang.reflect.InvocationTargetException. Tracing the properties of an exception thrown by a service call results in output that looks something like:
+
+<pre class="code">
+ code:        SERVER.PROCESSING
+ level:       error
+ description: Service threw an exception during method invocation: null
+ type: java.lang.reflect.InvocationTargetException
+ rootcause: 
+ details:     java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	...
+	at flashgateway.Gateway.invoke(Gateway.java:184)
+	...
+	at java.lang.Thread.run(Thread.java:536)
+Caused by: com.server.PlayerNotFoundException: There is no player with name 'bob'
+	at com.server.Roster.getPlayer(Roster.java:45)
+	...
+</pre>
+
+We would like the nested com.server.PlayerNotFoundException to be used as exception upon which the error object is based but it is not. We have not come up with a great solution to this problem. 
+
+<p>
+The best solution we have come up with is to build a new error object that inspects the "detail" field of the error returned by Remoting to determine the correct values for "description," "type" and "details." Unfortunately the formatting of the stack trace as provided by the "details" field differs depending on the JVM version being used on the server. Specifically, between Java 1.3 and Java 1.4 the way in which nested exceptions are printed in a stack trace is different. This makes inspecting the "detail" field brittle and a source of hard-to-uncover bugs.
+
+<p>
+Please let us know if you have recommendations for dealing with this issue.
+
 <h3><a name="databinding">Data Binding</a></h3>
 
 There's been some discussion of binding more than just RecordSets to UI components using DataGlue. This makes a ton of sense, especially since we typically think of collections of business objects instead of database recordsets - a mindset that ASTranslator is designed for. Here's a simple start that binds any array of objects to a UI component using DataGlue. A handy use of this would be to take an array result received from remoting and bind it to a UI component just as you would a RecordSet.
@@ -388,6 +465,18 @@ DataGlue.BindFormatStrings(lb_people, dataprovider, "#firstName# #lastName#", "#
 
 The last two lines you would put in a remoting XXX_Result method to
 bind remoting results to a UI component.
+
+<h3><a name="issues">Known Issues</a></h3>
+
+In our work with Flash Remoting MX for J2EE we have encountered the following issues:
+
+<h4>Remoting Exposes Private State of Server-side Objects</h4>
+
+This issue is discussed in the <a href="#overview">Overview</a> and was the primary motivation for developing ASTranslator.
+
+<h4>Exceptions Hidden by java.lang.reflect.InvocationTargetException</h4>
+
+Exceptions thrown by the J2EE implementation of a Remoting service are nested by java.lang.reflect.InvocationTargetException and are not exposed to the Flash MX client in a usable way. This is discussed in <a href="#errors">Error Handling</a>.
 
 <h3><a name="support">Support</a></h3>
 
