@@ -37,6 +37,8 @@ public class TranslationFilter
     filter.ignoreProperty(File.class, "parentFile");
     filter.ignoreProperty(File.class, "canonicalFile");
     filter.ignoreProperty(File.class, "absoluteFile");
+    filter.ignoreProperty(Object.class, "class");
+    filter.ignoreClass(Class.class);
 
     return filter;
   }

@@ -92,6 +92,17 @@
       </batchtest>
     </junit>
   </target>
-  
+
+  <target name="publish" depends="dist">
+    <ftp server="upload.sourceforge.net"
+         userid="anonymous"
+         password="astranslator@carbonfive.com"
+         remotedir="/incoming">
+      <fileset dir="${dist}">
+        <include name="astranslator-${version}.zip"/>
+      </fileset>
+    </ftp>
+  </target>
+
 </project>
 

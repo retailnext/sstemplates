@@ -16,8 +16,6 @@ public class JavaBeanEncoder
 {
   private static final Log log = LogFactory.getLog(JavaBeanEncoder.class);
 
-  private static Set objectAttributes = new HashSet(Arrays.asList(PropertyUtils.getPropertyDescriptors(Object.class)));
-
   public Object encodeShell(Context ctx, Object decodedObject)
   {
     return new ASObject();
@@ -47,8 +45,6 @@ public class JavaBeanEncoder
     PropertyDescriptor[] attributes            = PropertyUtils.getPropertyDescriptors(decoded);
     for (int i = 0; i < attributes.length; i++)
     {
-      if (objectAttributes.contains(attributes[i])) continue;
-
       if (ctx.getFilter().doIgnoreProperty(decoded.getClass(), attributes[i].getName())) continue;
 
       attributeName  = attributes[i].getName();
