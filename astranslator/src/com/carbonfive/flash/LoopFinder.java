@@ -28,7 +28,7 @@ public class LoopFinder
   private static final int DEPTH_MAX   = 250;
   private static final int LOOP_MAX    = 50;
 
-  private SequencedHashMap buffer       = new LRUMap();
+  private SequencedHashMap buffer       = new SequencedHashMap();
   private Bag              bag          = new HashBag();
   private int              depth        = 0;
   private Map              possibles    = new HashMap();
@@ -42,12 +42,15 @@ public class LoopFinder
     if (klass == null) return;
     if (ignore(klass)) return;
 
-    int distance = buffer.indexOf(klass);
-    if (distance != -1)
+    if (buffer.containsKey(klass))
     {
-      String key = klass.getName() + " - " + distance;
-      bag.add(key);
-      if (bag.getCount(key) >= LOOP_MAX) possibles.put(key, new Integer(bag.getCount(key)));
+      int distance = buffer.indexOf(klass);
+      if (distance != -1)
+      {
+        String key = klass.getName() + " - " + distance;
+        bag.add(key);
+        if (bag.getCount(key) >= LOOP_MAX) possibles.put(key, new Integer(bag.getCount(key)));
+      }
     }
 
     buffer.put(klass, new Integer(depth));

@@ -31,4 +31,9 @@ public class LoopFinderTest
   {
     new LoopFinder().add(null);
   }
+
+  public void testSequencedHashMapNPE() throws Exception
+  {
+    new LoopFinder().add(LoopFinder.class);
+  }
 }
