@@ -1,6 +1,8 @@
 package com.carbonfive.flash;
 
 import java.util.*;
+import org.w3c.dom.*;
+import org.apache.xerces.dom.*;
 import junit.framework.*;
 import flashgateway.io.ASObject;
 
@@ -132,11 +134,14 @@ public class ASTranslatorTest
     as.setType(TestBean.class.getName());
     as.put("strField", "A string");
     as.put("intField", new Double(3));
+    as.put("xmlField", getXmlDocument());
 
     TestBean bean = (TestBean) new ASTranslator().fromActionScript(as);
     assertNotNull(bean);
     assertEquals(as.get("intField"), new Double(bean.getIntField()));
     assertEquals(as.get("strField"), bean.getStrField());
+    Document xmlField = (Document) as.get("xmlField");
+    assertEquals(xmlField.getDocumentElement().getTagName(), getXmlDocument().getDocumentElement().getTagName());
   }
 
   public void testDeepTranslateToBean()
@@ -369,6 +374,11 @@ public class ASTranslatorTest
     Object strField = as.get("strField");
     assertTrue(msg, strField instanceof String);
     assertEquals(msg, bean.getStrField(), strField);
+    
+    assertTrue(msg, as.containsKey("xmlField"));
+    Object xmlField = as.get("xmlField");
+    assertTrue(msg, xmlField instanceof Document);
+    assertEquals(msg, bean.getXmlField().getDocumentElement().getTagName(), getXmlDocument().getDocumentElement().getTagName());
   }
 
   private TestBean getTestBean()
@@ -378,8 +388,9 @@ public class ASTranslatorTest
     bean.setStrField("A string");
     bean.setLongField(12345);
     bean.setDoubleField(1.1234);
+    bean.setXmlField(getXmlDocument());
     return bean;
-  }
+  }                                               
 
   public static class TestBean
     implements java.io.Serializable
@@ -389,6 +400,7 @@ public class ASTranslatorTest
     private long longField;
     private double doubleField;
     private String strField;
+    private Document xmlDocument;
     public int getIntField() { return this.intField; }
     public void setIntField(int i) { this.intField = i; }
     public short getShortField() { return this.shortField; }
@@ -399,7 +411,27 @@ public class ASTranslatorTest
     public void setDoubleField(double d) { this.doubleField = d; }
     public String getStrField() { return this.strField; }
     public void setStrField(String s) { this.strField = s; }
+    public Document getXmlField() { return this.xmlDocument; }
+    public void setXmlField(Document d) { this.xmlDocument = d; }
   }
+  
+  private Document getXmlDocument()
+  {
+    Document doc= new DocumentImpl();
+    Element root = doc.createElement("person");     
+    Element item = doc.createElement("name");       
+    item.appendChild( doc.createTextNode("Jeff") );
+    root.appendChild( item );                       
+    item = doc.createElement("age");                
+    item.appendChild( doc.createTextNode("28" ) );  
+    root.appendChild( item );                       
+    item = doc.createElement("height");            
+    item.appendChild( doc.createTextNode("1.80" ) );
+    root.appendChild( item );                       
+    doc.appendChild( root );  
+    
+    return doc; 
+  }  
 
   public static class DeepTestBean
     implements java.io.Serializable

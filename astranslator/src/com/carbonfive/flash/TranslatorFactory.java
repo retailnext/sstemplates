@@ -35,21 +35,21 @@ public class TranslatorFactory
     Translator translator = null;
     Class clazz = serverObject.getClass();
 
-    boolean isPrimitiveActionScriptObject = isActionScriptPrimitive( clazz );
-    boolean isNumericClass                = Number.class.isAssignableFrom( clazz );
+    boolean isNativeObject                = isActionScriptNative( serverObject );
+    boolean isNumberObject                = Number.class.isAssignableFrom( clazz );
     boolean isArray                       = clazz.isArray();
     boolean isCollection                  = Collection.class.isAssignableFrom(clazz);
     boolean isMap                         = Map.class.isAssignableFrom(clazz);
     boolean isJavaBean                    = Serializable.class.isAssignableFrom(clazz);
 
-    if ( isPrimitiveActionScriptObject )    // pass through these classes
+    if ( isNativeObject )                   // pass through these classes
     {
       translator = new NativeTranslator(astranslator);
     }
     
-    else if ( isNumericClass )              // all numbers become doubles
+    else if ( isNumberObject )              // all numbers become doubles
     {
-      translator = new DoubleTranslator(astranslator);
+      translator = new NumberTranslator(astranslator);
     }
 
     else if ( isArray )                     // create ArrayList
@@ -81,14 +81,11 @@ public class TranslatorFactory
   {
 
     Translator translator = null;
-    Class clazz = clientObject.getClass();
 
-    boolean isNativeObject = ( clientObject instanceof String ) ||
-                             ( clientObject instanceof Date )   ||
-                             ( clientObject instanceof Boolean );
-    boolean isNumberObject = ( clientObject instanceof Double );
-    boolean isArrayList    = ( clientObject instanceof ArrayList && clazz.isArray() );
-    boolean isCollection   = ( clientObject instanceof ArrayList && !clazz.isArray() );
+    boolean isNativeObject = ( isActionScriptNative( clientObject ) );
+    boolean isNumberObject = ( clientObject instanceof Number );
+    boolean isArrayList    = ( clientObject instanceof ArrayList && clientObject.getClass().isArray() );
+    boolean isCollection   = ( clientObject instanceof ArrayList && !clientObject.getClass().isArray() );
     boolean isMap          = ( clientObject instanceof Map       && !(clientObject instanceof ASObject) ) ||
                              ( clientObject instanceof ASObject  && ((ASObject) clientObject).getType() == null );
     boolean isJavaBean     = ( clientObject instanceof ASObject );
@@ -99,7 +96,7 @@ public class TranslatorFactory
     }
     else if ( isNumberObject )
     {
-      translator = new DoubleTranslator(astranslator);
+      translator = new NumberTranslator(astranslator);
     }
     else if ( isArrayList )
     {
@@ -124,21 +121,15 @@ public class TranslatorFactory
 
 //------------------------------------------------------------------------------
 
-  private static HashSet actionScriptPrimitives = new HashSet();
-  static
+  private static boolean isActionScriptNative(Object obj)
   {
-    actionScriptPrimitives.add(Boolean.class.getName());
-    actionScriptPrimitives.add(Boolean.TYPE.getName());
-    actionScriptPrimitives.add(String.class.getName());
-    actionScriptPrimitives.add(Date.class.getName());
-  }
-
-//------------------------------------------------------------------------------
-
-  private static boolean isActionScriptPrimitive(Class clazz)
-  {
-    if (clazz == null) return false;
-    return actionScriptPrimitives.contains( clazz.getName() );
+    if (obj == null)                         return false;
+    if (obj instanceof Boolean)              return true;
+    if (obj instanceof Date)                 return true;
+    if (obj instanceof String)               return true;
+    if (obj instanceof org.w3c.dom.Document) return true;
+    if (obj instanceof java.sql.ResultSet)   return true;
+    return false;
   }
 
 //------------------------------------------------------------------------------

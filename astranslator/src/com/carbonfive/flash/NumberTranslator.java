@@ -1,12 +1,13 @@
 package com.carbonfive.flash;
 
+import java.math.*;
 import flashgateway.io.ASObject;
 
-public class DoubleTranslator
+public class NumberTranslator
   extends AbstractTranslator
 {
   
-  public DoubleTranslator(ASTranslator astranslator)
+  public NumberTranslator(ASTranslator astranslator)
   {
     super(astranslator);
   }
@@ -22,12 +23,13 @@ public class DoubleTranslator
   public Object translateFromActionScript( Object clientObject, Class clazz )
   {
     Double dbl = (Double) clientObject;
-
-    boolean isShort   = ( Short.class.equals( clazz )   || Short.TYPE.equals( clazz ) );
-    boolean isInteger = ( Integer.class.equals( clazz ) || Integer.TYPE.equals( clazz ) );
-    boolean isLong    = ( Long.class.equals( clazz )    || Long.TYPE.equals( clazz ) );
-    boolean isFloat   = ( Float.class.equals( clazz )   || Float.TYPE.equals( clazz ) );
-    boolean isDouble  = ( Double.class.equals( clazz )  || Double.TYPE.equals( clazz ) );
+    boolean isByte        = ( Byte.class.equals( clazz )        || Byte.TYPE.equals( clazz ) );
+    boolean isShort       = ( Short.class.equals( clazz )       || Short.TYPE.equals( clazz ) );
+    boolean isInteger     = ( Integer.class.equals( clazz )     || Integer.TYPE.equals( clazz ) );
+    boolean isLong        = ( Long.class.equals( clazz )        || Long.TYPE.equals( clazz ) );
+    boolean isFloat       = ( Float.class.equals( clazz )       || Float.TYPE.equals( clazz ) );
+    boolean isDouble      = ( Double.class.equals( clazz )      || Double.TYPE.equals( clazz ) );
+    boolean isBigDecimal  = ( BigDecimal.class.equals( clazz ) );
 
     Object result = null;
     if ( isShort )
@@ -49,6 +51,10 @@ public class DoubleTranslator
     else if ( isDouble )
     {
       result = dbl;
+    }
+    else if ( isBigDecimal )
+    {
+      result = new BigDecimal(dbl.doubleValue());
     }
 
     return result;
