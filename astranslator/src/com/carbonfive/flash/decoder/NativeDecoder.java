@@ -2,6 +2,7 @@ package com.carbonfive.flash.decoder;
 
 import java.util.*;
 import java.math.*;
+import org.apache.commons.logging.*;
 
 /**
  * Decodes an ActionScript native object to a Java native object.
@@ -9,6 +10,7 @@ import java.math.*;
 public class NativeDecoder
   extends ActionScriptDecoder
 {
+  private static final Log log = LogFactory.getLog(NativeDecoder.class);
 
   /**
    * This method attempts to create a Java object from an ActionScript object that is
@@ -28,6 +30,9 @@ public class NativeDecoder
 
     if ((encodedObject instanceof String) && ! String.class.equals(desiredClass))
     {
+      log.info("Translating ActionScript string object to non-string Java object: " + encodedObject +
+               " --> " + desiredClass.getName());
+
       boolean isBoolean    = Boolean.class.equals(desiredClass) || Boolean.TYPE.equals(desiredClass);
       boolean isByte       = Byte.class.equals(desiredClass)    || Byte.TYPE.equals(desiredClass);
       boolean isShort      = Short.class.equals(desiredClass)   || Short.TYPE.equals(desiredClass);
@@ -38,17 +43,26 @@ public class NativeDecoder
       boolean isBigDecimal = BigDecimal.class.isAssignableFrom(desiredClass); // BigDecimal is not final
       boolean isDate       = Date.class.isAssignableFrom(desiredClass); // Date is not final
 
-      Object result = null;
-      if      ( isBoolean )    result = Boolean.valueOf((String) encodedObject);
-      else if ( isByte )       result = Byte.valueOf((String) encodedObject);
-      else if ( isShort )      result = Short.valueOf((String) encodedObject);
-      else if ( isInteger )    result = Integer.valueOf((String) encodedObject);
-      else if ( isLong )       result = Long.valueOf((String) encodedObject);
-      else if ( isFloat )      result = Float.valueOf((String) encodedObject);
-      else if ( isDouble )     result = Double.valueOf((String) encodedObject);
-      else if ( isBigDecimal ) result = new BigDecimal((String) encodedObject);
-      else if ( isDate )       result = new Date(Long.parseLong((String) encodedObject));
-      return result;
+      try
+      {
+        Object result = null;
+        if      ( isBoolean )    result = Boolean.valueOf((String) encodedObject);
+        else if ( isByte )       result = Byte.valueOf((String) encodedObject);
+        else if ( isShort )      result = Short.valueOf((String) encodedObject);
+        else if ( isInteger )    result = Integer.valueOf((String) encodedObject);
+        else if ( isLong )       result = Long.valueOf((String) encodedObject);
+        else if ( isFloat )      result = Float.valueOf((String) encodedObject);
+        else if ( isDouble )     result = Double.valueOf((String) encodedObject);
+        else if ( isBigDecimal ) result = new BigDecimal((String) encodedObject);
+        else if ( isDate )       result = new Date(Long.parseLong((String) encodedObject));
+        return result;
+      }
+      catch (NumberFormatException e)
+      {
+        NumberFormatException nfe = new NumberFormatException("Error converting encoded String object to a number: " + encodedObject);
+        nfe.setStackTrace(e.getStackTrace());
+        throw nfe;
+      }
     }
 
     return encodedObject;

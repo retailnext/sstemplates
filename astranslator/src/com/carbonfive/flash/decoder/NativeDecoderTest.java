@@ -67,4 +67,19 @@ public class NativeDecoderTest
     assertEquals(new Float(10),   decoder.decodeObject("10",   Float.class));
     assertEquals(new Double(10),  decoder.decodeObject("10",   Double.class));
   }
+
+  public void testNativeDecoderConversionError() throws Exception
+  {
+    NativeDecoder decoder = new NativeDecoder();
+
+    try
+    {
+      decoder.decodeObject("mike", Integer.class);
+      fail("Should have thrown NumberFormatException");
+    }
+    catch (NumberFormatException nfe)
+    {
+      // good
+    }
+  }
 }
