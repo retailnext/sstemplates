@@ -152,17 +152,11 @@ public class ASTranslator
     return fromActionScript( asObject, desiredBeanClass );
   }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// p r o t e c t e d
-//
-////////////////////////////////////////////////////////////////////////////////
-
   /**
    * Translate an object to another object of type 'desiredBeanClass'
-   * obj types should be ASObject, Boolean, String, Double, Date, ArrayList
+   * obj types should be ASObject, Boolean, String, Number, Date, ArrayList
    */
-  protected Object fromActionScript( Object actionScriptObject, Class desiredBeanClass )
+  public Object fromActionScript( Object actionScriptObject, Class desiredBeanClass )
   {
     if (actionScriptObject == null) return null;
 

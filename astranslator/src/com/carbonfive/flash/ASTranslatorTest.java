@@ -127,7 +127,7 @@ public class ASTranslatorTest
     ASObject as3 = (ASObject) map.get("bean");
     validateTestBean(bean, as2);
 
-    // assertTrue(as2 == as3);
+    assertTrue(as2 == as3);
   }
 
   public void testTranslateToBean()
@@ -187,6 +187,7 @@ public class ASTranslatorTest
     Object uncastElementFromList = listOfBeansTranslatedToASObjects.get( 0 );
 
     ASObject aso = (ASObject) uncastElementFromList;
+    assertEquals("testtesttest", aso.get("strField"));
   }
 
   public void testComplexSpecificTranslateToBean()
@@ -529,6 +530,24 @@ public class ASTranslatorTest
     Map bmap = (Map) amap.get("a-b");
     assertNull(bmap.get("b-null"));
     assertEquals("b-bar", bmap.get("b-foo"));
+  }
+
+  public void testDecodeWithDesiredClass() throws Exception
+  {
+    Integer i = new Integer(10);
+    Double d = new Double(10);
+
+    Object encoded = new ASTranslator().toActionScript(i);
+    assertTrue(encoded instanceof Double);
+    assertEquals(d, encoded);
+
+    Object decoded1 = new ASTranslator().fromActionScript(encoded);
+    assertTrue(decoded1 instanceof Double);
+    assertEquals(d, decoded1);
+
+    Object decoded2 = new ASTranslator().fromActionScript(encoded, Integer.TYPE);
+    assertTrue(decoded2 instanceof Integer);
+    assertEquals(i, decoded2);
   }
 
   private void validateTestBean(TestBean bean, ASObject as)
