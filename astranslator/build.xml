@@ -40,6 +40,7 @@
     <mkdir dir="${dist}" />
     <jar jarfile="${dist}/astranslator-${version}.jar">
       <fileset dir="${basedir}">
+        <include name="LICENSE"/>
         <include name="build.*"/>
         <include name="${src}/**"/>
         <include name="${props}/**"/>
