@@ -2,6 +2,9 @@ package com.carbonfive.flash;
 
 import java.util.*;
 
+/**
+ * Thrown when an infinite loop is detected by <code>LoopFinder</code>.
+ */
 public class InfiniteLoopException extends ASTranslationException
 {
   private LoopFinder finder = null;
@@ -17,6 +20,11 @@ public class InfiniteLoopException extends ASTranslationException
     return finder;
   }
 
+  /**
+   * Returns information about the infinite loop, including a buffer of recent classes encoded, and a list
+   * of possible culprits for the infinite loop.
+   * @return the message
+   */
   public String getMessage()
   {
     StringBuffer buf = new StringBuffer();

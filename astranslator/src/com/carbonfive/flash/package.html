@@ -285,6 +285,8 @@ public class Service
 }
 </pre>
 
+Be aware that your custom Java object, eg: Player, <b>must implement Serializable</b> in order for ASTranslator to property convert them to Action Script objects.
+<p>
 Note that you must cast the result of this method call to the expected return type. It will either be an ASObject, a Java Collection or one of the Java Class types known to Flash Remoting (XML Document, ResultSet,...).
 <p>
 If you wish to specify classes or interfaces to be left out of the translation, the code can look like this:
