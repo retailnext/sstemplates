@@ -17,7 +17,8 @@ public class NumberDecoder
     boolean isBigDecimal  = ( BigDecimal.class.equals( desiredClass ) );
 
     Object result = null;
-    if      ( isShort )      result = new Short(dbl.shortValue());
+    if      ( isByte )       result = new Byte(dbl.byteValue());
+    else if ( isShort )      result = new Short(dbl.shortValue());
     else if ( isInteger )    result = new Integer(dbl.intValue());
     else if ( isLong )       result = new Long(dbl.longValue());
     else if ( isFloat )      result = new Float(dbl.floatValue());
