@@ -1,0 +1,79 @@
+<project name="geolocator" default="dist" basedir=".">
+  <property file="build.properties"/>
+
+  <target name="init">
+    <tstamp/>
+    <property name="build" value="classes"/>
+    <property name="props" value="properties"/>
+    <property name="dist"  value="dist"/>
+    <property name="doc"   value="doc"/>
+    <property name="src"   value="src"/>
+
+    <path id="build.class.path">
+      <pathelement location="${junit.jar}"/>
+      <pathelement location="${props}"/>
+    </path>
+  </target>
+    
+  <target name="prepare" depends="init">
+    <mkdir dir="${build}" />
+  </target>
+
+  <target name="compile" depends="prepare">
+    <javac srcdir="${src}" destdir="${build}"
+           classpathref="build.class.path"
+           deprecation="off" debug="on" optimize="off" target="1.4"/>
+  </target>
+  
+  <target name="javadoc" depends="prepare">
+  	<mkdir dir="${doc}"/>
+  	
+  	<javadoc destdir="${doc}" classpathref="build.class.path">
+      <fileset dir="${src}">
+        <include name="com/carbonfive/gis/*.java"/>
+        <exclude name="**/*Test.java"/>
+      </fileset>
+    </javadoc>
+  </target>
+
+  <target name="dist" depends="compile, javadoc">
+    <mkdir dir="${dist}" />
+    <jar jarfile="${dist}/geolocator-${version}.jar">
+      <fileset dir="${basedir}">
+        <include name="LICENSE"/>
+        <include name="build.*"/>
+        <include name="${src}/**"/>
+        <include name="${props}/**"/>
+        <include name="${doc}/**"/>
+      </fileset>
+      <fileset dir="${build}"/>
+    </jar>
+  </target>
+
+  <target name="clean" depends="init">
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+    <delete dir="${doc}"/>
+  </target>
+  
+  <target name="test" depends="compile">
+    <junit printsummary="withOutAndErr" haltonfailure="yes" haltonerror="yes">
+    
+      <sysproperty key="log4j.debug" value="false"/>
+      <sysproperty key="log4j.configuration" value="log4j-junit.properties"/>
+      
+      <classpath>  
+        <pathelement location="${build}"/>
+        <path refid="build.class.path"/>
+      </classpath>  
+      <formatter type="plain" usefile="false"/>
+      <batchtest fork="yes">
+        <fileset dir="${src}">
+          <include name="**/*Test.java" />
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+  
+</project>
+
