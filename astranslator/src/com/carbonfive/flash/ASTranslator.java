@@ -1,11 +1,8 @@
 package com.carbonfive.flash;
 
-import java.util.*;
-import flashgateway.io.ASObject;
 import com.carbonfive.flash.decoder.*;
 import com.carbonfive.flash.encoder.*;
 import org.apache.commons.logging.*;
-
 
  /**
   * ASTranslator provides the ability to translate between ASObjects used by

@@ -37,7 +37,7 @@ public class LoadTest
   {
     LargeObject lo = LargeObject.create();
     System.out.println("ASTranslating...");
-    new ASTranslator().toActionScript(lo);
+    ASTranslatorFactory.getInstance().getASTranslator().toActionScript(lo);
     System.out.println("Done");
   }
 }
