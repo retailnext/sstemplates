@@ -10,31 +10,29 @@ public class LoopFinder
 {
   private static final Log log = LogFactory.getLog(LoopFinder.class);
 
-  private static final int MAX_DEPTH = 10;
-  private static final int LOOP_MAX  = 500;
+  private static final int BUFFER_SIZE = 20;
+  private static final int DEPTH_MAX   = 250;
+  private static final int LOOP_MAX    = 50;
 
-  private LinkedList buffer       = new LinkedList();
-  private Bag        bag          = new HashBag();
-  private Class      loopingClass = null;;
+  private SequencedHashMap buffer       = new LRUMap();
+  private Bag              bag          = new HashBag();
+  private int              depth        = 0;
+  private Map              possibles    = new HashMap();
 
   public void add(Class klass)
   {
-    // if we have already found a loop, don't bother with this anymore
-    if (isLoop()) return;
+    if (ignore(klass)) return;
 
-    if (! ignore(klass))
+    int distance = buffer.indexOf(klass);
+    if (distance != -1)
     {
-      int distance = buffer.indexOf(klass);
-      if (distance != -1)
-      {
-        String key = klass.getName() + "-" + distance;
-        bag.add(key);
-        if (bag.getCount(key) >= LOOP_MAX) loopingClass = klass;
-      }
+      String key = klass.getName() + " - " + distance;
+      bag.add(key);
+      if (bag.getCount(key) >= LOOP_MAX) possibles.put(key, new Integer(bag.getCount(key)));
     }
 
-    buffer.addFirst(klass);
-    if (buffer.size() == MAX_DEPTH + 1) buffer.removeLast();
+    buffer.put(klass, new Integer(depth));
+    if (buffer.size() == BUFFER_SIZE + 1) buffer.remove(buffer.getLastKey());
   }
 
   private boolean ignore(Class klass)
@@ -46,11 +44,31 @@ public class LoopFinder
 
   public boolean isLoop()
   {
-    return loopingClass != null;
+    return depth >= DEPTH_MAX;
   }
 
-  public Class getLoopingClass()
+  public Map getPossibles()
   {
-    return loopingClass;
+    return possibles;
+  }
+
+  public SequencedHashMap getBuffer()
+  {
+    return buffer;
+  }
+
+  public int getDepth()
+  {
+    return depth;
+  }
+
+  public void stepIn()
+  {
+    depth ++;
+  }
+
+  public void stepOut()
+  {
+    depth --;
   }
 }

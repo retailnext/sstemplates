@@ -27,7 +27,10 @@ public class JavaBeanEncoder
   {
     ASObject encodedObject = (ASObject) shell;
     encodedObject.setType( decodedObject.getClass().getName() );
+
+    ctx.getLoopFinder().stepIn();
     encodedObject = populate(ctx, decodedObject, encodedObject);
+    ctx.getLoopFinder().stepOut();
 
     return encodedObject;
   }

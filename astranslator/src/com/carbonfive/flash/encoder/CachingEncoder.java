@@ -38,7 +38,9 @@ public class CachingEncoder
     Object encodedShell = nextEncoder.encodeShell(ctx, decodedObject);
     if (encodedShell != null) encoderCache.put(decodedObject, encodedShell);
 
-    return nextEncoder.encodeObject(ctx, encodedShell, decodedObject);
+    Object encodedObject = nextEncoder.encodeObject(ctx, encodedShell, decodedObject);
+
+    return encodedObject;
   }
 
   public ActionScriptEncoder getNextEncoder()

@@ -37,8 +37,7 @@ public class EncoderFactory
     loopFinder.add(clazz);
     if (loopFinder.isLoop())
     {
-      throw new ASTranslationException("Detected an infinite loop with class: " +
-                                       loopFinder.getLoopingClass().getName());
+      throw new InfiniteLoopException(loopFinder);
     }
 
     if (ctx.getFilter().doIgnoreClass(clazz)) return nullEncoder;
