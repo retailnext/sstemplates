@@ -22,7 +22,7 @@ public class CachingDecoder
 
   public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
-    IdentityMap decoderCache = CachingManager.getDecoderCache();
+    ReferenceCache decoderCache = CachingManager.getDecoderCache();
 
     if ( decoderCache.containsKey(encodedObject) )
     {

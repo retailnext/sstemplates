@@ -258,8 +258,12 @@ public class ASTranslatorTest
     as.put("mapField", asMap);
 
     // translate
-    ComplexGenericTestBean cbean = (ComplexGenericTestBean) new ASTranslator().fromActionScript(as);
-    assertNotNull(cbean);
+    Object decoded = new ASTranslator().fromActionScript(as);
+    assertNotNull(decoded);
+    log.info("ASObject type: " + as.getType());
+    assertTrue("Should be ComplexGenericTestBean, but is: " + decoded.getClass().getName(),
+               decoded instanceof ComplexGenericTestBean);
+    ComplexGenericTestBean cbean = (ComplexGenericTestBean) decoded;
 
     // validate
     assertNotNull(cbean.getListField());
@@ -417,6 +421,33 @@ public class ASTranslatorTest
     assertTrue(ctb == ctb.getMe());
   }
 
+  public void testCircularEquivalence()
+    throws Exception
+  {
+    CircularTestBean ctb1 = new CircularTestBean();
+    CircularTestBean ctb2 = new CircularTestBean();
+    ctb1.setMe(ctb2);
+
+    assertEquals(ctb1, ctb2);
+    assertTrue(ctb1 != ctb2);
+
+    // default behavior is to use == to handle references
+    ASTranslator trans = new ASTranslator();
+    Object encoded = trans.toActionScript(ctb1);
+    assertNotNull(encoded);
+    assertTrue(encoded instanceof ASObject);
+    ASObject as = (ASObject) encoded;
+    assertTrue(as.get("me") != as);
+
+    // now let's try it using .equals() instead
+    trans.setUseEquivalence(true);
+    encoded = trans.toActionScript(ctb1);
+    assertNotNull(encoded);
+    assertTrue(encoded instanceof ASObject);
+    as = (ASObject) encoded;
+    assertTrue("as = " + as + "\n as.get(me) = " + as.get("me"), as.get("me") == as);
+  }
+
   public void testIgnoreClass()
     throws Exception
   {
@@ -425,6 +456,27 @@ public class ASTranslatorTest
     TestBean bean = new TestBean();
     ASObject aso = (ASObject) trans.toActionScript(bean);
     assertNull(aso);
+  }
+
+  public void testIgnoreSuperclass()
+    throws Exception
+  {
+    ASTranslator trans = new ASTranslator();
+    trans.ignoreClass(TestBean.class);
+    TestBean bean = new TestSuperBean();
+    ASObject aso = (ASObject) trans.toActionScript(bean);
+    assertNull(aso);
+  }
+
+  public void testIgnoreSuperclass2()
+    throws Exception
+  {
+    ASTranslator trans = new ASTranslator();
+    trans.ignoreClass(TestBean.class);
+    TestSuperBean2 bean = new TestSuperBean2();
+    ASObject aso = (ASObject) trans.toActionScript(bean);
+    assertNotNull(aso);
+    assertNull(aso.get("bean"));
   }
 
   public void testIgnoreProperty()
@@ -526,6 +578,16 @@ public class ASTranslatorTest
     private CircularTestBean me;
     public CircularTestBean getMe() { return me; }
     public void setMe(CircularTestBean c) { me = c; }
+
+    public boolean equals(Object obj)
+    {
+      return ( obj instanceof CircularTestBean );
+    }
+
+    public int hashCode()
+    {
+      return CircularTestBean.class.hashCode();
+    }
   }
 
   public static class InfiniteLoopBean
@@ -533,5 +595,17 @@ public class ASTranslatorTest
   {
     private InfiniteLoopBean me;
     public InfiniteLoopBean getNewMe() { return new InfiniteLoopBean(); }
+  }
+
+  public static class TestSuperBean extends TestBean
+  {
+  }
+
+  public static class TestSuperBean2
+    implements Serializable
+  {
+    private TestSuperBean bean;
+    public TestSuperBean getBean() { return bean; }
+    public void setBean(TestSuperBean bean) { this.bean = bean; }
   }
 }

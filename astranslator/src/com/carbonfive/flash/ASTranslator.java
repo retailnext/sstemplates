@@ -18,20 +18,64 @@ public class ASTranslator
    private static final Log log = LogFactory.getLog(ASTranslator.class);
 
    private TranslationFilter filter = null;
+   private boolean useEquivalence = false;
 
    public ASTranslator()
    {
      filter = TranslationFilter.getBaseFilter();
    }
 
+   /**
+    * Ignore objects that are an instance of <code>klass</code> when translating.  For
+    * example, <code>ignoreClass(Object.class)</code> would cause ASTranslator to ignore
+    * everything.<br/>
+    * Objects that are ignored are returned from ASTranslator as null.
+    * @param klass
+    */
    public void ignoreClass(Class klass)
    {
      filter.ignoreClass(klass);
    }
 
+   /**
+    * Ignore the specified <code>property</code> of objects that are instances of
+    * <code>klass</code>.
+    * Properties that are ignored are returned from ASTranslator as null.
+    * @param klass
+    * @param property
+    */
    public void ignoreProperty(Class klass, String property)
    {
      filter.ignoreProperty(klass, property);
+   }
+
+   /**
+    * Determines whether object that are equivalent (using Object.equals()) should be
+    * considered identical by ASTranslator. <br/>
+    * When walking the object graph ASTranslator stores a cache of objects viewed.  This
+    * cache is used to maintain references within the object graph.  If <code>useEquivalence</code>
+    * is set to true, this cache is an equivalence cache, which means objects are compared by
+    * Object.equals() instead of the == operator.  So if two objects are equal (but not
+    * identical) in the object graph, one will be stored as a reference to the other one when
+    * translated to ASObjects.<br/>
+    * The consequences of this are:<br/>
+    * <ul>
+    * <li>ASObject graphs can be <b>much</b> smaller</li>
+    * <li>Circular references in object graphs will cause infinite loops (within
+    *     the object's hashCode() method)</li>
+    * <li>Modifying an object in Flash may modify other Flash objects unexpectedly</li>
+    * </ul>
+    * You should use this only if your Flash code is using the ASObjects in a read-only manner,
+    * or you are very well aware of what is going on.<br/>
+    * This setting also assumes that the Flash Remoting gateway supports maintaining references.
+    * Unfortunately, this is not currently the case.  However, it is pretty easy to hack this
+    * behavior in to Flash Remoting or OpenAMF.
+    *
+    * @param b
+    */
+   public void setUseEquivalence(boolean b)
+   {
+     this.useEquivalence = b;
    }
 
   /**
@@ -58,7 +102,7 @@ public class ASTranslator
   {
     if (serverObject == null) return null;
 
-    CachingManager.getEncoderCache(); // create the cache here
+    CachingManager.createEncoderCache(this.useEquivalence); // create the cache here
 
     Context ctx = Context.getBaseContext();
     ctx.setFilter(filter);
@@ -116,7 +160,7 @@ public class ASTranslator
     ActionScriptDecoder decoder = DecoderFactory.getInstance().getDecoder( actionScriptObject, desiredBeanClass );
     Object              result  = decoder.decodeObject( actionScriptObject, desiredBeanClass );
 
-    CachingManager.removeEncoderCache();
+    CachingManager.removeDecoderCache();
 
     return result;
   }

@@ -23,7 +23,7 @@ public class ArrayEncoderTest
   protected void setUp()
     throws Exception
   {
-    factory =  EncoderFactory.getInstance();
+    factory = EncoderFactory.getInstance();
   }
 
   protected void tearDown()

@@ -7,23 +7,33 @@ public class CachingManager
   private static HashMap encoderCaches = new HashMap();
   private static HashMap decoderCaches = new HashMap();
 
-  public static IdentityMap getEncoderCache()
+  public static ReferenceCache createEncoderCache(boolean useEquivalence)
+  {
+    return getCache(encoderCaches, useEquivalence);
+  }
+
+  public static ReferenceCache getEncoderCache()
   {
     return getCache(encoderCaches);
   }
 
-  public static IdentityMap getDecoderCache()
+  public static ReferenceCache getDecoderCache()
   {
-    return getCache(decoderCaches);
+    return getCache(decoderCaches, false);
   }
 
-  private static IdentityMap getCache(HashMap caches)
+  private static ReferenceCache getCache(HashMap caches, boolean useEquivalence)
   {
     if (! caches.containsKey(Thread.currentThread()))
     {
-      caches.put(Thread.currentThread(), new IdentityMap());
+      caches.put(Thread.currentThread(), new ReferenceCache(useEquivalence));
     }
-    return (IdentityMap) caches.get(Thread.currentThread());
+    return (ReferenceCache) caches.get(Thread.currentThread());
+  }
+
+  private static ReferenceCache getCache(HashMap caches)
+  {
+    return getCache(caches, false);
   }
 
   static void removeEncoderCache()
@@ -33,6 +43,6 @@ public class CachingManager
 
   static void removeDecoderCache()
   {
-    encoderCaches.remove(Thread.currentThread());
+    decoderCaches.remove(Thread.currentThread());
   }
 }

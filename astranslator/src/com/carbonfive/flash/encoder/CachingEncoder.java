@@ -1,5 +1,6 @@
 package com.carbonfive.flash.encoder;
 
+import java.util.*;
 import com.carbonfive.flash.encoder.*;
 import com.carbonfive.flash.*;
 import org.apache.commons.logging.*;
@@ -26,17 +27,15 @@ public class CachingEncoder
 
   public Object encodeObject(Context ctx, Object shell, Object decodedObject)
   {
-    IdentityMap encoderCache = CachingManager.getEncoderCache();
+    ReferenceCache identityCache = CachingManager.getEncoderCache();
 
-    if ( encoderCache.containsKey(decodedObject) )
+    if ( identityCache.containsKey(decodedObject) )
     {
-      // log.debug("Cached object: " + decodedObject.getClass().getName());
-      return encoderCache.get( decodedObject );
+      return identityCache.get( decodedObject );
     }
-    // log.debug("Translating object: " + decodedObject.getClass().getName());
 
     Object encodedShell = nextEncoder.encodeShell(ctx, decodedObject);
-    if (encodedShell != null) encoderCache.put(decodedObject, encodedShell);
+    if (encodedShell != null) identityCache.put(decodedObject, encodedShell);
 
     Object encodedObject = nextEncoder.encodeObject(ctx, encodedShell, decodedObject);
 
