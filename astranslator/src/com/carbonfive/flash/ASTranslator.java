@@ -15,7 +15,9 @@ import flashgateway.io.ASObject;
   * <p>
   * ASTranslator follows the conversion rules for Flash Remoting for Java and relies on the
   * remoting gateway to handle conversion of class types named by the conversion rules including
-  * org.w3c.dom.Document and java.sql.ResultSet.
+  * org.w3c.dom.Document and java.sql.ResultSet. Therefore it is safe to pass all objects
+  * through ASTranslator when receiving them from Flash and when sending them back to Flash. This
+  * is the recommended use.
   * <p>
   * The ASObject.getType() field has a special role in ASTranslator. It identifies
   * which Java object an ASObject should be translated to, and when an ASObject
