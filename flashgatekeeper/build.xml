@@ -42,6 +42,15 @@
         <exclude name="**/*Test.java"/>
       </fileset>
     </javadoc>
+    
+    <echo>
+As a project administrator, you can deploy the docs to SourceForge as follows:
+
+cd doc;
+tar cvfz flashgatekeeper-docs.gz api/*
+scp flashgatekeeper-docs.gz [username]@shell.sourceforge.net:/home/groups/c/ca/carbonfive/htdocs/flashgatekeeper/
+ssh [username]@shell.sourceforge.net 'cd /home/groups/c/ca/carbonfive/htdocs/flashgatekeeper/; tar xvfz flashgatekeeper-docs.gz; rm *.gz;'
+    </echo>
   </target>
 
   <target name="dist" depends="compile, javadoc">
