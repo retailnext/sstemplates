@@ -26,7 +26,7 @@ public class NumberDecoder
     else if ( isLong )       result = new Long(dbl.longValue());
     else if ( isFloat )      result = new Float(dbl.floatValue());
     else if ( isDouble )     result = dbl;
-    else if ( isBigDecimal ) result = new BigDecimal(dbl.doubleValue());
+    else if ( isBigDecimal ) result = new BigDecimal(dbl.toString());
 
     return result;
   }
