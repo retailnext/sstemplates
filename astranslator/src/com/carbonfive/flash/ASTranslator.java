@@ -30,7 +30,7 @@ public class ASTranslator
     * example, <code>ignoreClass(Object.class)</code> would cause ASTranslator to ignore
     * everything.<br/>
     * Objects that are ignored are returned from ASTranslator as null.
-    * @param klass
+    * @param klass The class (or superclass or interface) to ignore
     */
    public void ignoreClass(Class klass)
    {
@@ -41,8 +41,8 @@ public class ASTranslator
     * Ignore the specified <code>property</code> of objects that are instances of
     * <code>klass</code>.
     * Properties that are ignored are returned from ASTranslator as null.
-    * @param klass
-    * @param property
+    * @param klass The class (or superclass or interface) of the property to ignore
+    * @param property The name of the property to ignore
     */
    public void ignoreProperty(Class klass, String property)
    {
@@ -51,13 +51,15 @@ public class ASTranslator
 
    /**
     * Determines whether object that are equivalent (using Object.equals()) should be
-    * considered identical by ASTranslator. <br/>
+    * considered identical by ASTranslator.
+    * <p>
     * When walking the object graph ASTranslator stores a cache of objects viewed.  This
     * cache is used to maintain references within the object graph.  If <code>useEquivalence</code>
     * is set to true, this cache is an equivalence cache, which means objects are compared by
     * Object.equals() instead of the == operator.  So if two objects are equal (but not
     * identical) in the object graph, one will be stored as a reference to the other one when
-    * translated to ASObjects.<br/>
+    * translated to ASObjects.
+    * <p>
     * The consequences of this are:<br/>
     * <ul>
     * <li>ASObject graphs can be <b>much</b> smaller</li>
@@ -65,13 +67,17 @@ public class ASTranslator
     *     the object's hashCode() method)</li>
     * <li>Modifying an object in Flash may modify other Flash objects unexpectedly</li>
     * </ul>
+    * <p>
     * You should use this only if your Flash code is using the ASObjects in a read-only manner,
-    * or you are very well aware of what is going on.<br/>
+    * or you are very well aware of what is going on.
+    * <p>
     * This setting also assumes that the Flash Remoting gateway supports maintaining references.
     * Unfortunately, this is not currently the case.  However, it is pretty easy to hack this
     * behavior in to Flash Remoting or OpenAMF.
+    * <p>
+    * The default value for <code>useEquivalence</code> is false.
     *
-    * @param b
+    * @param b Whether to use equivalence or not
     */
    public void setUseEquivalence(boolean b)
    {

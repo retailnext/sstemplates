@@ -4,6 +4,10 @@ import java.io.*;
 import java.util.*;
 import org.apache.commons.logging.*;
 
+/**
+ * Cache used to maintain references between ASObject graphs as well as Java object graphs.  This cache knows
+ * whether it should use equivalence (.equals()) or identity (==) to match objects.  The default is identity.
+ */
 public class ReferenceCache
   implements Serializable
 {
