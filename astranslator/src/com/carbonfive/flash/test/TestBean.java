@@ -1,6 +1,7 @@
 package com.carbonfive.flash.test;
 
 import java.io.*;
+import java.util.*;
 
 public class TestBean
   implements Serializable
@@ -10,6 +11,7 @@ public class TestBean
   private long longField;
   private double doubleField;
   private String strField;
+  private Collection colField;
 
   public int getIntField() { return this.intField; }
   public void setIntField(int i) { this.intField = i; }
@@ -21,6 +23,8 @@ public class TestBean
   public void setDoubleField(double d) { this.doubleField = d; }
   public String getStrField() { return this.strField; }
   public void setStrField(String s) { this.strField = s; }
+  public Collection getColField() { return this.colField; }
+  public void setColField(Collection c) { this.colField = c; }
 
   public static TestBean getTestBean()
   {
@@ -29,6 +33,8 @@ public class TestBean
     bean.setStrField("A string");
     bean.setLongField(12345);
     bean.setDoubleField(1.1234);
+    bean.setColField(new HashSet(Arrays.asList(new String[] { "A", "B" })));
     return bean;
   }
+
 }

@@ -1,5 +1,6 @@
 package com.carbonfive.flash.decoder;
 
+import java.util.*;
 import junit.framework.*;
 import flashgateway.io.ASObject;
 import com.carbonfive.flash.test.*;
@@ -34,31 +35,52 @@ public class JavaBeanDecoderTest
 
   private static final double DELTA = 0.00001;
 
-  public void testJavaBeanDecode()
-    throws Exception
+  public void testJavaBeanDecode() throws Exception
   {
     TestBean bean = com.carbonfive.flash.test.TestBean.getTestBean(); // gets a filled in TestBean
 
     ASObject aso = new ASObject();
-    aso.setType(com.carbonfive.flash.test.TestBean.class.getName());
+    aso.setType(TestBean.class.getName());
     aso.put("intField", new Double(bean.getIntField()));
     aso.put("shortField", new Double(bean.getShortField()));
     aso.put("longField", new Double(bean.getLongField()));
     aso.put("doubleField", new Double(bean.getDoubleField()));
     aso.put("strField", bean.getStrField());
 
-    ActionScriptDecoder decoder = factory.getDecoder(aso, com.carbonfive.flash.test.TestBean.class);
+    ActionScriptDecoder decoder = factory.getDecoder(aso, TestBean.class);
     assertNotNull(decoder);
 
-    Object decodedObject = decoder.decodeObject(aso, com.carbonfive.flash.test.TestBean.class);
+    Object decodedObject = decoder.decodeObject(aso, TestBean.class);
     assertNotNull(decodedObject);
     assertTrue(decodedObject instanceof com.carbonfive.flash.test.TestBean);
 
-    com.carbonfive.flash.test.TestBean decodedBean = (com.carbonfive.flash.test.TestBean) decodedObject;
+    TestBean decodedBean = (TestBean) decodedObject;
     assertEquals(bean.getIntField(), decodedBean.getIntField());
     assertEquals(bean.getShortField(), decodedBean.getShortField());
     assertEquals(bean.getLongField(), decodedBean.getLongField());
     assertEquals(bean.getDoubleField(), decodedBean.getDoubleField(), DELTA);
     assertEquals(bean.getStrField(), decodedBean.getStrField());
+  }
+
+  public void testJavaBeanDecodeWithInterface() throws Exception
+  {
+    ASObject outer = new ASObject();
+    outer.setType(TestBean.class.getName());
+
+    ASObject inner = new ASObject();
+    inner.setType(HashSet.class.getName());
+
+    outer.put("colField", inner);
+
+    ActionScriptDecoder decoder = factory.getDecoder(outer, TestBean.class);
+    assertNotNull(decoder);
+
+    Object decodedObject = decoder.decodeObject(outer, TestBean.class);
+    assertNotNull(decodedObject);
+    assertTrue(decodedObject instanceof TestBean);
+
+    TestBean decodedBean = (TestBean) decodedObject;
+    assertNotNull(decodedBean.getColField());
+    assertEquals(HashSet.class, decodedBean.getColField().getClass());
   }
 }

@@ -41,13 +41,13 @@ public class JavaBeanDecoder
     String name   = null;
     Method write  = null;
     Object value  = null;
-    Class  wClass = null;
+    Class  propertyType = null;
     for (int i = 0; i < pds.length; i++)
     {
       name  = pds[i].getName();
 
-      wClass = pds[i].getPropertyType();
-      write  = pds[i].getWriteMethod();
+      propertyType = pds[i].getPropertyType();
+      write = pds[i].getWriteMethod();
 
       if (write == null)
       {
@@ -61,10 +61,13 @@ public class JavaBeanDecoder
         continue;
       }
 
+      Class asoType = DecoderFactory.decideClassToTranslateInto(value);
+      if (propertyType.isAssignableFrom(asoType)) propertyType = asoType;
+
       try
       {
-        decoder = DecoderFactory.getInstance().getDecoder( value, wClass );
-        decodedObject = decoder.decodeObject(value, wClass);
+        decoder = DecoderFactory.getInstance().getDecoder( value, propertyType );
+        decodedObject = decoder.decodeObject(value, propertyType);
         write.invoke(bean, new Object[] { decodedObject });
       }
       catch (Exception e) // Method.invoke() stuff
