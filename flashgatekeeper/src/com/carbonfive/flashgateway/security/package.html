@@ -3,11 +3,11 @@
 <link rel="stylesheet" type="text/css" href="../../../../../properties/javadoc.css" title="style">
 </head>
 <body>
-FlashGatekeeper is an implementation of a Servlet 2.3 Filter that limits the services that can be invoked by Flash clients through Macromedia Flash Remoting MX for J2EE and for ColdFusion J2EE Edition on any Java application server.
+FlashGatekeeper is an implementation of a Servlet 2.3 Filter that provides an important Flash Remoting security solution by limiting the services that can be invoked by Flash clients through Macromedia Flash Remoting MX for J2EE and for ColdFusion J2EE Edition on any Java application server.
 
 <h2><a name="documentation">FlashGatekeeper Security Filter for Macromedia Flash Remoting MX</a></h2>
 
-FlashGatekeeper is designed to be used with <a target="_top" href="http://www.macromedia.com/software/flashremoting/">Macromedia Flash Remoting MX</a> on any J2EE application server. It allows developers to limit the services that can be invoked through Flash Remoting. For details on why this is important, <a href="#overview">read the overview</a>.
+FlashGatekeeper is designed to be used with <a target="_top" href="http://www.macromedia.com/software/flashremoting/">Macromedia Flash Remoting MX</a> on any J2EE application server. It allows developers to limit the services that can be invoked through Flash Remoting, providing an important Flash Remoting security solution. For details on why this is important, <a href="#overview">read the overview</a>.
 
 <p>
 FlashGatekeeper is supported by <a target="_top" href="http://www.carbonfive.com/opensource-main-1.html">Carbon Five</a> and can be deployed on application servers with Flash Remoting MX including Macromedia JRun, Jakarta Tomcat, JBoss, Caucho Resin, IBM WebSphere, BEA Weblogic and ATG Dynamo.
@@ -19,6 +19,7 @@ FlashGatekeeper is supported by <a target="_top" href="http://www.carbonfive.com
 <li><a href="#install">Install</a>
 <li><a href="#support">Support</a>
 <li><a href="#developers">Developers</a>
+<li><a href="#releases">Release Notes</a>
 <li><a href="#reference">Reference</a>
 <li><a href="#credits">Credits</a>
 </ul>
@@ -144,6 +145,20 @@ GatekeeperFilter only allows AMF messages that are trying to invoke a configured
 </p>
 
 For those interesting in peeking under the hood or making changes, the <a href="#download">distribution</a> includes the source code, an Ant build script and JUnit unit tests that can be used to make changes. Simply unzip the distribution to get started.
+
+<h3><a name="releases">Release Notes</a></h3>
+
+<h4>FlashGatekeeper 0.3</h4>
+
+<ul>
+<li>Removed dependency on openAMF - using flashgateway.jar classes for deserialization
+</ul>
+
+<h4>FlashGatekeeper 0.2</h4>
+
+<ul>
+<li>Initial public release of FlashGatekeeper on SourceForge.
+</ul>
 
 <h3><a name="reference">Reference</a></h3>
 
