@@ -13,6 +13,10 @@ import flashgateway.io.ASObject;
   * Macromedia Flash Remoting and Java objects in your application. ASObjects are
   * essentially HashMaps with an additional field "type".
   * <p>
+  * ASTranslator follows the conversion rules for Flash Remoting for Java and relies on the
+  * remoting gateway to handle conversion of class types named by the conversion rules including
+  * org.w3c.dom.Document and java.sql.ResultSet.
+  * <p>
   * The ASObject.getType() field has a special role in ASTranslator. It identifies
   * which Java object an ASObject should be translated to, and when an ASObject
   * is created from a Java object it is set to the class name of the source Java object.
@@ -154,7 +158,7 @@ public class ASTranslator
    * @param serverObject  an Object to translate to ASObjects or 
    *                      corresponding primitive or Collection classes
    * @return              an Object that may be an ASObject or nested 
-   *                      Collections of ASObjects or null if conversion fails
+   *                      Collections of ASObjects or null if translation fails
    */
   public Object toActionScript( Object serverObject )
   {
@@ -192,17 +196,17 @@ public class ASTranslator
    * the translation of ASObject fields.
 
    *
-   * @param aso an Object that is usually an ASObject but may also be
-   *            a Collection or primitive
+   * @param asObject an Object that is usually an ASObject but may also be
+   *                           a Collection or primitive
    * @return    an Object value that is either a JavaBean or Collection
    *            of JavaBeans or null if translation fails
    */
-  public Object fromActionScript(Object actionScriptObject )
+  public Object fromActionScript(Object asObject )
   {
     try
     {
-      Class desiredBeanClass = decideClassToTranslateInto( actionScriptObject );
-      return mapFromActionScriptObject( actionScriptObject, desiredBeanClass );
+      Class desiredBeanClass = decideClassToTranslateInto( asObject );
+      return mapFromActionScriptObject( asObject, desiredBeanClass );
     }
     catch( ASTranslationException aste )
     {
