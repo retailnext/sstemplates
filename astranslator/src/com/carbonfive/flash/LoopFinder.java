@@ -56,6 +56,7 @@ public class LoopFinder
 
   private boolean ignore(Class klass)
   {
+    if (klass == null) return false;
     if (klass.getPackage() == null) return false;
     if ("java.lang".equals(klass.getPackage().getName())) return true;
     return false;
