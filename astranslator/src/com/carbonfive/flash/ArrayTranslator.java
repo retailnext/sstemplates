@@ -7,32 +7,32 @@ public class ArrayTranslator
   extends AbstractTranslator
 {
 
-  public ArrayTranslator(ASTranslator astranslator)
+  public ArrayTranslator(ASTranslator ast, Object obj, Class c)
   {
-    super(astranslator);
+    super(ast, obj, c);
   }
   
-  public Object translateToActionScript( Object serverObject )
+  public Object translateToActionScript( )
   {
-    List serverObjectAsList = Arrays.asList( (Object[]) serverObject );
+    List serverObjectAsList = Arrays.asList( (Object[]) getObject() );
     Translator translator   = TranslatorFactory.getInstance().getTranslatorToActionScript( getASTranslator(), serverObjectAsList );
     
-    return translator.translateToActionScript( serverObjectAsList );
+    return translator.translateToActionScript( );
   }
 
 //------------------------------------------------------------------------------
 
-  public Object translateFromActionScript( Object clientObject, Class clazz  )
+  public Object translateFromActionScript( )
   {
 
-    Class         desiredBeanClass  = clientObject.getClass().getComponentType();
-    int           size              = ( (List) clientObject ).size();
+    Class         desiredBeanClass  = getObject().getClass().getComponentType();
+    int           size              = ( (List) getObject() ).size();
     Object[]      serverArray       = new Object[size];
     Object        translated        = null;
     int           n                 = 0;
-    for ( Iterator i = ( (List) clientObject).iterator(); i.hasNext(); )
+    for ( Iterator i = ( (List) getObject()).iterator(); i.hasNext(); )
     {
-      translated        = getASTranslator().fromActionScript( i.next(), desiredBeanClass );
+      translated        = getASTranslator().fromActionScript( i.next(), getDesiredClass() );
       serverArray[n++]  = translated;
     }
 

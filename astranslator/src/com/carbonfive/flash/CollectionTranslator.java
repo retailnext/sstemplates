@@ -8,14 +8,14 @@ public class CollectionTranslator
   extends AbstractTranslator
 {
   
-  public CollectionTranslator(ASTranslator astranslator)
+  public CollectionTranslator(ASTranslator ast, Object obj, Class c)
   {
-    super(astranslator);
+    super(ast, obj, c);
   }
 
-  public Object translateToActionScript( Object serverObject )
+  public Object translateToActionScript( )
   {
-    Collection serverObjectAsCollection = ( Collection ) serverObject;
+    Collection serverObjectAsCollection = ( Collection ) getObject();
 
     ArrayList    list       = new ArrayList();
     Object       translated = null;
@@ -29,12 +29,12 @@ public class CollectionTranslator
 
 //------------------------------------------------------------------------------
 
-  public Object translateFromActionScript( Object clientObject, Class clazz )
+  public Object translateFromActionScript( )
   {
-    Collection    serverCollection  = createServerCollection(clazz);
+    Collection    serverCollection  = createServerCollection(getDesiredClass());
     Object        translated        = null;
     Object        obj               = null;
-    for (Iterator items = ( (Collection) clientObject ).iterator(); items.hasNext(); )
+    for (Iterator items = ( (Collection) getObject() ).iterator(); items.hasNext(); )
     {
       obj = items.next();
       translated = getASTranslator().fromActionScript( obj, obj.getClass()  );
@@ -44,6 +44,9 @@ public class CollectionTranslator
     return serverCollection;
   }
 
+  /**
+   * Create a new collection that is compatible with the Class passed in.
+   */
   private Collection createServerCollection( Class clazz )
   {
     Collection  serverCollection = null;
@@ -51,7 +54,7 @@ public class CollectionTranslator
     try
     {
       boolean isList = List.class.isAssignableFrom( clazz );
-      boolean isSet = Set.class.isAssignableFrom( clazz );
+      boolean isSet  = Set.class.isAssignableFrom( clazz );
 
       ClassLoader translatorClassLoader = ASTranslator.class.getClassLoader();
       Object clientCollection = Beans.instantiate( translatorClassLoader, clazz.getName() );

@@ -381,7 +381,7 @@ public class ASTranslatorTest
     assertEquals(msg, bean.getXmlField().getDocumentElement().getTagName(), getXmlDocument().getDocumentElement().getTagName());
   }
 
-  private TestBean getTestBean()
+  static TestBean getTestBean()
   {
     TestBean bean = new TestBean();
     bean.setIntField(1);
@@ -415,7 +415,7 @@ public class ASTranslatorTest
     public void setXmlField(Document d) { this.xmlDocument = d; }
   }
   
-  private Document getXmlDocument()
+  private static Document getXmlDocument()
   {
     Document doc= new DocumentImpl();
     Element root = doc.createElement("person");     

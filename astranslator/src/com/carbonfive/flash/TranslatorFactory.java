@@ -44,31 +44,31 @@ public class TranslatorFactory
 
     if ( isNativeObject )                   // pass through these classes
     {
-      translator = new NativeTranslator(astranslator);
+      translator = new NativeTranslator(astranslator, serverObject, null);
     }
     else if ( isNumberObject )              // all numbers become doubles
     {
-      translator = new NumberTranslator(astranslator);
+      translator = new NumberTranslator(astranslator, serverObject, null);
     }
     else if ( isArray )                     // create ArrayList
     {
-      translator = new ArrayTranslator(astranslator);
+      translator = new ArrayTranslator(astranslator, serverObject, null);
     }
     else if ( isMap )                       // create ASObject
     {
-      translator = new MapTranslator(astranslator);
+      translator = new MapTranslator(astranslator, serverObject, null);
     }
     else if ( isCollection )
     {
-      translator = new CollectionTranslator(astranslator);
+      translator = new CollectionTranslator(astranslator, serverObject, null);
     }
     else if ( isJavaBean )
     {
-      translator = new JavaBeanTranslator(astranslator);
+      translator = new JavaBeanTranslator(astranslator, serverObject, null);
     }
     else
     {
-      translator = new NativeTranslator(astranslator);
+      translator = new NativeTranslator(astranslator, serverObject, null);
     }
 
     return translator;
@@ -76,42 +76,46 @@ public class TranslatorFactory
 
 //------------------------------------------------------------------------------
 
-  Translator getTranslatorFromActionScript( ASTranslator astranslator, Object clientObject )
+  Translator getTranslatorFromActionScript( ASTranslator astranslator, Object clientObject, Class desiredClass )
   {
-
     Translator translator = null;
+
+    if (! objectIsCompatibleWithClass(clientObject, desiredClass))
+    {
+      return null;
+    }
 
     boolean isNativeObject = ( isActionScriptNative( clientObject ) );
     boolean isNumberObject = ( clientObject instanceof Number );
-    boolean isArrayList    = ( clientObject instanceof ArrayList && clientObject.getClass().isArray() );
-    boolean isCollection   = ( clientObject instanceof ArrayList && !clientObject.getClass().isArray() );
-    boolean isMap          = ( clientObject instanceof Map       && !(clientObject instanceof ASObject) ) ||
+    boolean isArray        = ( clientObject instanceof ArrayList && desiredClass.isArray() );
+    boolean isCollection   = ( clientObject instanceof ArrayList && Collection.class.isAssignableFrom(desiredClass) );
+    boolean isMap          = ( clientObject instanceof Map       && ! (clientObject instanceof ASObject) ) ||
                              ( clientObject instanceof ASObject  && ((ASObject) clientObject).getType() == null );
-    boolean isJavaBean     = ( clientObject instanceof ASObject );
+    boolean isJavaBean     = ( clientObject instanceof ASObject  && ((ASObject) clientObject).getType() != null );
 
     if ( isNativeObject )
     {
-      translator = new NativeTranslator(astranslator);
+      translator = new NativeTranslator(astranslator, clientObject, desiredClass);
     }
     else if ( isNumberObject )
     {
-      translator = new NumberTranslator(astranslator);
+      translator = new NumberTranslator(astranslator, clientObject, desiredClass);
     }
-    else if ( isArrayList )
+    else if ( isArray )
     {
-      translator = new ArrayTranslator(astranslator);
+      translator = new ArrayTranslator(astranslator, clientObject, desiredClass);
     }
     else if ( isCollection )
     {
-      translator = new CollectionTranslator(astranslator);
+      translator = new CollectionTranslator(astranslator, clientObject, desiredClass);
     }
     else if ( isMap )
     {
-      translator = new MapTranslator(astranslator);
+      translator = new MapTranslator(astranslator, clientObject, desiredClass);
     }
     else if ( isJavaBean )
     {
-      translator = new JavaBeanTranslator(astranslator);
+      translator = new JavaBeanTranslator(astranslator, clientObject, desiredClass);
     }
 
     return translator;
@@ -132,5 +136,11 @@ public class TranslatorFactory
   }
 
 //------------------------------------------------------------------------------
+
+  private static boolean objectIsCompatibleWithClass(Object clientObject, Class desiredClass)
+  {
+    // this could do all sorts of error checking
+    return true;
+  }
 
 }

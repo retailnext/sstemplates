@@ -9,19 +9,19 @@ public class JavaBeanTranslator
   extends AbstractTranslator
 {
 
-  public JavaBeanTranslator(ASTranslator astranslator)
+  public JavaBeanTranslator(ASTranslator ast, Object obj, Class c)
   {
-    super(astranslator);
+    super(ast, obj, c);
   }
 
-  public Object translateToActionScript( Object serverObject )
+  public Object translateToActionScript( )
   {
-      Class clazz = serverObject.getClass();
+      Class clazz = getObject().getClass();
       String serverObjectType = clazz.getName();
 
       ASObject actionScriptObject = new ASObject();
       actionScriptObject.setType( serverObjectType );
-      actionScriptObject = populate( serverObject, actionScriptObject );
+      actionScriptObject = populate( getObject(), actionScriptObject );
 
 
       return actionScriptObject;
@@ -29,9 +29,9 @@ public class JavaBeanTranslator
 
 //------------------------------------------------------------------------------
 
-  public Object translateFromActionScript( Object clientObject, Class clazz )
+  public Object translateFromActionScript( )
   {
-    ASObject aso = (ASObject) clientObject;
+    ASObject aso = (ASObject) getObject();
     String type = aso.getType();
 
     Object   bean = null;

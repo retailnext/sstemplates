@@ -174,7 +174,7 @@ public class ASTranslator
     }
 
     Translator translator = TranslatorFactory.getInstance().getTranslatorToActionScript( this, serverObject );
-    Object result = translator.translateToActionScript( serverObject );
+    Object result = translator.translateToActionScript();
 
 
     if (result != null)
@@ -204,12 +204,12 @@ public class ASTranslator
    * @return    an Object value that is either a JavaBean or Collection
    *            of JavaBeans or null if translation fails
    */
-  public Object fromActionScript(Object asObject )
+  public Object fromActionScript( Object asObject )
   {
     try
     {
       Class desiredBeanClass = decideClassToTranslateInto( asObject );
-      return mapFromActionScriptObject( asObject, desiredBeanClass );
+      return fromActionScript( asObject, desiredBeanClass );
     }
     catch( ASTranslationException aste )
     {
@@ -223,9 +223,31 @@ public class ASTranslator
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-  protected Object fromActionScript(Object actionScriptObject, Class desiredBeanClass )
+  /**
+   * Translate an object to another object of type clazz
+   * obj types should be ASObject, Boolean, String, Double, Date, ArrayList
+   */
+  protected Object fromActionScript( Object actionScriptObject, Class desiredBeanClass )
   {
-    return mapFromActionScriptObject( actionScriptObject, desiredBeanClass );
+    if (actionScriptObject == null) return null;
+
+    // check references map
+    if ( asToBeanCache.containsKey(actionScriptObject) )
+    {
+      return asToBeanCache.get(actionScriptObject);
+    }
+
+    Translator translator = TranslatorFactory.getInstance().getTranslatorFromActionScript( this, actionScriptObject, desiredBeanClass );
+    Object result = translator.translateFromActionScript();
+
+    // add to references map
+    if (result != null)
+    {
+      asToBeanCache.put(actionScriptObject, result);
+      return result;
+    }
+
+    return null;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -257,34 +279,4 @@ public class ASTranslator
 
     return asoClass;
   }
-
-//------------------------------------------------------------------------------
-
-  /**
-   * Translate an object to another object of type clazz
-   * obj types should be ASObject, Boolean, String, Double, Date, ArrayList
-   */
-  private Object mapFromActionScriptObject(Object clientObject, Class clazz)
-  {
-    if (clientObject == null) return null;
-
-    // check references map
-    if ( asToBeanCache.containsKey(clientObject) )
-    {
-      return asToBeanCache.get(clientObject);
-    }
-
-    Translator translator = TranslatorFactory.getInstance().getTranslatorFromActionScript( this, clientObject );
-    Object result = translator.translateFromActionScript( clientObject, clazz );
-
-    // add to references map
-    if (result != null)
-    {
-      asToBeanCache.put(clientObject, result);
-      return result;
-    }
-
-    return null;
-  }
-
 }

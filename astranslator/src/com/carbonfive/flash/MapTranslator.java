@@ -8,15 +8,15 @@ public class MapTranslator
   extends AbstractTranslator
 {
 
-  public MapTranslator(ASTranslator astranslator)
+  public MapTranslator(ASTranslator ast, Object obj, Class c)
   {
-    super(astranslator);
+    super(ast, obj, c);
   }
 
-  public Object translateToActionScript( Object serverObject )
+  public Object translateToActionScript( )
   {
-    Class serverObjectClass = serverObject.getClass();
-    Map serverObjectAsMap = (Map) serverObject;
+    Class serverObjectClass = getObject().getClass();
+    Map serverObjectAsMap = (Map) getObject();
 
     ASObject actionScriptMap = new ASObject();
     actionScriptMap.setType( serverObjectClass.getName() );
@@ -38,16 +38,16 @@ public class MapTranslator
 
 //------------------------------------------------------------------------------
 
-  public Object translateFromActionScript( Object clientObject, Class clazz  )
+  public Object translateFromActionScript( )
   {
     Map map = null;
     try
     {
       ClassLoader translatorClassLoader = ASTranslator.class.getClassLoader();
-      Object obj = Beans.instantiate( translatorClassLoader, clazz.getName() );
+      Object obj = Beans.instantiate( translatorClassLoader, getDesiredClass().getName() );
 
-      if (clazz.isInterface()) map = new HashMap();
-      else                     map = (Map) obj;
+      if (getDesiredClass().isInterface()) map = new HashMap();
+      else                                 map = (Map) obj;
     }
     catch (Exception e)
     {
@@ -57,10 +57,10 @@ public class MapTranslator
     Object        translated = null;
     Object        key    = null;
     Object        value  = null;
-    for (Iterator keys = ((Map) clientObject).keySet().iterator(); keys.hasNext(); )
+    for (Iterator keys = ((Map) getObject()).keySet().iterator(); keys.hasNext(); )
     {
       key = keys.next();
-      value = ( (Map) clientObject ).get( key );
+      value = ( (Map) getObject() ).get( key );
 
       translated = getASTranslator().fromActionScript( value, value.getClass()  );
 

@@ -7,29 +7,29 @@ public class NumberTranslator
   extends AbstractTranslator
 {
   
-  public NumberTranslator(ASTranslator astranslator)
+  public NumberTranslator(ASTranslator ast, Object obj, Class c)
   {
-    super(astranslator);
+    super(ast, obj, c);
   }
 
-  public Object translateToActionScript( Object serverObject )
+  public Object translateToActionScript( )
   {
-    Number serverObjectAsNumber = (Number) serverObject;
+    Number serverObjectAsNumber = (Number) getObject();
     return new Double( serverObjectAsNumber.doubleValue() );
   }
 
 //------------------------------------------------------------------------------
 
-  public Object translateFromActionScript( Object clientObject, Class clazz )
+  public Object translateFromActionScript( )
   {
-    Double dbl = (Double) clientObject;
-    boolean isByte        = ( Byte.class.equals( clazz )        || Byte.TYPE.equals( clazz ) );
-    boolean isShort       = ( Short.class.equals( clazz )       || Short.TYPE.equals( clazz ) );
-    boolean isInteger     = ( Integer.class.equals( clazz )     || Integer.TYPE.equals( clazz ) );
-    boolean isLong        = ( Long.class.equals( clazz )        || Long.TYPE.equals( clazz ) );
-    boolean isFloat       = ( Float.class.equals( clazz )       || Float.TYPE.equals( clazz ) );
-    boolean isDouble      = ( Double.class.equals( clazz )      || Double.TYPE.equals( clazz ) );
-    boolean isBigDecimal  = ( BigDecimal.class.equals( clazz ) );
+    Double dbl = (Double) getObject();
+    boolean isByte        = ( Byte.class.equals( getDesiredClass() )        || Byte.TYPE.equals( getDesiredClass() ) );
+    boolean isShort       = ( Short.class.equals( getDesiredClass() )       || Short.TYPE.equals( getDesiredClass() ) );
+    boolean isInteger     = ( Integer.class.equals( getDesiredClass() )     || Integer.TYPE.equals( getDesiredClass() ) );
+    boolean isLong        = ( Long.class.equals( getDesiredClass() )        || Long.TYPE.equals( getDesiredClass() ) );
+    boolean isFloat       = ( Float.class.equals( getDesiredClass() )       || Float.TYPE.equals( getDesiredClass() ) );
+    boolean isDouble      = ( Double.class.equals( getDesiredClass() )      || Double.TYPE.equals( getDesiredClass() ) );
+    boolean isBigDecimal  = ( BigDecimal.class.equals( getDesiredClass() ) );
 
     Object result = null;
     if ( isShort )

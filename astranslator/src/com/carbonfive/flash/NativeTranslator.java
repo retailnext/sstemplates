@@ -6,21 +6,21 @@ public class NativeTranslator
   extends AbstractTranslator
 {
   
-  public NativeTranslator(ASTranslator astranslator)
+  public NativeTranslator(ASTranslator ast, Object obj, Class c)
   {
-    super(astranslator);
+    super(ast, obj, c);
   }
 
-  public Object translateToActionScript( Object serverObject )
+  public Object translateToActionScript( )
   {
-    return serverObject;
+    return getObject();
   }
 
 //------------------------------------------------------------------------------
 
-  public Object translateFromActionScript( Object clientObject, Class clazz )
+  public Object translateFromActionScript( )
   {
-    return clientObject;
+    return getObject();
   }
 
 }
