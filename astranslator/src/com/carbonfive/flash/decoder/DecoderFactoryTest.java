@@ -67,9 +67,7 @@ public class DecoderFactoryTest
 
   public void testHandleASObjectNatively() throws Exception
   {
-    ASObject aso = new ASObject();
-    aso.setType(ASObject.class.getName());
-    validate(aso, ASObject.class, NativeDecoder.class);
+    validate(new ASObject(), ASObject.class, NativeDecoder.class);
   }
 
   public void testCreateJavaBeanDecoder() throws Exception
