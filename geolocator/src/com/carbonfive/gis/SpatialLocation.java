@@ -106,6 +106,9 @@ public class SpatialLocation
     double La1 = this.getLatitude(); double Lo1 = this.getLongitude();
     double La2 = loc.getLatitude();  double Lo2 = loc.getLongitude();
 
+    // avoid double precision issues
+    if (La1 == La2 && Lo1 == Lo2) return 0;
+
     return acos( ( cos(La1)*cos(Lo1)*cos(La2)*cos(Lo2) ) +
                  ( cos(La1)*sin(Lo1)*cos(La2)*sin(Lo2) ) +
                  ( sin(La1)*sin(La2) )
