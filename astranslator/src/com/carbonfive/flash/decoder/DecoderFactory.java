@@ -30,8 +30,8 @@ public class DecoderFactory
   public ActionScriptDecoder getDecoder(Object encodedObject, Class desiredClass)
   {
     boolean isNativeObject = ( EncoderFactory.isActionScriptNative( encodedObject ) );
-    boolean isNumberObject = ( encodedObject instanceof Number );
-    boolean isDateObject   = ( encodedObject instanceof Date );
+    boolean isNumber       = ( encodedObject instanceof Number );
+    boolean isDate         = ( encodedObject instanceof Date );
     boolean isArray        = ( encodedObject instanceof ArrayList && desiredClass.isArray() );
     boolean isCollection   = ( encodedObject instanceof ArrayList && Collection.class.isAssignableFrom(desiredClass) );
     boolean isMap          = ( encodedObject instanceof Map       && ! (encodedObject instanceof ASObject) ) ||
@@ -41,12 +41,12 @@ public class DecoderFactory
     ActionScriptDecoder decoder = null;
 
     if      ( isNativeObject ) decoder = new CachingDecoder(nativeDecoder);
-    else if ( isNumberObject ) decoder = new CachingDecoder(numberDecoder);
-    else if ( isDateObject   ) decoder = new CachingDecoder(dateDecoder);
-    else if ( isArray )        decoder = new CachingDecoder(arrayDecoder);
-    else if ( isCollection )   decoder = new CachingDecoder(collectionDecoder);
-    else if ( isMap )          decoder = new CachingDecoder(mapDecoder);
-    else if ( isJavaBean )     decoder = new CachingDecoder(javaBeanDecoder);
+    else if ( isNumber       ) decoder = new CachingDecoder(numberDecoder);
+    else if ( isDate         ) decoder = new CachingDecoder(dateDecoder);
+    else if ( isArray        ) decoder = new CachingDecoder(arrayDecoder);
+    else if ( isCollection   ) decoder = new CachingDecoder(collectionDecoder);
+    else if ( isMap          ) decoder = new CachingDecoder(mapDecoder);
+    else if ( isJavaBean     ) decoder = new CachingDecoder(javaBeanDecoder);
     else                       decoder = new CachingDecoder(nativeDecoder);
 
     return decoder;

@@ -44,8 +44,8 @@ public class EncoderFactory
     if (ctx.getFilter().doIgnoreClass(clazz)) return nullEncoder;
 
     boolean isNativeObject = isActionScriptNative(decodedObject);
-    boolean isNumberObject = Number.class.isAssignableFrom(clazz);
-    boolean isDateObject   = Date.class.isAssignableFrom(clazz);
+    boolean isNumber       = Number.class.isAssignableFrom(clazz);
+    boolean isDate         = Date.class.isAssignableFrom(clazz);
     boolean isArray        = clazz.isArray();
     boolean isCollection   = Collection.class.isAssignableFrom(clazz);
     boolean isMap          = Map.class.isAssignableFrom(clazz);
@@ -54,12 +54,12 @@ public class EncoderFactory
     ActionScriptEncoder encoder = null;
 
     if      ( isNativeObject ) encoder = new CachingEncoder(nativeEncoder);
-    else if ( isNumberObject ) encoder = new CachingEncoder(numberEncoder);
-    else if ( isDateObject   ) encoder = new CachingEncoder(dateEncoder);
-    else if ( isArray )        encoder = new CachingEncoder(arrayEncoder);
-    else if ( isMap )          encoder = new CachingEncoder(mapEncoder);
-    else if ( isCollection )   encoder = new CachingEncoder(collectionEncoder);
-    else if ( isJavaBean )     encoder = new CachingEncoder(javaBeanEncoder);
+    else if ( isNumber       ) encoder = new CachingEncoder(numberEncoder);
+    else if ( isDate         ) encoder = new CachingEncoder(dateEncoder);
+    else if ( isArray        ) encoder = new CachingEncoder(arrayEncoder);
+    else if ( isMap          ) encoder = new CachingEncoder(mapEncoder);
+    else if ( isCollection   ) encoder = new CachingEncoder(collectionEncoder);
+    else if ( isJavaBean     ) encoder = new CachingEncoder(javaBeanEncoder);
     else
     {
       if (! (decodedObject instanceof Serializable))
