@@ -10,18 +10,29 @@ public class ASTranslatorFactory
 
   public static final String FACTORY_PROPERTY = ASTranslatorFactory.class.getName();
 
-  public static ASTranslatorFactory getInstance() throws Exception
+  public static ASTranslatorFactory getInstance() throws ASTranslationException
   {
     String factoryClassName = System.getProperty(FACTORY_PROPERTY);
     if (factoryClassName == null || "".equals(factoryClassName)) return new ASTranslatorFactory();
 
-    Class factoryClass = Thread.currentThread().getContextClassLoader().loadClass(factoryClassName);
+    try
+    {
+      Class factoryClass = Thread.currentThread().getContextClassLoader().loadClass(factoryClassName);
 
-    if (! ASTranslatorFactory.class.isAssignableFrom(factoryClass))
-      throw new ASTranslationException("Custom ASTranslatorFactory must extend ASTranslatorFactory class: " +
-                                       factoryClass.getName());
+      if (! ASTranslatorFactory.class.isAssignableFrom(factoryClass))
+        throw new ASTranslationException("Custom ASTranslatorFactory must extend ASTranslatorFactory class: " +
+                                         factoryClass.getName());
 
-    return (ASTranslatorFactory) factoryClass.newInstance();
+      return (ASTranslatorFactory) factoryClass.newInstance();
+    }
+    catch (RuntimeException re)
+    {
+      throw re;
+    }
+    catch (Exception e)
+    {
+      throw new ASTranslationException("Error creating custom ASTranslatorFactory", e);
+    }
   }
 
   protected ASTranslatorFactory()
