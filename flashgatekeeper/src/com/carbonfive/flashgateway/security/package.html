@@ -44,6 +44,11 @@ Using the core Java APIs a Flash client can connect to java.util.ArrayList as a 
 
 <p>
 Macromedia's recommended approach for dealing with this security issue is to enable the Java Security Manager for your application server and edit the Java security policy file to limit the classes the Remoting gateway servlet can access. Unfortunately, the Java Security Manager will slow down your application server, security policy files are a pain to edit and manage, and you can't even prevent the ArrayList exploit above because the Remoting gateway needs access to ArrayList to function. The Security Manager can not distinguish between the gateway using a class as a Remoting service or as part of its written code.
+</p>
+
+<p>
+Don't use the Security Manager solution. Use FlashGatekeeper.
+</p>
 
 <h3><a name="download">Download</a></h3>
 
