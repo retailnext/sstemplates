@@ -3,8 +3,10 @@ package com.carbonfive.flash.encoder;
 import java.util.*;
 import java.lang.reflect.*;
 import java.beans.*;
+import java.io.*;
 import flashgateway.io.ASObject;
 import org.apache.commons.beanutils.*;
+import org.apache.log4j.*;
 import com.carbonfive.flash.encoder.*;
 
 /**
@@ -13,6 +15,8 @@ import com.carbonfive.flash.encoder.*;
 public class JavaBeanEncoder
   implements ActionScriptEncoder
 {
+  private static final Logger log = Logger.getLogger(JavaBeanEncoder.class);
+
   private static Set objectAttributes = new HashSet(Arrays.asList(PropertyUtils.getPropertyDescriptors(Object.class)));
 
   public Object encodeObject( Object decodedObject )
@@ -36,6 +40,8 @@ public class JavaBeanEncoder
     for (int i = 0; i < attributes.length; i++)
     {
       if (objectAttributes.contains(attributes[i])) continue;
+      if (isDangerous(decoded, attributes[i])) continue;
+
       attributeName  = attributes[i].getName();
       getter  = attributes[i].getReadMethod();
 
@@ -50,10 +56,26 @@ public class JavaBeanEncoder
         continue;
       }
 
+      if (decoded.equals(attributeValue))
+      {
+        log.warn("Child of JavaBean is itself: " + decoded);
+        continue;
+      }
+
       encodedAttributeValue = EncoderFactory.getInstance().getEncoder( attributeValue ).encodeObject( attributeValue );
       encoded.put( attributeName, encodedAttributeValue );
     }
 
     return encoded;
   }
+
+  private boolean isDangerous(Object obj, PropertyDescriptor pd)
+  {
+    return dangerous.contains(obj.getClass().getName() + "." + pd.getName());
+  }
+
+  private static Set dangerous = new HashSet(Arrays.asList(new String[]
+  {
+    "java.io.File.parentFile", "java.io.File.canonicalFile", "java.io.File.absoluteFile"
+  }));
 }

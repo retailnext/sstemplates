@@ -2,6 +2,7 @@ package com.carbonfive.flash.encoder;
 
 import com.carbonfive.flash.encoder.*;
 import com.carbonfive.flash.*;
+import org.apache.log4j.*;
 
 /**
  * Provides reference-based caching for Java to ActionScript encoding.
@@ -9,6 +10,9 @@ import com.carbonfive.flash.*;
 public class CachingEncoder
   implements ActionScriptEncoder
 {
+  private static final Logger log = Logger.getLogger(CachingEncoder.class);
+  private static final int MAXIMUM_DEPTH = 100;
+  
   private ActionScriptEncoder nextEncoder = null;
 
   public CachingEncoder(ActionScriptEncoder next)
@@ -25,7 +29,16 @@ public class CachingEncoder
       return encoderCache.get( decodedObject );
     }
 
-    Object encodedObject = nextEncoder.encodeObject( decodedObject );
+    Object encodedObject = null;
+    try
+    {
+      encodedObject = nextEncoder.encodeObject( decodedObject );
+    }
+    catch (StackOverflowError e)
+    {
+      log.error("Stack overflow encoding: " + decodedObject);
+      throw e;
+    }
 
     if (encodedObject != null)
     {
