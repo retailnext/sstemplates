@@ -7,6 +7,8 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer; 
 
 /**
+* This code derived from an example Http daemon:
+* 
 * Simple multithreaded Http daemon that exclusively uses
 * the 'old ' I/O API.
 *
