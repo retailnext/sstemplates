@@ -101,4 +101,20 @@ public class ArrayDecoderTest
     assertEquals(1, array[0]);
     assertEquals(2, array[1]);
   }
+
+  public void testNullEntry() throws Exception
+  {
+    List list = new ArrayList();
+    list.add("1");
+    list.add(null);
+
+    ArrayDecoder decoder = new ArrayDecoder();
+    Object decoded = decoder.decodeObject(list, new String[2].getClass());
+
+    assertTrue(decoded instanceof String[]);
+
+    String[] array = (String[]) decoded;
+    assertEquals("1", array[0]);
+    assertNull(array[1]);
+  }
 }

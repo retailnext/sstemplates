@@ -90,4 +90,17 @@ public class ArrayEncoderTest
     assertEquals(new Double(2), list.get(1));
     assertEquals(new Double(3), list.get(2));
   }
+
+  public void testNullEntry() throws Exception
+  {
+    String[] array = new String[] { "1", null };
+    ArrayEncoder encoder = new ArrayEncoder();
+
+    Object encoded = encoder.encodeObject(Context.getBaseContext(), array);
+    assertTrue(encoded instanceof ArrayList);
+
+    ArrayList list = (ArrayList) encoded;
+    assertEquals("1", list.get(0));
+    assertNull(list.get(1));
+  }
 }

@@ -63,4 +63,16 @@ public class CollectionDecoderTest
     assertEquals(Arrays.asList(new Double[] { new Double(1.5), new Double(2) }), list2);
   }
 
+  public void testNullEntry() throws Exception
+  {
+    List list = new ArrayList();
+    list.add("1");
+    list.add(null);
+
+    CollectionDecoder decoder = new CollectionDecoder();
+    List list2 = (List) decoder.decodeObject(list, Collection.class);
+    assertTrue(list2.get(0) instanceof String);
+    assertEquals("1", list2.get(0));
+    assertNull(list2.get(1));
+  }
 }

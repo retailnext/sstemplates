@@ -35,6 +35,12 @@ public class CollectionDecoder
     {
       obj = i.next();
 
+      if (obj == null)
+      {
+        decodedCollection.add(null);
+        continue;
+      }
+
       desiredObjClass = ( forceClass == null ? obj.getClass() : forceClass );
 
       decoder = DecoderFactory.getInstance().getDecoder( obj, desiredObjClass );
