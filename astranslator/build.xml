@@ -18,7 +18,7 @@
       <pathelement location="${props}"/>
       <pathelement location="${lib}/commons-beanutils.jar"/>
       <pathelement location="${lib}/commons-collections.jar"/>
-      <pathelement location="${lib}/log4j-1.2.5.jar"/>
+      <pathelement location="${lib}/commons-logging.jar"/>
     </path>
   </target>
     
