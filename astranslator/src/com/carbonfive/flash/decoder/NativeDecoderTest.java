@@ -53,15 +53,17 @@ public class NativeDecoderTest
 
   public void testNativeDecodeConversion() throws Exception
   {
-    assertTrue(decoder.decodeObject("true", Boolean.class) instanceof Boolean);
-    assertTrue(decoder.decodeObject("10",   Integer.class) instanceof Integer);
-    assertTrue(decoder.decodeObject("10",   Float.class)   instanceof Float);
-    assertTrue(decoder.decodeObject("10",   Double.class)  instanceof Double);
+    assertTrue(decoder.decodeObject("true", Boolean.class)   instanceof Boolean);
+    assertTrue(decoder.decodeObject("10",   Integer.class)   instanceof Integer);
+    assertTrue(decoder.decodeObject("10",   Float.class)     instanceof Float);
+    assertTrue(decoder.decodeObject("10",   Double.class)    instanceof Double);
+    assertTrue(decoder.decodeObject("a",    Character.class) instanceof Character);
 
-    assertEquals(Boolean.TRUE,    decoder.decodeObject("true", Boolean.class));
-    assertEquals(new Integer(10), decoder.decodeObject("10",   Integer.class));
-    assertEquals(new Float(10),   decoder.decodeObject("10",   Float.class));
-    assertEquals(new Double(10),  decoder.decodeObject("10",   Double.class));
+    assertEquals(Boolean.TRUE,       decoder.decodeObject("true", Boolean.class));
+    assertEquals(new Integer(10),    decoder.decodeObject("10",   Integer.class));
+    assertEquals(new Float(10),      decoder.decodeObject("10",   Float.class));
+    assertEquals(new Double(10),     decoder.decodeObject("10",   Double.class));
+    assertEquals(new Character('a'), decoder.decodeObject("a",    Character.class));
   }
 
   public void testNativeDecoderConversionError() throws Exception

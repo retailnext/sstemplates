@@ -33,13 +33,14 @@ public class NativeDecoder
       log.info("Converting ActionScript string object to non-string Java object: " + encodedObject +
                " --> " + desiredClass.getName());
 
-      boolean isBoolean    = Boolean.class.equals(desiredClass) || Boolean.TYPE.equals(desiredClass);
-      boolean isByte       = Byte.class.equals(desiredClass)    || Byte.TYPE.equals(desiredClass);
-      boolean isShort      = Short.class.equals(desiredClass)   || Short.TYPE.equals(desiredClass);
-      boolean isInteger    = Integer.class.equals(desiredClass) || Integer.TYPE.equals(desiredClass);
-      boolean isLong       = Long.class.equals(desiredClass)    || Long.TYPE.equals(desiredClass);
-      boolean isFloat      = Float.class.equals(desiredClass)   || Float.TYPE.equals(desiredClass);
-      boolean isDouble     = Double.class.equals(desiredClass)  || Double.TYPE.equals(desiredClass);
+      boolean isBoolean    = Boolean.class.equals(desiredClass)   || Boolean.TYPE.equals(desiredClass);
+      boolean isChar       = Character.class.equals(desiredClass) || Character.TYPE.equals(desiredClass);
+      boolean isByte       = Byte.class.equals(desiredClass)      || Byte.TYPE.equals(desiredClass);
+      boolean isShort      = Short.class.equals(desiredClass)     || Short.TYPE.equals(desiredClass);
+      boolean isInteger    = Integer.class.equals(desiredClass)   || Integer.TYPE.equals(desiredClass);
+      boolean isLong       = Long.class.equals(desiredClass)      || Long.TYPE.equals(desiredClass);
+      boolean isFloat      = Float.class.equals(desiredClass)     || Float.TYPE.equals(desiredClass);
+      boolean isDouble     = Double.class.equals(desiredClass)    || Double.TYPE.equals(desiredClass);
       boolean isBigDecimal = BigDecimal.class.isAssignableFrom(desiredClass); // BigDecimal is not final
       boolean isDate       = Date.class.isAssignableFrom(desiredClass); // Date is not final
 
@@ -47,6 +48,7 @@ public class NativeDecoder
       {
         Object result = null;
         if      ( isBoolean )    result = Boolean.valueOf((String) encodedObject);
+        else if ( isChar )       result = getChar((String) encodedObject);
         else if ( isByte )       result = Byte.valueOf((String) encodedObject);
         else if ( isShort )      result = Short.valueOf((String) encodedObject);
         else if ( isInteger )    result = Integer.valueOf((String) encodedObject);
@@ -71,5 +73,14 @@ public class NativeDecoder
   Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
     return shell;
+  }
+
+  private Character getChar(String str)
+  {
+    if (str == null) return null;
+    if (str.length() == 0) return null;
+    Character c = new Character(str.charAt(0));
+    if (str.length() > 1) log.warn("Converting multi-character string to char: " + str + " --> " + c);
+    return c;
   }
 }

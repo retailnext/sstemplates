@@ -1,6 +1,5 @@
 package com.carbonfive.flash.encoder;
 
-import java.util.*;
 import junit.framework.*;
 import com.carbonfive.flash.*;
 
