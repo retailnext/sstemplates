@@ -30,7 +30,7 @@ FlashGatekeeper is supported by <a target="_top" href="http://www.carbonfive.com
 FlashGatekeeper gives developers the ability to configure the services that can be invoked through Flash Remoting.
 
 <p>
-Flash Remoting is implemented as a servlet that uses introspection to invoke methods on a class in the application server. The class and method are both named by the Flash client. A Flash MX client can invoke any method through the Flash Remoting gateway on any class that has a no argument constructor and can therefore be created by the Flash Remoting gateway servlet using Class.forName("package.ClassName").newInstance( ). 
+Macromedia Flash Remoting is implemented as a servlet that uses introspection to invoke methods on a class in the application server. The class and method are both named by the Flash client. A Flash MX client can invoke any method through the Flash Remoting gateway on any class that has a no argument constructor and can therefore be created by the Flash Remoting gateway servlet using Class.forName("package.ClassName").newInstance( ). It can also invoke any method on any EJB home interface that it can find in JNDI.
 </p>
 
 <p>
