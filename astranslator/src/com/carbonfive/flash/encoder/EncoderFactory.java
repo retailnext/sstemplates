@@ -57,7 +57,12 @@ public class EncoderFactory
     else if ( isMap )          encoder = new CachingEncoder(mapEncoder);
     else if ( isCollection )   encoder = new CachingEncoder(collectionEncoder);
     else if ( isJavaBean )     encoder = new CachingEncoder(javaBeanEncoder);
-    else                       encoder = new CachingEncoder(nativeEncoder);
+    else
+    {
+      if (! (decodedObject instanceof Serializable))
+        log.warn("Cannot encode object: " + clazz.getName() + " - It must implement Serializable");
+      encoder = new CachingEncoder(nativeEncoder);
+    }
 
     return encoder;
   }
