@@ -1,0 +1,19 @@
+<config>
+  <service>
+    <name>ServiceName</name>
+    <method>
+      <name>methodName</name>
+      <access-constraint>
+        <role-name>ADMIN</role-name>
+        <role-name>GUEST</role-name>
+      </access-constraint>
+    </method>
+    <method>
+      <name>*</name>
+      <access-constraint>
+        <role-name>ADMIN</role-name>
+        <role-name>GUEST</role-name>
+      </access-constraint>
+    </method>
+  </service>
+</config>
