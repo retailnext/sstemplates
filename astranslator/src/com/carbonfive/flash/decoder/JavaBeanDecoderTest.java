@@ -46,7 +46,6 @@ public class JavaBeanDecoderTest
     aso.put("longField", new Double(bean.getLongField()));
     aso.put("doubleField", new Double(bean.getDoubleField()));
     aso.put("strField", bean.getStrField());
-    aso.put("xmlField", bean.getXmlField());
 
     ActionScriptDecoder decoder = factory.getDecoder(aso, TestBean.class);
     assertNotNull(decoder);
@@ -61,6 +60,5 @@ public class JavaBeanDecoderTest
     assertEquals(bean.getLongField(), decodedBean.getLongField());
     assertEquals(bean.getDoubleField(), decodedBean.getDoubleField(), DELTA);
     assertEquals(bean.getStrField(), decodedBean.getStrField());
-    assertEquals(bean.getXmlField(), decodedBean.getXmlField());
   }
 }

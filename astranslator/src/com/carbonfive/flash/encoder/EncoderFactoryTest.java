@@ -68,6 +68,14 @@ public class EncoderFactoryTest
     validate(TestBean.getTestBean(), JavaBeanEncoder.class);
   }
 
+  public void testInstanceOf()
+    throws Exception
+  {
+    assertTrue(EncoderFactory.instanceOf(String.class, "java.lang.String"));
+    assertTrue(EncoderFactory.instanceOf(Integer.class, "java.lang.Number"));
+    assertTrue(! EncoderFactory.instanceOf(String.class, "java.lang.Number"));
+  }
+
   private void validate(Object obj, Class encoderClass)
   {
     ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder(Context.getBaseContext(), obj);

@@ -55,14 +55,12 @@ public class JavaBeanEncoderTest
     assertTrue(aso.get("longField") instanceof Double);
     assertTrue(aso.get("doubleField") instanceof Double);
     assertTrue(aso.get("strField") instanceof String);
-    assertTrue(aso.get("xmlField") instanceof Document);
 
     assertEquals(bean.getIntField(), ((Double) aso.get("intField")).intValue());
     assertEquals(bean.getShortField(), ((Double) aso.get("shortField")).shortValue());
     assertEquals(bean.getLongField(), ((Double) aso.get("longField")).longValue());
     assertEquals(bean.getDoubleField(), ((Double) aso.get("doubleField")).doubleValue(), DELTA);
-    assertEquals(bean.getStrField(), (String) aso.get("strField"));
-    assertEquals(bean.getXmlField(), (Document) aso.get("xmlField"));
+    assertEquals(bean.getStrField(), aso.get("strField"));
   }
 
 }

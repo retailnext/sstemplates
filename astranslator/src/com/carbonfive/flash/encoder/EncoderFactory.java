@@ -70,15 +70,24 @@ public class EncoderFactory
    */
   public static boolean isActionScriptNative(Object obj)
   {
-    if (obj == null)                                       return false;
-    if (obj instanceof Boolean)                            return true;
-    if (obj instanceof Date)                               return true;
-    if (obj instanceof String)                             return true;
-    if (obj instanceof Character)                          return true;
-    if (obj instanceof org.w3c.dom.Document)               return true;
-    if (obj instanceof flashgateway.io.ASXMLString)        return true;
-    if (obj instanceof java.sql.ResultSet)                 return true;
-    if (obj instanceof flashgateway.sql.PageableResultSet) return true;
+    if (obj == null)                                                      return false;
+    if (obj instanceof Boolean)                                           return true;
+    if (obj instanceof Date)                                              return true;
+    if (obj instanceof String)                                            return true;
+    if (obj instanceof Character)                                         return true;
+    if (obj instanceof java.sql.ResultSet)                                return true;
+    if (instanceOf(obj.getClass(), "org.w3c.dom.Document"))               return true;
+    if (instanceOf(obj.getClass(), "flashgateway.io.ASXMLString"))        return true;
+    if (instanceOf(obj.getClass(), "flashgateway.sql.PageableResultSet")) return true;
+
     return false;
+  }
+
+  static boolean instanceOf(Class clazz, String className)
+  {
+    if (clazz == null) return false;
+    if (className.equals(clazz.getName())) return true;
+    if (clazz.getSuperclass() == null) return false;
+    return instanceOf(clazz.getSuperclass(), className);
   }
 }
