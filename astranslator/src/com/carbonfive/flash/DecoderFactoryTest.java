@@ -75,9 +75,9 @@ public class DecoderFactoryTest
     throws Exception
   {
     ASObject aso = new ASObject();
-    aso.setType(ASTranslatorTest.TestBean.class.getName());
+    aso.setType(TestBean.class.getName());
 
-    validate(aso, ASTranslatorTest.TestBean.class, JavaBeanDecoder.class);
+    validate(aso, TestBean.class, JavaBeanDecoder.class);
   }
 
   private void validate(Object obj, Class desiredClass, Class decoderClass)

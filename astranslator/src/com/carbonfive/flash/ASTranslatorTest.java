@@ -52,7 +52,7 @@ public class ASTranslatorTest
   public void testTranslateToASObject()
     throws Exception
   {
-    TestBean bean = getTestBean();
+    TestBean bean = TestBean.getTestBean();
 
     ASObject as = (ASObject) new ASTranslator().toActionScript(bean);
 
@@ -62,7 +62,7 @@ public class ASTranslatorTest
   public void testDeepTranslateToASObject()
     throws Exception
   {
-    TestBean bean = getTestBean();
+    TestBean bean = TestBean.getTestBean();
 
     DeepTestBean deepbean = new DeepTestBean();
     deepbean.setBeanField(bean);
@@ -85,7 +85,7 @@ public class ASTranslatorTest
     a.setListField(new ArrayList());
     a.getListField().add("one");
 
-    TestBean bean = getTestBean();
+    TestBean bean = TestBean.getTestBean();
 
     a.getListField().add(bean);
     a.getListField().add(bean);
@@ -134,14 +134,14 @@ public class ASTranslatorTest
     as.setType(TestBean.class.getName());
     as.put("strField", "A string");
     as.put("intField", new Double(3));
-    as.put("xmlField", getXmlDocument());
+    as.put("xmlField", TestBean.getXmlDocument());
 
     TestBean bean = (TestBean) new ASTranslator().fromActionScript(as);
     assertNotNull(bean);
     assertEquals(as.get("intField"), new Double(bean.getIntField()));
     assertEquals(as.get("strField"), bean.getStrField());
     Document xmlField = (Document) as.get("xmlField");
-    assertEquals(xmlField.getDocumentElement().getTagName(), getXmlDocument().getDocumentElement().getTagName());
+    assertEquals(xmlField.getDocumentElement().getTagName(), TestBean.getXmlDocument().getDocumentElement().getTagName());
   }
 
   public void testDeepTranslateToBean()
@@ -251,7 +251,7 @@ public class ASTranslatorTest
     throws Exception
   {
     HashMap map = new HashMap();
-    TestBean bean = getTestBean();
+    TestBean bean = TestBean.getTestBean();
 
     map.put("one", bean);
     map.put("two", bean);
@@ -268,8 +268,8 @@ public class ASTranslatorTest
   {
     ComplexSpecificTestBean bean = new ComplexSpecificTestBean();
     ArrayList list = new ArrayList();
-    list.add(getTestBean());
-    list.add(getTestBean());
+    list.add(TestBean.getTestBean());
+    list.add(TestBean.getTestBean());
     bean.setListField(list);
 
     ASObject as = (ASObject) new ASTranslator().toActionScript(bean);
@@ -378,64 +378,12 @@ public class ASTranslatorTest
     assertTrue(msg, as.containsKey("xmlField"));
     Object xmlField = as.get("xmlField");
     assertTrue(msg, xmlField instanceof Document);
-    assertEquals(msg, bean.getXmlField().getDocumentElement().getTagName(), getXmlDocument().getDocumentElement().getTagName());
+    assertEquals(msg, bean.getXmlField().getDocumentElement().getTagName(), TestBean.getXmlDocument().getDocumentElement().getTagName());
   }
 
   public void testCacheGetsEmptied()
   {
   }
-
-  static TestBean getTestBean()
-  {
-    TestBean bean = new TestBean();
-    bean.setIntField(1);
-    bean.setStrField("A string");
-    bean.setLongField(12345);
-    bean.setDoubleField(1.1234);
-    bean.setXmlField(getXmlDocument());
-    return bean;
-  }                                               
-
-  public static class TestBean
-    implements java.io.Serializable
-  {
-    private int intField;
-    private short shortField;
-    private long longField;
-    private double doubleField;
-    private String strField;
-    private Document xmlDocument;
-    public int getIntField() { return this.intField; }
-    public void setIntField(int i) { this.intField = i; }
-    public short getShortField() { return this.shortField; }
-    public void setShortField(short s) { this.shortField = s; }
-    public long getLongField() { return this.longField; }
-    public void setLongField(long l) { this.longField = l; }
-    public double getDoubleField() { return this.doubleField; }
-    public void setDoubleField(double d) { this.doubleField = d; }
-    public String getStrField() { return this.strField; }
-    public void setStrField(String s) { this.strField = s; }
-    public Document getXmlField() { return this.xmlDocument; }
-    public void setXmlField(Document d) { this.xmlDocument = d; }
-  }
-  
-  private static Document getXmlDocument()
-  {
-    Document doc= new DocumentImpl();
-    Element root = doc.createElement("person");     
-    Element item = doc.createElement("name");       
-    item.appendChild( doc.createTextNode("Jeff") );
-    root.appendChild( item );                       
-    item = doc.createElement("age");                
-    item.appendChild( doc.createTextNode("28" ) );  
-    root.appendChild( item );                       
-    item = doc.createElement("height");            
-    item.appendChild( doc.createTextNode("1.80" ) );
-    root.appendChild( item );                       
-    doc.appendChild( root );  
-    
-    return doc; 
-  }  
 
   public static class DeepTestBean
     implements java.io.Serializable

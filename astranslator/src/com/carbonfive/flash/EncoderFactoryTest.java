@@ -74,7 +74,7 @@ public class EncoderFactoryTest
   public void testCreateJavaBeanEncoder()
     throws Exception
   {
-    validate(ASTranslatorTest.getTestBean(), JavaBeanEncoder.class);
+    validate(TestBean.getTestBean(), JavaBeanEncoder.class);
   }
 
   private void validate(Object obj, Class encoderClass)
