@@ -3,6 +3,7 @@ package com.carbonfive.flash;
 import flashgateway.io.ASObject;
 import com.carbonfive.flash.decoder.*;
 import com.carbonfive.flash.encoder.*;
+import org.apache.commons.logging.*;
 
 
  /**
@@ -14,13 +15,14 @@ import com.carbonfive.flash.encoder.*;
   */
 public class ASTranslator
 {
+   private static final Log log = LogFactory.getLog(ASTranslator.class);
 
   /**
    * Given an Object, toActionScript creates a corresponding ASObject
    * or Collection of ASObjects that maps the source object's JavaBean
    * properties to ASObject fields, Collections and Sets to
    * ArrayLists, and all Numbers to Doubles while maintaining object
-   * references.  
+   * references (including circular references).
    * <p> 
    * These mappings are consistent with Flash Remoting's rules for
    * converting Objects to ASObjects. They just add the behavior of
@@ -42,7 +44,7 @@ public class ASTranslator
     CachingManager.getEncoderCache(); // create the cache here
 
     ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder( serverObject );
-    Object              result  = encoder.encodeObject( serverObject );
+    Object              result  = encoder.encodeObject(encoder.encodeShell(serverObject), serverObject);
 
     CachingManager.removeEncoderCache(); // remove it here
 
@@ -97,7 +99,8 @@ public class ASTranslator
     CachingManager.getDecoderCache();
 
     ActionScriptDecoder decoder = DecoderFactory.getInstance().getDecoder( actionScriptObject, desiredBeanClass );
-    Object              result  = decoder.decodeObject( actionScriptObject, desiredBeanClass );
+    Object              result  = decoder.decodeObject( decoder.decodeShell(actionScriptObject, desiredBeanClass),
+                                                        actionScriptObject, desiredBeanClass );
 
     CachingManager.removeEncoderCache();
 

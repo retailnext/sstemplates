@@ -15,7 +15,12 @@ public class CachingDecoder
     this.nextDecoder = next;
   }
 
-  public Object decodeObject( Object encodedObject, Class desiredClass )
+  public Object decodeShell(Object encodedObject, Class desiredClass)
+  {
+    return null;
+  }
+
+  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
     ReferenceBasedCache decoderCache = CachingManager.getDecoderCache();
 
@@ -24,19 +29,19 @@ public class CachingDecoder
       return decoderCache.get( encodedObject );
     }
 
-    Object decodedObject = nextDecoder.decodeObject( encodedObject, desiredClass );
+    Object decodedShell = nextDecoder.decodeShell(encodedObject, desiredClass);
+    if (decodedShell != null) decoderCache.put(encodedObject, decodedShell);
 
-    if (decodedObject != null)
-    {
-      decoderCache.put( encodedObject, decodedObject );
-      return decodedObject;
-    }
-
-    return null;
+    return nextDecoder.decodeObject(decodedShell, encodedObject, desiredClass);
   }
 
   public ActionScriptDecoder getNextDecoder()
   {
     return nextDecoder;
+  }
+
+  public String toString()
+  {
+    return "CachingDecoder[" + nextDecoder + "]";
   }
 }

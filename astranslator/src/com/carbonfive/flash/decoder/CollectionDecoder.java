@@ -11,10 +11,15 @@ public class CollectionDecoder
   implements ActionScriptDecoder
 {
   private static final Log log = LogFactory.getLog(CollectionDecoder.class);
-  
-  public Object decodeObject( Object encodedObject, Class desiredClass )
+
+  public Object decodeShell(Object encodedObject, Class desiredClass)
   {
-    Collection    decodedCollection = createCollection(desiredClass);
+    return createCollection(desiredClass);
+  }
+
+  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  {
+    Collection    decodedCollection = (Collection) shell;
     Object        decodedObject     = null;
     Object        obj               = null;
 
@@ -24,6 +29,7 @@ public class CollectionDecoder
     Class forceClass = null;
     if (isFullOfIntegers((Collection) encodedObject)) forceClass = Integer.class;
 
+    ActionScriptDecoder decoder = null;
     Class desiredObjClass = null;
     for (Iterator i = ( (Collection) encodedObject ).iterator(); i.hasNext(); )
     {
@@ -31,7 +37,8 @@ public class CollectionDecoder
 
       desiredObjClass = ( forceClass == null ? obj.getClass() : forceClass );
 
-      decodedObject = DecoderFactory.getInstance().getDecoder( obj, desiredObjClass ).decodeObject( obj, desiredObjClass );
+      decoder = DecoderFactory.getInstance().getDecoder( obj, desiredObjClass );
+      decodedObject = decoder.decodeObject(decoder.decodeShell(obj, desiredObjClass), obj, desiredObjClass);
       decodedCollection.add( decodedObject );
     }
 

@@ -1,6 +1,7 @@
 package com.carbonfive.flash;
 
 import java.util.*;
+import java.io.*;
 import org.w3c.dom.*;
 import junit.framework.*;
 import flashgateway.io.ASObject;
@@ -392,6 +393,32 @@ public class ASTranslatorTest
     assertEquals(list, encodedSet);
   }
 
+  public void testCircularTranslateToASObject()
+    throws Exception
+  {
+    CircularTestBean ctb = new CircularTestBean();
+    ctb.setMe(ctb);
+    Object encoded = new ASTranslator().toActionScript(ctb);
+
+    assertNotNull(encoded);
+    assertTrue(encoded instanceof ASObject);
+    ASObject as = (ASObject) encoded;
+    assertTrue(as.get("me") == as);
+  }
+
+  public void testCircularTranslateFromASObject()
+    throws Exception
+  {
+    ASObject as = new ASObject();
+    as.setType(CircularTestBean.class.getName());
+    as.put("me", as);
+    Object obj = new ASTranslator().fromActionScript(as);
+    assertNotNull(obj);
+    assertTrue(obj instanceof CircularTestBean);
+    CircularTestBean ctb = (CircularTestBean) obj;
+    assertTrue(ctb == ctb.getMe());
+  }
+
   private void validateTestBean(TestBean bean, ASObject as)
     throws Exception
   {
@@ -463,6 +490,14 @@ public class ASTranslatorTest
     public void setListField(List l) { this.listField = l; }
     public Map getMapField() { return this.mapField; }
     public void setMapField(Map h) { this.mapField = h; }
+  }
+
+  public static class CircularTestBean
+    implements Serializable
+  {
+    private CircularTestBean me;
+    public CircularTestBean getMe() { return me; }
+    public void setMe(CircularTestBean c) { me = c; }
   }
 
 }

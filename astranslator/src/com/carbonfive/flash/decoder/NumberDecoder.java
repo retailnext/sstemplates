@@ -8,7 +8,7 @@ import java.math.*;
 public class NumberDecoder
   implements ActionScriptDecoder
 {
-  public Object decodeObject( Object encodedObject, Class desiredClass )
+  public Object decodeShell(Object encodedObject, Class desiredClass)
   {
     Double dbl = (Double) encodedObject;
     boolean isByte        = ( Byte.class.equals( desiredClass )        || Byte.TYPE.equals( desiredClass ) );
@@ -29,5 +29,10 @@ public class NumberDecoder
     else if ( isBigDecimal ) result = new BigDecimal(dbl.doubleValue());
 
     return result;
+  }
+
+  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  {
+    return shell;
   }
 }

@@ -9,19 +9,29 @@ import java.lang.reflect.*;
 public class ArrayDecoder
   implements ActionScriptDecoder
 {
-  public Object decodeObject( Object encodedObject, Class desiredClass )
+  public Object decodeShell(Object encodedObject, Class desiredClass)
   {
     Class  arrayElementClass = desiredClass.getComponentType();
     int    size              = ( (List) encodedObject ).size();
     Object decodedArray      = Array.newInstance(arrayElementClass, size);
+    return decodedArray;
+  }
+
+  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  {
+    Class  arrayElementClass = desiredClass.getComponentType();
+    Object decodedArray      = shell;
     Object encodedValue      = null;
     Object decodedValue      = null;
-    int    n                 = 0;
+
+    ActionScriptDecoder decoder = null;
+    int n = 0;
     for ( Iterator i = ((List) encodedObject).iterator(); i.hasNext(); )
     {
-      encodedValue      = i.next();
-      decodedValue      = DecoderFactory.getInstance().getDecoder( encodedValue, arrayElementClass )
-                                                      .decodeObject( encodedValue, arrayElementClass );
+      encodedValue = i.next();
+      decoder      = DecoderFactory.getInstance().getDecoder( encodedValue, arrayElementClass );
+      decodedValue = decoder.decodeObject(decoder.decodeShell(encodedValue, arrayElementClass),
+                                          encodedValue, arrayElementClass);
       Array.set(decodedArray, n++, decodedValue);
     }
 

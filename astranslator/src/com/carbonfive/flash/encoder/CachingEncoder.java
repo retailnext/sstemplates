@@ -19,7 +19,12 @@ public class CachingEncoder
     this.nextEncoder = next;
   }
 
-  public Object encodeObject( Object decodedObject )
+  public Object encodeShell(Object decodedObject)
+  {
+    return null;
+  }
+
+  public Object encodeObject(Object shell, Object decodedObject)
   {
     ReferenceBasedCache encoderCache = CachingManager.getEncoderCache();
 
@@ -28,24 +33,10 @@ public class CachingEncoder
       return encoderCache.get( decodedObject );
     }
 
-    Object encodedObject = null;
-    try
-    {
-      encodedObject = nextEncoder.encodeObject( decodedObject );
-    }
-    catch (StackOverflowError e)
-    {
-      log.error("Stack overflow encoding: " + decodedObject);
-      throw e;
-    }
+    Object encodedShell = nextEncoder.encodeShell(decodedObject);
+    if (encodedShell != null) encoderCache.put(decodedObject, encodedShell);
 
-    if (encodedObject != null)
-    {
-      encoderCache.put( decodedObject, encodedObject );
-      return encodedObject;
-    }
-
-    return null;
+    return nextEncoder.encodeObject(encodedShell, decodedObject);
   }
 
   public ActionScriptEncoder getNextEncoder()

@@ -5,5 +5,6 @@ package com.carbonfive.flash.encoder;
  */
 public interface ActionScriptEncoder
 {
-  public Object encodeObject( Object decodedObject );
+  public Object encodeShell( Object decodedObject );
+  public Object encodeObject( Object shell, Object decodedObject );
 }

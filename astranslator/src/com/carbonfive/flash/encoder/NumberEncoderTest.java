@@ -51,7 +51,7 @@ public class NumberEncoderTest
   {
     NumberEncoder encoder = new NumberEncoder();
 
-    Object encodedNumber = encoder.encodeObject(decodedNumber);
+    Object encodedNumber = encoder.encodeObject(encoder.encodeShell(decodedNumber), decodedNumber);
 
     assertNotNull(encodedNumber);
     assertEquals(Double.class, encodedNumber.getClass());

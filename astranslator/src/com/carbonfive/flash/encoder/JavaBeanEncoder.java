@@ -18,9 +18,14 @@ public class JavaBeanEncoder
 
   private static Set objectAttributes = new HashSet(Arrays.asList(PropertyUtils.getPropertyDescriptors(Object.class)));
 
-  public Object encodeObject( Object decodedObject )
+  public Object encodeShell(Object decodedObject)
   {
-    ASObject encodedObject = new ASObject();
+    return new ASObject();
+  }
+
+  public Object encodeObject(Object shell, Object decodedObject)
+  {
+    ASObject encodedObject = (ASObject) shell;
     encodedObject.setType( decodedObject.getClass().getName() );
     encodedObject = populate( decodedObject, encodedObject );
 
@@ -35,6 +40,7 @@ public class JavaBeanEncoder
     String               attributeName         = null;
     Object               attributeValue        = null;
     Method               getter                = null;
+    ActionScriptEncoder  encoder               = null;
     PropertyDescriptor[] attributes            = PropertyUtils.getPropertyDescriptors(decoded);
     for (int i = 0; i < attributes.length; i++)
     {
@@ -55,7 +61,8 @@ public class JavaBeanEncoder
         continue;
       }
 
-      encodedAttributeValue = EncoderFactory.getInstance().getEncoder( attributeValue ).encodeObject( attributeValue );
+      encoder = EncoderFactory.getInstance().getEncoder( attributeValue );
+      encodedAttributeValue = encoder.encodeObject( encoder.encodeShell(attributeValue), attributeValue );
       encoded.put( attributeName, encodedAttributeValue );
     }
 

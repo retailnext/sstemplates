@@ -46,9 +46,9 @@ public class MapDecoderTest
     map.put("two", "two");
     
     MapDecoder decoder = new MapDecoder();
-    assertTrue(decoder.decodeObject(map, Map.class)       instanceof HashMap);
-    assertTrue(decoder.decodeObject(map, HashMap.class)   instanceof HashMap);
-    assertTrue(decoder.decodeObject(map, Hashtable.class) instanceof Hashtable);
+    assertTrue(decoder.decodeObject(decoder.decodeShell(map, Map.class),       map, Map.class)       instanceof HashMap);
+    assertTrue(decoder.decodeObject(decoder.decodeShell(map, HashMap.class),   map, HashMap.class)   instanceof HashMap);
+    assertTrue(decoder.decodeObject(decoder.decodeShell(map, Hashtable.class), map, Hashtable.class) instanceof Hashtable);
   }
 
 }

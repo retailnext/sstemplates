@@ -44,7 +44,7 @@ public class ArrayDecoderTest
     ActionScriptDecoder decoder = factory.getDecoder(list, arrayClass);
     assertNotNull(decoder);
 
-    Object decodedObject = decoder.decodeObject(list, arrayClass);
+    Object decodedObject = decoder.decodeObject(decoder.decodeShell(list, arrayClass), list, arrayClass);
     assertTrue(decodedObject instanceof Object[]);
 
     Object[] array = (Object[]) decodedObject;
@@ -69,7 +69,7 @@ public class ArrayDecoderTest
     ActionScriptDecoder decoder = factory.getDecoder(list, arrayClass);
     assertNotNull(decoder);
 
-    Object decodedObject = decoder.decodeObject(list, arrayClass);
+    Object decodedObject = decoder.decodeObject(decoder.decodeShell(list, arrayClass), list, arrayClass);
     assertTrue(decodedObject instanceof Integer[]);
 
     Integer[] array = (Integer[]) decodedObject;

@@ -10,21 +10,28 @@ import com.carbonfive.flash.encoder.*;
 public class MapEncoder
   implements ActionScriptEncoder
 {
-  public Object encodeObject( Object decodedObject )
+  public Object encodeShell(Object decodedObject)
+  {
+    return new ASObject();
+  }
+
+  public Object encodeObject(Object shell, Object decodedObject)
   {
     Map      asMap         = (Map) decodedObject;
-    ASObject encodedObject = new ASObject();
+    ASObject encodedObject = (ASObject) shell;
     encodedObject.setType( decodedObject.getClass().getName() );
 
-    Object key          = null;
-    Object value        = null;
-    Object encodedValue = null;
+    Object              key          = null;
+    Object              value        = null;
+    Object              encodedValue = null;
+    ActionScriptEncoder encoder      = null;
     for (Iterator i = asMap.keySet().iterator(); i.hasNext(); )
     {
       key = i.next();
       value = asMap.get(key);
 
-      encodedValue = EncoderFactory.getInstance().getEncoder( value ).encodeObject( value );
+      encoder = EncoderFactory.getInstance().getEncoder( value );
+      encodedValue = encoder.encodeObject(encoder.encodeShell(value), value);
       encodedObject.put( key, encodedValue );
     }
 

@@ -41,7 +41,7 @@ public class ArrayEncoderTest
     ActionScriptEncoder encoder = factory.getEncoder(array);
     assertNotNull(encoder);
 
-    Object encodedObject = encoder.encodeObject(array);
+    Object encodedObject = encoder.encodeObject(encoder.encodeShell(array), array);
     assertNotNull(encodedObject);
     assertTrue(encodedObject instanceof ArrayList);
 
@@ -62,7 +62,7 @@ public class ArrayEncoderTest
     ActionScriptEncoder encoder = factory.getEncoder(array);
     assertNotNull(encoder);
 
-    Object encodedObject = encoder.encodeObject(array);
+    Object encodedObject = encoder.encodeObject(encoder.encodeShell(array), array);
     assertNotNull(encodedObject);
     assertTrue(encodedObject instanceof ArrayList);
 

@@ -4,6 +4,7 @@ import java.lang.reflect.*;
 import java.beans.*;
 import flashgateway.io.ASObject;
 import org.apache.commons.beanutils.*;
+import org.apache.commons.logging.*;
 import com.carbonfive.flash.*;
 
 /**
@@ -12,27 +13,39 @@ import com.carbonfive.flash.*;
 public class JavaBeanDecoder
   implements ActionScriptDecoder
 {
-  public Object decodeObject( Object encodedObject, Class desiredClass )
+  private static final Log log = LogFactory.getLog(JavaBeanDecoder.class);
+
+  public Object decodeShell(Object encodedObject, Class desiredClass)
   {
     ASObject aso  = (ASObject) encodedObject;
     String   type = aso.getType();
 
-    Object   bean = null;
     try
     {
-      bean = Beans.instantiate(ASTranslator.class.getClassLoader(), type);
+      Object bean = Beans.instantiate(ASTranslator.class.getClassLoader(), type);
+      return bean;
     }
     catch (Exception e) // ClassNotFoundException, IOException, IntrospectionException
     {
+      log.warn("Cannot create bean: " + type);
       return null;
     }
+  }
+
+  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  {
+    ASObject aso  = (ASObject) encodedObject;
+    Object   bean = shell;
+    if (bean == null) return null;
 
     PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(bean);
 
-    String        name       = null;
-    Method        write      = null;
-    Object        value      = null;
-    Class         wClass     = null;
+    ActionScriptDecoder decoder = null;
+    Object decodedObject = null;
+    String name   = null;
+    Method write  = null;
+    Object value  = null;
+    Class  wClass = null;
     for (int i = 0; i < pds.length; i++)
     {
       name  = pds[i].getName();
@@ -54,7 +67,8 @@ public class JavaBeanDecoder
 
       try
       {
-        Object decodedObject = DecoderFactory.getInstance().getDecoder( value, wClass ).decodeObject( value, wClass  );
+        decoder = DecoderFactory.getInstance().getDecoder( value, wClass );
+        decodedObject = decoder.decodeObject(decoder.decodeShell(value, wClass), value, wClass);
         write.invoke(bean, new Object[] { decodedObject });
       }
       catch (Exception e) // Method.invoke() stuff

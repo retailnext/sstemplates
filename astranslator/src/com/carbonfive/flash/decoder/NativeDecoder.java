@@ -6,7 +6,12 @@ package com.carbonfive.flash.decoder;
 public class NativeDecoder
   implements ActionScriptDecoder
 {
-  public Object decodeObject( Object encodedObject, Class desiredClass )
+  public Object decodeShell(Object encodedObject, Class desiredClass)
+  {
+    return encodedObject;
+  }
+
+  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
     return encodedObject;
   }

@@ -11,8 +11,8 @@ public class MapDecoder
   implements ActionScriptDecoder
 {
   private static final Log log = LogFactory.getLog(MapDecoder.class);
-  
-  public Object decodeObject( Object encodedObject, Class desiredClass )
+
+  public Object decodeShell(Object encodedObject, Class desiredClass)
   {
     Map map = null;
     try
@@ -27,16 +27,25 @@ public class MapDecoder
       log.error("Exception creating appropriate Map class", e);
       return null;
     }
+    return map;
+  }
 
-    Object        key          = null;
-    Object        value        = null;
-    Object        decodedValue = null;
+  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  {
+    Map map = (Map) shell;
+    if (map == null) return null;
+
+    ActionScriptDecoder decoder = null;
+    Object key          = null;
+    Object value        = null;
+    Object decodedValue = null;
     for (Iterator keys = ((Map) encodedObject).keySet().iterator(); keys.hasNext(); )
     {
       key   = keys.next();
       value = ((Map) encodedObject).get( key );
 
-      decodedValue = DecoderFactory.getInstance().getDecoder( value, value.getClass() ).decodeObject( value, value.getClass() );
+      decoder = DecoderFactory.getInstance().getDecoder( value, value.getClass() );
+      decodedValue = decoder.decodeObject(decoder.decodeShell(value, value.getClass()), value, value.getClass());
       map.put( key, decodedValue );
     }
     

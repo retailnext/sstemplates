@@ -41,13 +41,13 @@ public class NativeEncoderTest
     String  string = "hello";
     Boolean bool   = Boolean.TRUE;
 
-    assertTrue(encoder.encodeObject(date)   instanceof Date);
-    assertTrue(encoder.encodeObject(string) instanceof String);
-    assertTrue(encoder.encodeObject(bool)   instanceof Boolean);
+    assertTrue(encoder.encodeObject(encoder.encodeShell(date), date)     instanceof Date);
+    assertTrue(encoder.encodeObject(encoder.encodeShell(string), string) instanceof String);
+    assertTrue(encoder.encodeObject(encoder.encodeShell(bool), bool)     instanceof Boolean);
 
-    Date    encodedDate   = (Date)    encoder.encodeObject(date);
-    String  encodedString = (String)  encoder.encodeObject(string);
-    Boolean encodedBool   = (Boolean) encoder.encodeObject(bool);
+    Date    encodedDate   = (Date)    encoder.encodeObject(encoder.encodeShell(date), date);
+    String  encodedString = (String)  encoder.encodeObject(encoder.encodeShell(string), string);
+    Boolean encodedBool   = (Boolean) encoder.encodeObject(encoder.encodeShell(bool), bool);
 
     assertEquals(date,   encodedDate);
     assertEquals(string, encodedString);

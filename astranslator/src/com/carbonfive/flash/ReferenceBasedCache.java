@@ -62,7 +62,7 @@ public class ReferenceBasedCache
 
     public int hashCode()
     {
-      return this.obj.hashCode();
+      return System.identityHashCode(obj);
     }
   }
 }

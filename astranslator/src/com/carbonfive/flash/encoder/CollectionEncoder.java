@@ -9,11 +9,16 @@ import com.carbonfive.flash.encoder.*;
 public class CollectionEncoder
   implements ActionScriptEncoder
 {
-  public Object encodeObject( Object decodedObject )
+  public Object encodeShell(Object decodedObject)
+  {
+    return new ArrayList();
+  }
+
+  public Object encodeObject(Object shell, Object decodedObject)
   {
     Collection asCollection = (Collection) decodedObject;
 
-    ArrayList           list    = new ArrayList();
+    List                list    = (List) shell;
     ActionScriptEncoder encoder = null;
     Object              decoded = null;
     Object              encoded = null;
@@ -21,7 +26,7 @@ public class CollectionEncoder
     {
       decoded = i.next();
       encoder = EncoderFactory.getInstance().getEncoder( decoded );
-      encoded = encoder.encodeObject( decoded );
+      encoded = encoder.encodeObject( encoder.encodeShell(decoded), decoded );
       list.add( encoded );
     }
     return list;

@@ -9,11 +9,17 @@ import com.carbonfive.flash.encoder.*;
 public class ArrayEncoder
   implements ActionScriptEncoder
 {
-  public Object encodeObject( Object decodedObject )
+  public Object encodeShell(Object decodedObject)
   {
-    List serverObjectAsList = Arrays.asList( (Object[]) decodedObject );
-    ActionScriptEncoder encoder   = EncoderFactory.getInstance().getEncoder( serverObjectAsList );
-    
-    return encoder.encodeObject( serverObjectAsList );
+    List serverObjectAsList = Arrays.asList((Object[]) decodedObject);
+    ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder( serverObjectAsList );
+    return encoder.encodeShell(serverObjectAsList);
+  }
+
+  public Object encodeObject( Object shell, Object decodedObject )
+  {
+    List serverObjectAsList = Arrays.asList((Object[]) decodedObject);
+    ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder( serverObjectAsList );
+    return encoder.encodeObject( shell, serverObjectAsList );
   }
 }

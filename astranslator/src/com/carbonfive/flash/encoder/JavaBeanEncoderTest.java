@@ -44,7 +44,7 @@ public class JavaBeanEncoderTest
     ActionScriptEncoder encoder = factory.getEncoder(bean);
     assertNotNull(encoder);
 
-    Object encodedObject = encoder.encodeObject(bean);
+    Object encodedObject = encoder.encodeObject(encoder.encodeShell(bean), bean);
     assertNotNull(encodedObject);
     assertTrue(encodedObject instanceof ASObject);
 

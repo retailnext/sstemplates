@@ -5,5 +5,6 @@ package com.carbonfive.flash.decoder;
  */
 public interface ActionScriptDecoder
 {
-  public Object decodeObject( Object encodedObject, Class desiredClass );
+  public Object decodeShell(Object encodedObject, Class desiredClass);
+  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass);
 }

@@ -8,7 +8,12 @@ import com.carbonfive.flash.encoder.*;
 public class NativeEncoder
   implements ActionScriptEncoder
 {
-  public Object encodeObject( Object decodedObject )
+  public Object encodeShell(Object decodedObject)
+  {
+    return decodedObject;
+  }
+
+  public Object encodeObject(Object shell, Object decodedObject)
   {
     return decodedObject;
   }

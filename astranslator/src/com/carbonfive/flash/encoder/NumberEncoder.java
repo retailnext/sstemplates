@@ -8,9 +8,13 @@ import com.carbonfive.flash.encoder.*;
 public class NumberEncoder
   implements ActionScriptEncoder
 {
-  public Object encodeObject( Object decodedObject )
+  public Object encodeShell(Object decodedObject)
   {
-    Number asNumber = (Number) decodedObject;
-    return new Double( asNumber.doubleValue() );
+    return new Double(((Number) decodedObject).doubleValue());
+  }
+
+  public Object encodeObject(Object shell, Object decodedObject)
+  {
+    return shell;
   }
 }
