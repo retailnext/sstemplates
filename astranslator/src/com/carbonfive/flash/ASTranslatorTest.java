@@ -426,7 +426,7 @@ public class ASTranslatorTest
     trans.ignoreClass(TestBean.class);
     TestBean bean = new TestBean();
     ASObject aso = (ASObject) trans.toActionScript(bean);
-//    assertNull(aso);
+    assertNull(aso);
   }
 
   public void testIgnoreProperty()
@@ -436,8 +436,8 @@ public class ASTranslatorTest
     trans.ignoreProperty(TestBean.class, "intField");
     TestBean bean = TestBean.getTestBean();
     ASObject aso = (ASObject) trans.toActionScript(bean);
-//    assertNotNull(aso);
-//    assertNull(aso.get("intField"));
+    assertNotNull(aso);
+    assertNull(aso.get("intField"));
   }
 
   private void validateTestBean(TestBean bean, ASObject as)

@@ -51,7 +51,7 @@ public class JavaBeanDecoderTest
     ActionScriptDecoder decoder = factory.getDecoder(aso, TestBean.class);
     assertNotNull(decoder);
 
-    Object decodedObject = decoder.decodeObject(decoder.decodeShell(aso, TestBean.class), aso, TestBean.class);
+    Object decodedObject = decoder.decodeObject(aso, TestBean.class);
     assertNotNull(decodedObject);
     assertTrue(decodedObject instanceof TestBean);
 

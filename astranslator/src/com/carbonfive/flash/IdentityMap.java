@@ -11,12 +11,12 @@ import java.util.*;
  *
  * @author Alon Salont <alon@carbonfive.com>
  */
-public class ReferenceBasedCache
+public class IdentityMap
 {
 
   private HashMap map;
 
-  public ReferenceBasedCache()
+  public IdentityMap()
   {
     map = new HashMap();
   }

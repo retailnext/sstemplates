@@ -40,13 +40,13 @@ public class NativeDecoderTest
     String  string = "hello";
     Boolean bool   = Boolean.TRUE;
 
-    assertTrue(decoder.decodeObject(decoder.decodeShell(date,   Date.class),    date,   Date.class)    instanceof Date);
-    assertTrue(decoder.decodeObject(decoder.decodeShell(string, String.class),  string, String.class)  instanceof String);
-    assertTrue(decoder.decodeObject(decoder.decodeShell(bool,   Boolean.class), bool,   Boolean.class) instanceof Boolean);
+    assertTrue(decoder.decodeObject(date,   Date.class)    instanceof Date);
+    assertTrue(decoder.decodeObject(string, String.class)  instanceof String);
+    assertTrue(decoder.decodeObject(bool,   Boolean.class) instanceof Boolean);
 
-    Date    decodedDate   = (Date)    decoder.decodeObject(decoder.decodeShell(date,   Date.class),    date,   Date.class);
-    String  decodedString = (String)  decoder.decodeObject(decoder.decodeShell(string, String.class),  string, String.class);
-    Boolean decodedBool   = (Boolean) decoder.decodeObject(decoder.decodeShell(bool,   Boolean.class), bool,   Boolean.class);
+    Date    decodedDate   = (Date)    decoder.decodeObject(date,   Date.class);
+    String  decodedString = (String)  decoder.decodeObject(string, String.class);
+    Boolean decodedBool   = (Boolean) decoder.decodeObject(bool,   Boolean.class);
 
     assertEquals(date,   decodedDate);
     assertEquals(string, decodedString);

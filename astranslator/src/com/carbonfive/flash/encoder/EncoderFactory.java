@@ -2,7 +2,7 @@ package com.carbonfive.flash.encoder;
 
 import java.util.*;
 import java.io.*;
-import com.carbonfive.flash.encoder.*;
+import com.carbonfive.flash.*;
 import org.apache.commons.logging.*;
 
 public class EncoderFactory
@@ -25,12 +25,15 @@ public class EncoderFactory
   private static final MapEncoder        mapEncoder        = new MapEncoder();
   private static final CollectionEncoder collectionEncoder = new CollectionEncoder();
   private static final JavaBeanEncoder   javaBeanEncoder   = new JavaBeanEncoder();
+  private static final NullEncoder       nullEncoder       = new NullEncoder();
 
-  public ActionScriptEncoder getEncoder(Object decodedObject)
+  public ActionScriptEncoder getEncoder(Context ctx, Object decodedObject)
   {
-    if (decodedObject == null) return new NativeEncoder();
+    if (decodedObject == null) return nullEncoder;
 
     Class clazz = decodedObject.getClass();
+
+    if (ctx.getFilter().doIgnoreClass(clazz)) return nullEncoder;
 
     boolean isNativeObject = isActionScriptNative( decodedObject );
     boolean isNumberObject = Number.class.isAssignableFrom( clazz );

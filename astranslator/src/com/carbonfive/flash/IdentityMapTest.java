@@ -3,18 +3,18 @@ package com.carbonfive.flash;
 import java.util.*;
 import junit.framework.*;
 
-public class ReferenceBasedCacheTest
+public class IdentityMapTest
   extends    TestCase
 {
 
-  public ReferenceBasedCacheTest(String name)
+  public IdentityMapTest(String name)
   {
     super(name);
   }
 
   public static Test suite()
   {
-    TestSuite suite = new TestSuite(ReferenceBasedCacheTest.class);
+    TestSuite suite = new TestSuite(IdentityMapTest.class);
     return suite;
   }
 
@@ -31,7 +31,7 @@ public class ReferenceBasedCacheTest
   public void testCacheWorks()
     throws Exception
   {
-    ReferenceBasedCache cache = new ReferenceBasedCache();
+    IdentityMap cache = new IdentityMap();
 
     // these object should be equal() but not ==
     Date obj1 = new Date();

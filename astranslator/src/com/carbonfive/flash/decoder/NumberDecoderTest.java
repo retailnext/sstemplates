@@ -55,7 +55,7 @@ public class NumberDecoderTest
   {
     NumberDecoder decoder       = new NumberDecoder();
     Double        encodedNumber = new Double(2.0);
-    Object        decodedNumber = decoder.decodeObject(decoder.decodeShell(encodedNumber, desiredClass), encodedNumber, desiredClass);
+    Object        decodedNumber = decoder.decodeObject(encodedNumber, desiredClass);
     Class         realDesiredClass = ( desiredClass.isPrimitive()    ?
                                        getNonPrimative(desiredClass) :
                                        desiredClass );

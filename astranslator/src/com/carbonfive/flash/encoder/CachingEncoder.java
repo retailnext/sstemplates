@@ -19,12 +19,12 @@ public class CachingEncoder
     this.nextEncoder = next;
   }
 
-  public Object encodeShell(Object decodedObject)
+  public Object encodeShell(Context ctx, Object decodedObject)
   {
     return null;
   }
 
-  public Object encodeObject(Object shell, Object decodedObject)
+  public Object encodeObject(Context ctx, Object shell, Object decodedObject)
   {
     IdentityMap encoderCache = CachingManager.getEncoderCache();
 
@@ -36,10 +36,10 @@ public class CachingEncoder
       return encoderCache.get( decodedObject );
     }
 
-    Object encodedShell = nextEncoder.encodeShell(decodedObject);
+    Object encodedShell = nextEncoder.encodeShell(ctx, decodedObject);
     if (encodedShell != null) encoderCache.put(decodedObject, encodedShell);
 
-    return nextEncoder.encodeObject(encodedShell, decodedObject);
+    return nextEncoder.encodeObject(ctx, encodedShell, decodedObject);
   }
 
   public ActionScriptEncoder getNextEncoder()

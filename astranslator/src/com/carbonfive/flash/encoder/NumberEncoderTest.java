@@ -1,9 +1,8 @@
 package com.carbonfive.flash.encoder;
 
-import java.util.*;
 import java.math.*;
 import junit.framework.*;
-import com.carbonfive.flash.encoder.*;
+import com.carbonfive.flash.*;
 
 public class NumberEncoderTest
   extends    TestCase
@@ -51,7 +50,7 @@ public class NumberEncoderTest
   {
     NumberEncoder encoder = new NumberEncoder();
 
-    Object encodedNumber = encoder.encodeObject(encoder.encodeShell(decodedNumber), decodedNumber);
+    Object encodedNumber = encoder.encodeObject(Context.getBaseContext(), decodedNumber);
 
     assertNotNull(encodedNumber);
     assertEquals(Double.class, encodedNumber.getClass());

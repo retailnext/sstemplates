@@ -41,10 +41,10 @@ public class JavaBeanEncoderTest
   {
     TestBean bean = TestBean.getTestBean(); // gets a filled in TestBean
 
-    ActionScriptEncoder encoder = factory.getEncoder(bean);
+    ActionScriptEncoder encoder = factory.getEncoder(Context.getBaseContext(), bean);
     assertNotNull(encoder);
 
-    Object encodedObject = encoder.encodeObject(encoder.encodeShell(bean), bean);
+    Object encodedObject = encoder.encodeObject(Context.getBaseContext(), bean);
     assertNotNull(encodedObject);
     assertTrue(encodedObject instanceof ASObject);
 

@@ -6,7 +6,7 @@ import java.beans.*;
 import flashgateway.io.ASObject;
 import org.apache.commons.beanutils.*;
 import org.apache.commons.logging.*;
-import com.carbonfive.flash.encoder.*;
+import com.carbonfive.flash.*;
 
 /**
  * Encodes a Java object to an ActionScript object.
@@ -18,23 +18,23 @@ public class JavaBeanEncoder
 
   private static Set objectAttributes = new HashSet(Arrays.asList(PropertyUtils.getPropertyDescriptors(Object.class)));
 
-  public Object encodeShell(Object decodedObject)
+  public Object encodeShell(Context ctx, Object decodedObject)
   {
     return new ASObject();
   }
 
-  public Object encodeObject(Object shell, Object decodedObject)
+  public Object encodeObject(Context ctx, Object shell, Object decodedObject)
   {
     ASObject encodedObject = (ASObject) shell;
     encodedObject.setType( decodedObject.getClass().getName() );
-    encodedObject = populate( decodedObject, encodedObject );
+    encodedObject = populate(ctx, decodedObject, encodedObject);
 
     return encodedObject;
   }
 
 //------------------------------------------------------------------------------
 
-  private ASObject populate( Object decoded, ASObject encoded )
+  private ASObject populate(Context ctx, Object decoded, ASObject encoded)
   {
     Object               encodedAttributeValue = null;
     String               attributeName         = null;
@@ -45,7 +45,8 @@ public class JavaBeanEncoder
     for (int i = 0; i < attributes.length; i++)
     {
       if (objectAttributes.contains(attributes[i])) continue;
-      if (isDangerous(decoded, attributes[i])) continue;
+
+      if (ctx.getFilter().doIgnoreProperty(decoded.getClass(), attributes[i].getName())) continue;
 
       attributeName  = attributes[i].getName();
       getter  = attributes[i].getReadMethod();
@@ -61,21 +62,11 @@ public class JavaBeanEncoder
         continue;
       }
 
-      encoder = EncoderFactory.getInstance().getEncoder( attributeValue );
-      encodedAttributeValue = encoder.encodeObject(  attributeValue );
-      encoded.put( attributeName, encodedAttributeValue );
+      encoder = EncoderFactory.getInstance().getEncoder(ctx, attributeValue);
+      encodedAttributeValue = encoder.encodeObject(ctx, attributeValue);
+      encoded.put(attributeName, encodedAttributeValue);
     }
 
     return encoded;
   }
-
-  private boolean isDangerous(Object obj, PropertyDescriptor pd)
-  {
-    return dangerous.contains(obj.getClass().getName() + "." + pd.getName());
-  }
-
-  private static Set dangerous = new HashSet(Arrays.asList(new String[]
-  {
-    "java.io.File.parentFile", "java.io.File.canonicalFile", "java.io.File.absoluteFile"
-  }));
 }

@@ -1,15 +1,17 @@
 package com.carbonfive.flash.encoder;
 
+import com.carbonfive.flash.*;
+
 /**
  * Encode a Java object (of some type) to an ActionScript object (of some type).
  */
 public abstract class ActionScriptEncoder
 {
-  public abstract Object encodeShell( Object decodedObject );
-  public abstract Object encodeObject( Object shell, Object decodedObject );
+  public abstract Object encodeShell( Context ctx, Object decodedObject );
+  public abstract Object encodeObject( Context ctx, Object shell, Object decodedObject );
 
-  public Object encodeObject(Object decodedObject)
+  public Object encodeObject(Context ctx, Object decodedObject)
   {
-    return encodeObject( encodeShell(decodedObject), decodedObject );
+    return encodeObject( ctx, encodeShell(ctx, decodedObject), decodedObject );
   }
 }

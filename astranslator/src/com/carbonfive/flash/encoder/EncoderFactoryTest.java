@@ -70,7 +70,7 @@ public class EncoderFactoryTest
 
   private void validate(Object obj, Class encoderClass)
   {
-    ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder(obj);
+    ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder(Context.getBaseContext(), obj);
     assertNotNull(encoder);
     if (encoder instanceof CachingEncoder)
     {

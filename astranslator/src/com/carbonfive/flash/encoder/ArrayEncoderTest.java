@@ -2,7 +2,7 @@ package com.carbonfive.flash.encoder;
 
 import java.util.*;
 import junit.framework.*;
-import com.carbonfive.flash.encoder.*;
+import com.carbonfive.flash.*;
 
 public class ArrayEncoderTest
   extends    TestCase
@@ -38,10 +38,10 @@ public class ArrayEncoderTest
     Object obj2 = new Object();
     Object[] array = new Object[] { obj1, obj2 };
 
-    ActionScriptEncoder encoder = factory.getEncoder(array);
+    ActionScriptEncoder encoder = factory.getEncoder(Context.getBaseContext(), array);
     assertNotNull(encoder);
 
-    Object encodedObject = encoder.encodeObject(encoder.encodeShell(array), array);
+    Object encodedObject = encoder.encodeObject(Context.getBaseContext(), array);
     assertNotNull(encodedObject);
     assertTrue(encodedObject instanceof ArrayList);
 
@@ -59,10 +59,10 @@ public class ArrayEncoderTest
     Double  dbl1 = new Double(int1.intValue());
     Double  dbl2 = new Double(int2.intValue());
 
-    ActionScriptEncoder encoder = factory.getEncoder(array);
+    ActionScriptEncoder encoder = factory.getEncoder(Context.getBaseContext(), array);
     assertNotNull(encoder);
 
-    Object encodedObject = encoder.encodeObject(encoder.encodeShell(array), array);
+    Object encodedObject = encoder.encodeObject(Context.getBaseContext(), array);
     assertNotNull(encodedObject);
     assertTrue(encodedObject instanceof ArrayList);
 

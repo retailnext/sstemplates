@@ -10,7 +10,7 @@ import org.apache.commons.logging.*;
 
  /**
   * ASTranslator provides the ability to translate between ASObjects used by
-  * Macromedia Flash Remoting and Java objects in your application. 
+  * Macromedia Flash Remoting and Java objects in your application.
   * <a href="package-summary.html#documentation">See the project documentation</a> for details.
   * <p>
   * $Id$
@@ -19,27 +19,21 @@ public class ASTranslator
 {
    private static final Log log = LogFactory.getLog(ASTranslator.class);
 
-   private Set ignoreClasses    = new HashSet();
-   private Map ignoreProperties = new HashMap();
+   private TranslationFilter filter = null;
 
    public ASTranslator()
    {
-     ignoreProperty(File.class, "parentFile");
-     ignoreProperty(File.class, "canonicalFile");
-     ignoreProperty(File.class, "absoluteFile");
+     filter = TranslationFilter.getBaseFilter();
    }
 
    public void ignoreClass(Class klass)
    {
-     ignoreClasses.add(klass);
+     filter.ignoreClass(klass);
    }
 
    public void ignoreProperty(Class klass, String property)
    {
-     Set properties = (Set) ignoreProperties.get(klass);
-     if (properties == null) properties = new HashSet();
-     properties.add(property);
-     ignoreProperties.put(klass, properties);
+     filter.ignoreProperty(klass, property);
    }
 
   /**
@@ -48,7 +42,7 @@ public class ASTranslator
    * properties to ASObject fields, Collections and Sets to
    * ArrayLists, and all Numbers to Doubles while maintaining object
    * references (including circular references).
-   * <p> 
+   * <p>
    * These mappings are consistent with Flash Remoting's rules for
    * converting Objects to ASObjects. They just add the behavior of
    * using JavaBean-style introspection to determine property
@@ -57,9 +51,9 @@ public class ASTranslator
    * JavaBean. This enables two-way translation between ASObjects and
    * JavaBeans.
    *
-   * @param serverObject  an Object to translate to ASObjects or 
+   * @param serverObject  an Object to translate to ASObjects or
    *                      corresponding primitive or Collection classes
-   * @return              an Object that may be an ASObject or nested 
+   * @return              an Object that may be an ASObject or nested
    *                      Collections of ASObjects or null if translation fails
    */
   public Object toActionScript( Object serverObject )
@@ -68,8 +62,11 @@ public class ASTranslator
 
     CachingManager.getEncoderCache(); // create the cache here
 
-    ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder( serverObject );
-    Object              result  = encoder.encodeObject(serverObject);
+    Context ctx = Context.getBaseContext();
+    ctx.setFilter(filter);
+
+    ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder(ctx, serverObject);
+    Object              result  = encoder.encodeObject(ctx, serverObject);
 
     CachingManager.removeEncoderCache(); // remove it here
 
@@ -80,8 +77,8 @@ public class ASTranslator
   /**
    * Given an Object that is either an ASObject or Collection of
    * ASObjects, fromActionScript creates a corresponding JavaBean or
-   * Collection of JavaBeans.  
-   * <p> 
+   * Collection of JavaBeans.
+   * <p>
    * The "type" field of an ASObject identifies the class name of
    * the JavaBean to create. If the type field is null, an ASObject
    * becomes a HashMap. The interface of the JavaBean is more specific
@@ -97,7 +94,7 @@ public class ASTranslator
   public Object fromActionScript( Object asObject )
   {
     if (asObject == null) return null;
-    
+
     try
     {
       Class desiredBeanClass = decideClassToTranslateInto( asObject );
