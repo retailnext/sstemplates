@@ -32,7 +32,7 @@ public class JavaBeanDecoder
     }
   }
 
-  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
     ASObject aso  = (ASObject) encodedObject;
     Object   bean = shell;

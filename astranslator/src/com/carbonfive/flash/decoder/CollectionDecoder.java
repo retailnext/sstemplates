@@ -17,7 +17,7 @@ public class CollectionDecoder
     return createCollection(desiredClass);
   }
 
-  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
     Collection    decodedCollection = (Collection) shell;
     Object        decodedObject     = null;

@@ -31,7 +31,7 @@ public class NumberDecoder
     return result;
   }
 
-  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
     return shell;
   }

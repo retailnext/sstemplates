@@ -20,7 +20,7 @@ public class CachingDecoder
     return null;
   }
 
-  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
     ReferenceCache decoderCache = CachingManager.getDecoderCache();
 

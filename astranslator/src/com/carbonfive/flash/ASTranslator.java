@@ -162,7 +162,7 @@ public class ASTranslator
 ////////////////////////////////////////////////////////////////////////////////
 
   /**
-   * Translate an object to another object of type clazz
+   * Translate an object to another object of type 'desiredBeanClass'
    * obj types should be ASObject, Boolean, String, Double, Date, ArrayList
    */
   protected Object fromActionScript( Object actionScriptObject, Class desiredBeanClass )

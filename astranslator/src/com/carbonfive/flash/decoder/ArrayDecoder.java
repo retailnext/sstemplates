@@ -17,7 +17,7 @@ public class ArrayDecoder
     return decodedArray;
   }
 
-  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  protected Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
     Class  arrayElementClass = desiredClass.getComponentType();
     Object decodedArray      = shell;

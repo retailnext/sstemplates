@@ -30,7 +30,7 @@ public class MapDecoder
     return map;
   }
 
-  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
     Map map = (Map) shell;
     if (map == null) return null;

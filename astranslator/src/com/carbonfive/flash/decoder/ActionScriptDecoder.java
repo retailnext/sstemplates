@@ -6,7 +6,7 @@ package com.carbonfive.flash.decoder;
 public abstract class ActionScriptDecoder
 {
   public abstract Object decodeShell(Object encodedObject, Class desiredClass);
-  public abstract Object decodeObject(Object shell, Object encodedObject, Class desiredClass);
+  abstract Object decodeObject(Object shell, Object encodedObject, Class desiredClass);
 
   public Object decodeObject(Object encodedObject, Class desiredClass)
   {

@@ -68,7 +68,7 @@ public class NativeDecoder
     return encodedObject;
   }
 
-  public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
+  Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
     return shell;
   }
