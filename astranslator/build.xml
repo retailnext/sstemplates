@@ -45,6 +45,8 @@
     </javadoc>
   </target>
 
+  <target name="deploy" depends="dist"/>
+
   <target name="dist" depends="compile, javadoc">
     <mkdir dir="${dist}" />
 
