@@ -53,7 +53,7 @@
     </jar>
 
     <zip destfile="${dist}/astranslator-${version}.zip">
-      <fileset dir="${basedir}">
+      <zipfileset dir="${basedir}" prefix="astranslator-${version}">
         <include name="LICENSE"/>
         <include name="build.*"/>
         <include name="${src}/**"/>
@@ -64,7 +64,7 @@
         <exclude name="${lib}/flashgateway.jar"/>
         <exclude name="${lib}/log4j*.jar"/>
         <exclude name="${dist}/astranslator-${version}.zip"/>
-      </fileset>
+      </zipfileset>
     </zip>
   </target>
 
