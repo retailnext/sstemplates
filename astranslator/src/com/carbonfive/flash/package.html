@@ -1,0 +1,391 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../../../properties/javadoc.css" title="style">
+</head>
+<body>
+ASTranslator provides JavaBean-style mapping between Java objects in any J2EE application server and ActionScript objects in Flash MX when used with Macromedia Flash Remoting MX.
+
+<a name="documentation"> </a>
+<h2>ASTranslator For Macromedia Flash Remoting MX</h2>
+
+ASTranslator is designed to be used with <a href="http://www.macromedia.com/software/flashremoting/">Macromedia Flash Remoting MX</a> on any J2EE application server. It provides JavaBean-style mapping between Java objects in the application server and ActionScript objects in Flash MX. More information on why this is so important, <a href="#overview">read the overview</a>.
+
+<p>
+ASTranslator is supported by <a target="_top" href="http://www.carbonfive.com/opensource-main-1.html">Carbon Five</a> and can be deployed on application servers with Flash Remoting MX including Macromedia JRun, Jakarta Tomcat, JBoss, Caucho Resin, IBM WebSphere, BEA Weblogic and ATG Dynamo.
+
+<ul>
+<li><a href="#overview">Overview</a>
+<li><a href="#features">Features</a>
+<li><a href="#download">Download</a>
+<li><a href="#prerequisites">Prerequisites</a>
+<li><a href="#install">Install</a>
+<li><a href="#usage">Usage</a>
+<li><a href="#databinding">Data Binding</a>
+<li><a href="#support">Support</a>
+<li><a href="#developers">Developers</a>
+<li><a href="#credits">Credits</a>
+</ul>
+
+<hr size="1">
+
+<h3><a name="overview">Overview</a></h3>
+
+ASTranslator provides the ability to translate between ASObjects used by Macromedia Flash Remoting and Java objects in your application. ASObjects are essentially HashMaps where the key values are case insensitive and with an additional field "type". ASObjects are a Java representation of ActionScript objects in Flash.
+
+<p>
+We created ASTranslator because of an issue we found with Flash Remoting MX for J2EE. When returning Java objects from service calls to Flash, Flash Remoting serialized Java object according to their private member state, not using it's publicly declared property accessors as you would expect. So if you have a Java class:
+
+<pre class="code">
+package com.server;
+
+public class Player
+{
+  private String _name;
+  
+  public getName()
+  {
+    return _name;
+  }
+}
+</pre>
+
+and a service class:
+
+<pre class="code">
+package com.server;
+
+public class Service
+{
+  public Player getPlayer(String name)
+  {
+    Player player = Roster.getPlayer(name);
+    return player;
+  }
+}
+</pre>
+
+calling Service.getPlayer() from Flash MX would return an ActionScript object with a property "_name" instead of "name." This removes one of the primary values of object oriented programming: <i>encapsulation</i>. ActionScript programmers in Flash can see the internal state of Java objects on the server that even other Java objects running on the server cannot see. This is bad. It can be really bad (both for performance and security) if the internal state includes a lot more information than the object was designed to expose through its public interface.
+
+ASTranslator adds the behavior of using JavaBean-style introspection to serialize Java objects for Remoting. To use ASTranslator in the above example, we would change the Service class as follows:
+
+<pre class="code">
+package com.server;
+
+import flashgateway.io.ASObject;
+import com.carbonfive.flash.ASTranslator;
+  
+public class Service
+{
+  public ASObject getPlayer(String name)
+  {
+    Player player = Roster.getPlayer(name);
+    ASObject aso = (ASObject) new ASTranslator().toActionScript(player);
+    return aso;
+  }
+}
+</pre>
+
+Flash will now receive an ActionScript object with the property "name."
+
+<h3><a name="features">Features</a></h3>
+
+<h4>JavaBean-Style Serialization From Java to ActionScript</h4>
+
+As described in the <a href="#overview">overview</a>, ASTranslator enhances Flash Remoting by adding the ability to send Java objects to Flash using the Java object properties as defined by the object's property accessors (getters and setters) rather than using the object's internal member state as Remoting does by default.
+<p>
+ASTranslator follows the <a target="_top" href="http://livedocs.macromedia.com/frdocs/Using_Flash_Remoting_MX/UseASData4.jsp">conversion rules for Flash Remoting for J2EE</a> and relies on the remoting gateway to handle conversion of class types named by the conversion rules including org.w3c.dom.Document and java.sql.ResultSet. Additionally, if it does not know what to do with an object type, it simply passes it through. Therefore it is safe to pass all objects through ASTranslator.toActionScript() when sending them back to Flash. This is the recommended use.
+<p>
+Additionally, if the ActionScript programmer has registered ActionScript objects using Object.registerClass() that map directly to Java objects, the objects returned as the result of a Remoting service call will be of that registered type when returned to the service XXXX_onResult() callback method. More information on this is provided in the <a href="#usage">usage documentation</a>.
+
+<h4>JavaBean-Style Deserialization From ActionScript to Java</h4>
+
+When sending ActionScript objects to the server through Flash Remoting service method calls, the Java service class will either receive one of the known Java object types or an ASObject if the object type is not known. The process of converting these ASObjects to model objects in the application server can be tedious and brittle. ASTranslator adds automatic conversion of ASObjects to Java objects using JavaBean-style introspection to set the Java object properties.
+<p>
+With Flash Remoting alone, calling a service method with an object argument from Flash would look like:
+
+<pre class="code">
+#include "NetServices.as"
+
+NetServices.setDefaultGatewayUrl("http://localhost/gateway");
+var gatewayConnection = NetServices.createGatewayConnection();
+var service = gatewayConnection.getService("Service", this);
+
+Player = function() {}
+
+var player = new Player();
+player.name = "Joe";
+
+service.savePlayer(player);
+</pre>
+
+and the Java service class would look like:
+
+<pre class="code">
+package com.server;
+
+import flashgateway.io.ASObject;
+  
+public class Service
+{
+  public void savePlayer(ASObject asPlayer)
+  {
+    Player player = new Player();
+    player.setName((String) asPlayer.get("name"));
+    
+    Roster.savePlayer(player);
+  }
+}
+</pre>
+
+With ASTranslator, the ActionScript would look like:
+
+<pre class="code">
+#include "NetServices.as"
+
+NetServices.setDefaultGatewayUrl("http://localhost/gateway");
+var gatewayConnection = NetServices.createGatewayConnection();
+var service = gatewayConnection.getService("Service", this);
+
+Player = function() {}
+Object.registerClass("com.server.Player", Player);
+
+var player = new Player();
+player.name = "Joe";
+
+service.savePlayer(player);
+</pre>
+
+and the service class would look like:
+
+<pre class="code">
+import flashgateway.io.ASObject;
+import com.carbonfive.flash.ASTranslator;
+  
+public class Service
+{
+  public void savePlayer(ASObject asPlayer)
+  {
+    Player player = (Player) new ASTranslator().fromActionScript(asPlayer);
+    
+    Roster.savePlayer(player);
+  }
+}
+</pre>
+
+ASTranslator will create and set as many properties in the Java Player object as match in the ASObject received from Flash.
+<p>
+In order for ASTranslator to know what Java object type to convert the ASObject to, the type field of the ASObject must be set to the class name of the desired Java object type. This is achieved by using Object.registerClass() in ActionScript to associate the ActionScript object type with the Java class. More information on this is provided in the <a href="#usage">usage documentation</a>.
+
+<h3><a name="download">Download</a></h3>
+
+The latest release of ASTranslator is available for download from <a target="_top"  href="http://sourceforge.net/project/showfiles.php?group_id=52145">SourceForge.net</a>. For the adventureous, you can check out the <a href="http://sourceforge.net/cvs/?group_id=52145">latest changes from CVS</a>.
+
+<h3><a name="prerequisites">Prerequisites</a></h3>
+
+To use ASTranslator effectively, you must first have <a target="_top"  href="http://www.macromedia.com/software/flashremoting/downloads/">Flash Remoting for J2EE</a> installed in your application server and the <a target="_top"  href="http://www.macromedia.com/software/flashremoting/downloads/components/">Flash Remoting Components</a> installed in your Flash MX authoring environment. 
+<p>
+While <a target="_top"  href="http://www.macromedia.com/support/flash_remoting/ts/documents/presalesfaq.htm#javafiles">Macromedia is somewhat vague on the issue</a> we <b>strongly</b> recommend installing Flash Remoting for your application by:
+<ol>
+<li>locating flashgateway.jar in the flashgateway.ear or flashgateway.war file installed by the Macromedia installer
+<li>placing it in your web application's WEB-INF/lib/ directory
+<li>mapping the gateway for your web application by adding the following to your web application's WEB-INF/web.xml file:
+
+<pre class="code">
+  &lt;servlet>
+    &lt;servlet-name>FlashGatewayServlet&lt;/servlet-name>
+    &lt;display-name>Flash Remoting Servlet&lt;/display-name>
+    &lt;description>Servlet-based plugin to Flash Remoting&lt;/description>
+    &lt;servlet-class>flashgateway.controller.GatewayServlet&lt;/servlet-class>
+    &lt;load-on-startup>10&lt;/load-on-startup>
+  &lt;/servlet>
+
+  &lt;servlet-mapping>
+    &lt;servlet-name>FlashGatewayServlet&lt;/servlet-name>
+    &lt;url-pattern>/gateway&lt;/url-pattern>
+  &lt;/servlet-mapping>
+</pre>
+</ol>
+
+This will make the Remoting Gateway Service available at http://www.yourdomain.com/yourwebapp/gateway and all classes in your application visible to Flash Remoting.
+
+<h3><a name="install">Install</a></h3>
+
+To install ASTranslator, install Flash Remoting for J2EE MX as recommended in <a href="#prerequisites">prerequisites</a> and add astranslator-x.x.jar to your web application's WEB-INF/lib/ directory.
+<p>
+If you have installed Flash Remoting MX for J2EE in another manner, the best location for astranslator-x.x.jar will depend on the application server you are using. Here you get in to the sticky world of classloader precedence. Better to keep it all in your webapp.
+
+<h3><a name="usage">Usage</a></h3>
+
+<a href="com/carbonfive/flash/ASTranslator.html">ASTranslator</a> is the only class you will use in Java. 
+
+<h4>From Flash to Java</h4>
+
+Use <a href="com/carbonfive/flash/ASTranslator.html#fromActionScript(java.lang.Object)">ASTranslator.fromActionScript()</a> to translate ASObjects sent to remoting service methods from Flash. 
+
+<pre class="code">
+import flashgateway.io.ASObject;
+import com.carbonfive.flash.ASTranslator;
+  
+public class Service
+{
+  public void savePlayer(ASObject asPlayer)
+  {
+    Player player = (Player) new ASTranslator().fromActionScript(asPlayer);
+    
+    Roster.savePlayer(player);
+  }
+}
+</pre>
+
+Note that you must cast the result of this method call to the expected return type. fromActionScript() can take any object as an argument. It will translate any object and it's composite objects as deep as possible.
+<p>
+In order for ASTranslator to know what Java class an ASObject should become, you must register your ActionScript objects in Flash MX with the Java class name that the ActionScript object maps to.
+
+<pre class="code">
+Player = function() {}                              // Object definition
+Object.registerClass("com.server.Player", Player);  // Player maps to com.server.Player in Java
+</pre>
+
+<h4>From Java to Flash</h4>
+
+Use <a href="com/carbonfive/flash/ASTranslator.html#toActionScript(java.lang.Object)">ASTranslator.toActionScript()</a> to translate Java objects to ASObjects before sending them back to flash as the result of a Flash Remoting service call.
+
+<pre class="code">
+package com.server;
+
+import flashgateway.io.ASObject;
+import com.carbonfive.flash.ASTranslator;
+  
+public class Service
+{
+  public ASObject getPlayer(String name)
+  {
+    Player player = Roster.getPlayer(name);
+    ASObject aso = (ASObject) new ASTranslator().toActionScript(player);
+    return aso;
+  }
+}
+</pre>
+
+Note that you must cast the result of this method call to the expected return type. It will either be an ASObject, a Java Collection or one of the Java Class types known to Flash Remoting (XML Document, ResultSet,...).
+<p>
+For Java object that are not known to Flash Remoting, ASTranslator will set the "type" field of the resulting ASObject to be the class name of the translated Java object. If you register your ActionScript objects to map to Java objects as detailed in the section above, the ActionScript objects that are returned to Flash will be of the correct ActionScript object type.
+
+<pre class="code">
+#include "NetServices.as"
+
+NetServices.setDefaultGatewayUrl("http://localhost/gateway");
+var gatewayConnection = NetServices.createGatewayConnection();
+var service = gatewayConnection.getService("Service", this);
+
+// Define Player
+Player = function() {}
+
+// Define Player methods
+Player.prototype.getName = function()
+{
+  return name;
+}
+
+// Register Player object to map to com.server.Player Java object
+Object.registerClass("com.server.Player", Player);
+
+// Get Player from Flash Remoting
+service.getPlayer("Joe");
+
+// Handle Flash Remoting result
+getPlayer_Result(player)
+{
+  // player is an ActionScript object of type Player
+  var name = player.getName();
+}
+</pre>
+
+
+<h3><a name="databinding">Data Binding</a></h3>
+
+There's been some discussion of binding more than just RecordSets to UI components using DataGlue. This makes a ton of sense, especially since we typically think of collections of business objects instead of database recordsets - a mindset that ASTranslator is designed for. Here's a simple start that binds any array of objects to a UI component using DataGlue. A handy use of this would be to take an array result received from remoting and bind it to a UI component just as you would a RecordSet.
+ <p>
+Here's an implementation of an ArrayDataProvider that provides a DataProvider view of an array. You can use objects of this class to bind to UI components with DataGlue.
+
+<pre style="code">
+/**
+ * ArrayDataProvider.as
+ * Alon Salant, alon@carbonfive.com
+ *
+ * ArrayDataProvider implements a DataProvider view of an array
+ * so that it can be bound to UI components using DataGlue.
+ */
+ 
+#include "RsDataProviderClass.as"
+
+_global.ArrayDataProvider = function(list)
+{
+  this.init();
+  this.addAll(list);
+}
+
+ArrayDataProvider.prototype = new RsDataProviderClass();
+
+ArrayDataProvider.prototype.addAll = function(list)
+{
+  if (list != null && list.length > 0)
+  {
+    for (var i = 0; i < list.length; i++)
+    {
+    	this.addItem(list[i]);	
+    }
+  }
+}
+
+ArrayDataProvider.prototype.checkLocal = function()
+{
+  return true;
+}
+</pre>
+
+
+Here's the code from a sample fla that has a list box UI component
+with instance name lb_people. 
+
+<pre style="code">
+#include "DataGlue.as"
+#include "ArrayDataProvider.as"
+
+Person = function(firstName, lastName)
+{
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+var people = new Array();
+people.push(new Person("Mike", "Wynholds"));
+people.push(new Person("Sam", "Borgenson"));
+people.push(new Person("Don", "Thompson"));
+people.push(new Person("Alon", "Salant"));
+
+var dataprovider = new ArrayDataProvider(people);
+
+DataGlue.BindFormatStrings(lb_people, dataprovider, "#firstName#
+#lastName#", "#firstName#-#lastName#");
+</pre>
+
+The last two lines you would put in a remoting XXX_Result method to
+bind remoting results to a UI component.
+
+<h3><a name="support">Support</a></h3>
+
+For support, please read and post to the <a target="_top"  href="http://sourceforge.net/forum/forum.php?forum_id=191315">forums on SourceForge.net</a>.
+
+<h3><a name="developers">Developers</a></h3>
+
+For those interesting in peeking under the hood or making changes, the <a href="#download">distribution</a> includes the source code, an Ant build script and JUnit unit tests that can be used to make changes. Simply unzip/unjar the distribution to get started.
+
+<h3><a name="credits">Credits</a></h3>
+
+Alon Salant, <a href="http://www.carbonfive.com">Carbon Five</a><br>
+Mike Wynholds, <a href="http://www.carbonfive.com">Carbon Five</a><br>
+Steven Webster, <a href="http://www.iterationtwo.co.uk">iteration::two</a><br>
+
+</body>
+</html>

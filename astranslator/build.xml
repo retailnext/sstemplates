@@ -31,7 +31,7 @@
   <target name="javadoc" depends="prepare">
   	<mkdir dir="${doc}"/>
   	
-  	<javadoc destdir="${doc}" classpathref="build.class.path">
+  	<javadoc destdir="${doc}" classpathref="build.class.path" stylesheetfile="${props}/javadoc.css" access="public">
       <fileset dir="${src}">
         <include name="com/carbonfive/flash/*.java"/>
         <exclude name="**/*Test.java"/>
