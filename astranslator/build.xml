@@ -1,6 +1,19 @@
 <project name="astranslator" default="dist" basedir=".">
   <property file="build.properties"/>
 
+  <target name="help" depends="usage"/>
+
+  <target name="usage" depends="init">
+    <echo><![CDATA[
+Usage: ant <target>
+  targets: compile - Compiles ASTranslator and creates Javadoc
+           deploy  - Compiles ASTranslator, creates Javadoc and generates astranslator-${version}.zip
+           clean   - Clears out all compiled class files and generated .zip and .jar files
+           test    - Compiles ASTranslator and runs JUnit test suite
+]]>
+	</echo>
+  </target>
+
   <target name="init">
     <tstamp/>
     <property name="build" value="classes"/>
