@@ -21,6 +21,7 @@ public class EncoderFactory
 
   private static final NativeEncoder     nativeEncoder     = new NativeEncoder();
   private static final NumberEncoder     numberEncoder     = new NumberEncoder();
+  private static final DateEncoder       dateEncoder       = new DateEncoder();
   private static final ArrayEncoder      arrayEncoder      = new ArrayEncoder();
   private static final MapEncoder        mapEncoder        = new MapEncoder();
   private static final CollectionEncoder collectionEncoder = new CollectionEncoder();
@@ -42,8 +43,9 @@ public class EncoderFactory
 
     if (ctx.getFilter().doIgnoreClass(clazz)) return nullEncoder;
 
-    boolean isNativeObject = isActionScriptNative( decodedObject );
-    boolean isNumberObject = Number.class.isAssignableFrom( clazz );
+    boolean isNativeObject = isActionScriptNative(decodedObject);
+    boolean isNumberObject = Number.class.isAssignableFrom(clazz);
+    boolean isDateObject   = Date.class.isAssignableFrom(clazz);
     boolean isArray        = clazz.isArray();
     boolean isCollection   = Collection.class.isAssignableFrom(clazz);
     boolean isMap          = Map.class.isAssignableFrom(clazz);
@@ -53,6 +55,7 @@ public class EncoderFactory
 
     if      ( isNativeObject ) encoder = new CachingEncoder(nativeEncoder);
     else if ( isNumberObject ) encoder = new CachingEncoder(numberEncoder);
+    else if ( isDateObject   ) encoder = new CachingEncoder(dateEncoder);
     else if ( isArray )        encoder = new CachingEncoder(arrayEncoder);
     else if ( isMap )          encoder = new CachingEncoder(mapEncoder);
     else if ( isCollection )   encoder = new CachingEncoder(collectionEncoder);
@@ -77,7 +80,6 @@ public class EncoderFactory
   {
     if (obj == null)                                                      return false;
     if (obj instanceof Boolean)                                           return true;
-    if (obj instanceof Date)                                              return true;
     if (obj instanceof String)                                            return true;
     if (obj instanceof Character)                                         return true;
     if (obj instanceof java.sql.ResultSet)                                return true;

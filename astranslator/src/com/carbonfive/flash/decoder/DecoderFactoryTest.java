@@ -20,18 +20,15 @@ public class DecoderFactoryTest
     return suite;
   }
 
-  protected void setUp()
-    throws Exception
+  protected void setUp() throws Exception
   {
   }
 
-  protected void tearDown()
-    throws Exception
+  protected void tearDown() throws Exception
   {
   }
 
-  public void testCreateNumberTranslator()
-    throws Exception
+  public void testCreateNumberTranslator() throws Exception
   {
     validate(new Double(1.0), Byte.class, NumberDecoder.class);
     validate(new Double(1.0), Short.class, NumberDecoder.class);
@@ -42,14 +39,18 @@ public class DecoderFactoryTest
     validate(new Double(1.0), BigDecimal.class, NumberDecoder.class);
   }
 
-  public void testCreateArrayDecoder()
-    throws Exception
+  public void testCreateDateDecoder() throws Exception
+  {
+    validate(new Date(), Date.class, DateDecoder.class);
+    validate(new Date(), java.sql.Date.class, DateDecoder.class);
+  }
+
+  public void testCreateArrayDecoder() throws Exception
   {
     validate(new ArrayList(), new Object[1].getClass(), ArrayDecoder.class);
   }
 
-  public void testCreateCollectionDecoder()
-    throws Exception
+  public void testCreateCollectionDecoder() throws Exception
   {
     validate(new ArrayList(), ArrayList.class, CollectionDecoder.class);
     validate(new ArrayList(), List.class, CollectionDecoder.class);
@@ -57,8 +58,7 @@ public class DecoderFactoryTest
     validate(new ArrayList(), HashSet.class, CollectionDecoder.class);
   }
 
-  public void testCreateMapDecoder()
-    throws Exception
+  public void testCreateMapDecoder() throws Exception
   {
     validate(new ASObject(), HashMap.class, MapDecoder.class);
     validate(new ASObject(), Map.class, MapDecoder.class);

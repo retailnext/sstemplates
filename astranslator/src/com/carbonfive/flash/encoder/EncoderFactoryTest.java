@@ -21,18 +21,15 @@ public class EncoderFactoryTest
     return suite;
   }
 
-  protected void setUp()
-    throws Exception
+  protected void setUp() throws Exception
   {
   }
 
-  protected void tearDown()
-    throws Exception
+  protected void tearDown() throws Exception
   {
   }
 
-  public void testCreateNumberEncoder()
-    throws Exception
+  public void testCreateNumberEncoder() throws Exception
   {
     validate(new Byte((byte) 1), NumberEncoder.class);
     validate(new Short((short) 1), NumberEncoder.class);
@@ -43,34 +40,35 @@ public class EncoderFactoryTest
     validate(new BigDecimal(1.0), NumberEncoder.class);
   }
 
-  public void testCreateArrayEncoder()
-    throws Exception
+  public void testCreateDateEncoder() throws Exception
+  {
+    validate(new Date(), DateEncoder.class);
+    validate(new java.sql.Date(new Date().getTime()), DateEncoder.class);
+  }
+
+  public void testCreateArrayEncoder() throws Exception
   {
     validate(new Object[1], ArrayEncoder.class);
   }
 
-  public void testCreateCollectionEncoder()
-    throws Exception
+  public void testCreateCollectionEncoder() throws Exception
   {
     validate(new ArrayList(), CollectionEncoder.class);
     validate(new HashSet(), CollectionEncoder.class);
   }
 
-  public void testCreateMapEncoder()
-    throws Exception
+  public void testCreateMapEncoder() throws Exception
   {
     validate(new HashMap(), MapEncoder.class);
     validate(new Hashtable(), MapEncoder.class);
   }
 
-  public void testCreateJavaBeanEncoder()
-    throws Exception
+  public void testCreateJavaBeanEncoder() throws Exception
   {
     validate(TestBean.getTestBean(), JavaBeanEncoder.class);
   }
 
-  public void testInstanceOf()
-    throws Exception
+  public void testInstanceOf() throws Exception
   {
     assertTrue(EncoderFactory.instanceOf(String.class, "java.lang.String"));
     assertTrue(EncoderFactory.instanceOf(Integer.class, "java.lang.Number"));
@@ -85,13 +83,13 @@ public class EncoderFactoryTest
     {
       String msg = "Encoding " + obj.getClass().getName() + " does not use a " + encoderClass.getName() +
                    ".  It uses a " + ((CachingEncoder) encoder).getNextEncoder().getClass().getName();
-      assertTrue(encoderClass.isAssignableFrom(((CachingEncoder) encoder).getNextEncoder().getClass()));
+      assertTrue(msg, encoderClass.isAssignableFrom(((CachingEncoder) encoder).getNextEncoder().getClass()));
     }
     else
     {
       String msg = "Encoding " + obj.getClass().getName() + " does not use a " + encoderClass.getName() +
                    ".  It uses a " + encoder.getClass().getName();
-      assertTrue(encoderClass.isAssignableFrom(encoder.getClass()));
+      assertTrue(msg, encoderClass.isAssignableFrom(encoder.getClass()));
     }
   }
 }

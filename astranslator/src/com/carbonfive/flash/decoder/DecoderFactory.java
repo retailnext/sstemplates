@@ -21,6 +21,7 @@ public class DecoderFactory
 
   private static final NativeDecoder     nativeDecoder     = new NativeDecoder();
   private static final NumberDecoder     numberDecoder     = new NumberDecoder();
+  private static final DateDecoder       dateDecoder       = new DateDecoder();
   private static final ArrayDecoder      arrayDecoder      = new ArrayDecoder();
   private static final MapDecoder        mapDecoder        = new MapDecoder();
   private static final CollectionDecoder collectionDecoder = new CollectionDecoder();
@@ -30,6 +31,7 @@ public class DecoderFactory
   {
     boolean isNativeObject = ( EncoderFactory.isActionScriptNative( encodedObject ) );
     boolean isNumberObject = ( encodedObject instanceof Number );
+    boolean isDateObject   = ( encodedObject instanceof Date );
     boolean isArray        = ( encodedObject instanceof ArrayList && desiredClass.isArray() );
     boolean isCollection   = ( encodedObject instanceof ArrayList && Collection.class.isAssignableFrom(desiredClass) );
     boolean isMap          = ( encodedObject instanceof Map       && ! (encodedObject instanceof ASObject) ) ||
@@ -40,6 +42,7 @@ public class DecoderFactory
 
     if      ( isNativeObject ) decoder = new CachingDecoder(nativeDecoder);
     else if ( isNumberObject ) decoder = new CachingDecoder(numberDecoder);
+    else if ( isDateObject   ) decoder = new CachingDecoder(dateDecoder);
     else if ( isArray )        decoder = new CachingDecoder(arrayDecoder);
     else if ( isCollection )   decoder = new CachingDecoder(collectionDecoder);
     else if ( isMap )          decoder = new CachingDecoder(mapDecoder);

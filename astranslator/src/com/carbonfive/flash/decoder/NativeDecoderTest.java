@@ -17,25 +17,23 @@ public class NativeDecoderTest
     return suite;
   }
 
-  private DecoderFactory factory = null;
+  private NativeDecoder decoder = null;
 
   protected void setUp()
     throws Exception
   {
-    factory =  DecoderFactory.getInstance();
+    decoder = new NativeDecoder();
   }
 
   protected void tearDown()
     throws Exception
   {
-    factory = null;
+    decoder = null;
   }
 
   public void testNativeDecode()
     throws Exception
   {
-    NativeDecoder decoder = new NativeDecoder();
-
     Date    date   = new Date();
     String  string = "hello";
     Boolean bool   = Boolean.TRUE;
@@ -55,8 +53,6 @@ public class NativeDecoderTest
 
   public void testNativeDecodeConversion() throws Exception
   {
-    NativeDecoder decoder = new NativeDecoder();
-
     assertTrue(decoder.decodeObject("true", Boolean.class) instanceof Boolean);
     assertTrue(decoder.decodeObject("10",   Integer.class) instanceof Integer);
     assertTrue(decoder.decodeObject("10",   Float.class)   instanceof Float);
@@ -70,8 +66,6 @@ public class NativeDecoderTest
 
   public void testNativeDecoderConversionError() throws Exception
   {
-    NativeDecoder decoder = new NativeDecoder();
-
     try
     {
       decoder.decodeObject("mike", Integer.class);
