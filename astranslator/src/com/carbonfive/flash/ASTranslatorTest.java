@@ -260,7 +260,7 @@ public class ASTranslatorTest
     assertNotNull(as);
     assertNotNull(as.get("one"));
     assertNotNull(as.get("two"));
-    assertTrue("should be the same object reference", as.get("one") == as.get("two"));
+    assertTrue("should be the same object reference:\n" + as.get("one") + "\n" + as.get("two"), as.get("one") == as.get("two"));
   }
 
   public void testNoReferencesTranslateToASObject()
@@ -379,6 +379,10 @@ public class ASTranslatorTest
     Object xmlField = as.get("xmlField");
     assertTrue(msg, xmlField instanceof Document);
     assertEquals(msg, bean.getXmlField().getDocumentElement().getTagName(), getXmlDocument().getDocumentElement().getTagName());
+  }
+
+  public void testCacheGetsEmptied()
+  {
   }
 
   static TestBean getTestBean()

@@ -167,23 +167,16 @@ public class ASTranslator
   {
     if (serverObject == null) return null;
 
-    // check references map
-    if ( beanToASCache.containsKey(serverObject) )
-    {
-      return beanToASCache.get( serverObject );
-    }
+    CachingManager.getEncoderCache(); // create the cache here
 
-    Translator translator = TranslatorFactory.getInstance().getTranslatorToActionScript( this, serverObject );
-    Object result = translator.translateToActionScript();
+//    Translator translator = TranslatorFactory.getInstance().getTranslatorToActionScript( this, serverObject );
+//    Object result = translator.translateToActionScript();
+    ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder( serverObject );
+    Object              result  = encoder.encodeObject( serverObject );
 
+    CachingManager.removeEncoderCache(); // remove it here
 
-    if (result != null)
-    {
-      beanToASCache.put( serverObject, result );
-      return result;
-    }
-
-    return null;
+    return result;
   }
 
 
@@ -231,23 +224,17 @@ public class ASTranslator
   {
     if (actionScriptObject == null) return null;
 
-    // check references map
-    if ( asToBeanCache.containsKey(actionScriptObject) )
-    {
-      return asToBeanCache.get(actionScriptObject);
-    }
+    CachingManager.getDecoderCache();
 
-    Translator translator = TranslatorFactory.getInstance().getTranslatorFromActionScript( this, actionScriptObject, desiredBeanClass );
-    Object result = translator.translateFromActionScript();
+//    Translator translator = TranslatorFactory.getInstance().getTranslatorFromActionScript( this, actionScriptObject, desiredBeanClass );
+//    Object result = translator.translateFromActionScript();
 
-    // add to references map
-    if (result != null)
-    {
-      asToBeanCache.put(actionScriptObject, result);
-      return result;
-    }
+    ActionScriptDecoder decoder = DecoderFactory.getInstance().getDecoder( actionScriptObject, desiredBeanClass );
+    Object              result  = decoder.decodeObject( actionScriptObject, desiredBeanClass );
 
-    return null;
+    CachingManager.removeEncoderCache();
+
+    return result;
   }
 
 ////////////////////////////////////////////////////////////////////////////////

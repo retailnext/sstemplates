@@ -1,0 +1,29 @@
+package com.carbonfive.flash;
+
+import java.math.*;
+
+public class NumberDecoder
+  implements ActionScriptDecoder
+{
+  public Object decodeObject( Object encodedObject, Class desiredClass )
+  {
+    Double dbl = (Double) encodedObject;
+    boolean isByte        = ( Byte.class.equals( desiredClass )        || Byte.TYPE.equals( desiredClass ) );
+    boolean isShort       = ( Short.class.equals( desiredClass )       || Short.TYPE.equals( desiredClass ) );
+    boolean isInteger     = ( Integer.class.equals( desiredClass )     || Integer.TYPE.equals( desiredClass ) );
+    boolean isLong        = ( Long.class.equals( desiredClass )        || Long.TYPE.equals( desiredClass ) );
+    boolean isFloat       = ( Float.class.equals( desiredClass )       || Float.TYPE.equals( desiredClass ) );
+    boolean isDouble      = ( Double.class.equals( desiredClass )      || Double.TYPE.equals( desiredClass ) );
+    boolean isBigDecimal  = ( BigDecimal.class.equals( desiredClass ) );
+
+    Object result = null;
+    if      ( isShort )      result = new Short(dbl.shortValue());
+    else if ( isInteger )    result = new Integer(dbl.intValue());
+    else if ( isLong )       result = new Long(dbl.longValue());
+    else if ( isFloat )      result = new Float(dbl.floatValue());
+    else if ( isDouble )     result = dbl;
+    else if ( isBigDecimal ) result = new BigDecimal(dbl.doubleValue());
+
+    return result;
+  }
+}
