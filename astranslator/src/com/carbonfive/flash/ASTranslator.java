@@ -191,7 +191,8 @@ public class ASTranslator
       try
       {
         // asoClass = Class.forName( classOfActionScriptObject );
-        asoClass = getClass().getClassLoader().loadClass(classOfActionScriptObject);
+        // asoClass = getClass().getClassLoader().loadClass(classOfActionScriptObject);
+        asoClass = Thread.currentThread().getContextClassLoader().loadClass(classOfActionScriptObject);
       }
       catch ( ClassNotFoundException cnfe )
       {
