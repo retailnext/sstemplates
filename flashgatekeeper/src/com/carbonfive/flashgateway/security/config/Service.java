@@ -9,7 +9,6 @@ public class Service
 {
   private String                 name;
   private Map                    methods = new HashMap();
-  private AccessConstraint constraint;
 
   public String getName()
   {

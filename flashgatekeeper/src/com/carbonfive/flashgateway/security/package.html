@@ -129,7 +129,7 @@ Configure FlashGatekeeper in your application's WEB-INF/web.xml file as a servle
     &lt;filter-class>com.carbonfive.flashgateway.security.GatekeeperFilter&lt;/filter-class>
     &lt;init-param>
       &lt;param-name>config-file&lt;/param-name>
-      &lt;param-value>flashgateway.xml&lt;/param-value>
+      &lt;param-value>flashgatekeeper.xml&lt;/param-value>
     &lt;/init-param>
   &lt;/filter>
 
@@ -140,7 +140,7 @@ Configure FlashGatekeeper in your application's WEB-INF/web.xml file as a servle
 </pre>
 
 <p>
-FlashGatekeeper looks for its configuration file in the classpath of your web application. In this example, you would put <i>flashgateway.xml</i> in WEB-INF/classes or in another directory in your web applications classpath.
+FlashGatekeeper looks for its configuration file in the classpath of your web application. In this example, you would put <i>flashgatekeeper.xml</i> in WEB-INF/classes or in another directory in your web applications classpath.
 </p>
 
 
@@ -151,7 +151,7 @@ FlashGateway configuration allows you to define service access with a number of 
 </p>
 
 <p>
-A simple <i>flashgateway.xml</i> configuration file that allows access to all services and service methods to all users restricted to the <tt>com.carbonfive.services</tt> package follows:
+A simple <i>flashgatekeeper.xml</i> configuration file that allows access to all services and service methods to all users restricted to the <tt>com.carbonfive.services</tt> package follows:
 </p>
 
 <pre class="code">
@@ -165,7 +165,7 @@ A simple <i>flashgateway.xml</i> configuration file that allows access to all se
 &lt;/config>
 </pre>
 
-A following <i>flashgateway.xml</i> configuration file shows the range of configuration options.
+A following <i>flashgatekeeper.xml</i> configuration file shows the range of configuration options.
 
 <pre class="code">
 &lt;config>
