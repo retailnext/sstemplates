@@ -94,7 +94,11 @@ Flash will now receive an ActionScript object with the property "name."
 
 As described in the <a href="#overview">overview</a>, ASTranslator enhances Flash Remoting by adding the ability to send Java objects to Flash using the Java object properties as defined by the object's property accessors (getters and setters) rather than using the object's internal member state as Remoting does by default.
 <p>
-ASTranslator follows the <a target="_top" href="http://livedocs.macromedia.com/frdocs/Using_Flash_Remoting_MX/UseASData4.jsp">conversion rules for Flash Remoting for J2EE</a> and relies on the remoting gateway to handle conversion of class types named by the conversion rules including org.w3c.dom.Document and java.sql.ResultSet. Additionally, if it does not know what to do with an object type, it simply passes it through. Therefore it is safe to pass all objects through ASTranslator.toActionScript() when sending them back to Flash. This is the recommended use.
+ASTranslator follows the <a target="_top" href="http://livedocs.macromedia.com/frdocs/Using_Flash_Remoting_MX/UseASData4.jsp">conversion rules for Flash Remoting for J2EE</a> and relies on the remoting gateway to handle conversion of class types named by the conversion rules. Additionally, if it does not know what to do with an object type, it simply passes it through. Therefore it is safe to pass all objects through ASTranslator.toActionScript() when sending them back to Flash. This is the recommended use.
+<p>
+The Java programmer can identify classes, interfaces or specific properties of objects that should not be translated to ActionScript in a call to ASTranslator.toActionScript().  This is done through the use of ASTranslator.ignoreClass() and ASTranslator.ignoreProperty().  This is useful when you wish to reduce network traffic by not sending irrelevant data to Flash.  Specific information on this is provided in the <a href="#usage">usage documentation</a>.
+<p>
+ASTranslator also identifies potential loops while translating from a JavaBean to an ActionScript object.
 <p>
 Additionally, if the ActionScript programmer has registered ActionScript objects using Object.registerClass() that map directly to Java objects, the objects returned as the result of a Remoting service call will be of that registered type when returned to the service XXXX_onResult() callback method. More information on this is provided in the <a href="#usage">usage documentation</a>.
 
@@ -208,10 +212,23 @@ While <a target="_top"  href="http://www.macromedia.com/support/flash_remoting/t
 </ol>
 
 This will make the Remoting Gateway Service available at http://www.yourdomain.com/yourwebapp/gateway and all classes in your application visible to Flash Remoting.
+<p>
+ASTranslator also utilizes specific components from the Jakarta Commons project.  These libraries are provided in the distribution, and can be freely used by commercial and non-commercial applications.  More information can be found here:
+<ul>
+<li>Jakarta Commons BeanUtils - <a target="_top" href="http://jakarta.apache.org/commons/beanutils.html">home page</a>
+<li>Jakarta Commons Collections - <a target="_top" href="http://jakarta.apache.org/commons/collections.html">home page</a>
+<li>Jakarta Commons Logging - <a target="_top" href="http://jakarta.apache.org/commons/logging.html">home page</a>
+</ul>
 
 <h3><a name="install">Install</a></h3>
 
-To install ASTranslator, install Flash Remoting for J2EE MX as recommended in <a href="#prerequisites">prerequisites</a> and add astranslator-x.x.jar to your web application's WEB-INF/lib/ directory.
+To install ASTranslator, first install Flash Remoting for J2EE MX as recommended in <a href="#prerequisites">prerequisites</a>.  You must then unzip astranslator-x.x.zip and copy the following jars to your web application's WEB-INF/lib/ directory:
+<ul>
+<li>lib/astranslator-x.x.jar
+<li>lib/commons-beanutils.jar
+<li>lib/commons-collections.jar
+<li>lib/commons-logging.jar
+</ul>
 <p>
 If you have installed Flash Remoting MX for J2EE in another manner, the best location for astranslator-x.x.jar will depend on the application server you are using. Here you get in to the sticky world of class loader precedence. Better to keep it all in your webapp.
 
@@ -270,6 +287,32 @@ public class Service
 
 Note that you must cast the result of this method call to the expected return type. It will either be an ASObject, a Java Collection or one of the Java Class types known to Flash Remoting (XML Document, ResultSet,...).
 <p>
+If you wish to specify classes or interfaces to be left out of the translation, the code can look like this:
+
+<pre class="code">
+package com.server;
+
+import flashgateway.io.ASObject;
+import com.carbonfive.flash.ASTranslator;
+  
+public class Service
+{
+  public ASObject getPlayer(String name)
+  {
+    Player player = Roster.getPlayer(name);
+    ASTranslator translator = new ASTranslator();
+    translator.ignoreClass("com.yourcompany.Address");
+    translator.ignoreProperty("com.yourcompany.Player", "email");
+
+    ASObject aso = (ASObject) translator.toActionScript(player);
+    return aso;
+  }
+}
+</pre>
+
+This would cause ASTranslator to ignore any object of type com.yourcompany.Address while translating, as well as the getEmail() property of the com.yourcompany.Player class itself.
+<p>
+
 For Java object that are not known to Flash Remoting, ASTranslator will set the "type" field of the resulting ASObject to be the class name of the translated Java object. If you register your ActionScript objects to map to Java objects as detailed in the section above, the ActionScript objects that are returned to Flash will be of the correct ActionScript object type.
 
 <pre class="code">

@@ -11,14 +11,11 @@
     <property name="lib"   value="lib"/>
 
     <path id="build.class.path">
+      <fileset dir="${lib}">
+        <include name="*.jar"/>
+      </fileset>
       <pathelement location="${flashgateway.jar}"/>
-      <pathelement location="${log4j.jar}"/>
-      <pathelement location="${junit.jar}"/>
-      <pathelement location="${xerces.jar}"/>
       <pathelement location="${props}"/>
-      <pathelement location="${lib}/commons-beanutils.jar"/>
-      <pathelement location="${lib}/commons-collections.jar"/>
-      <pathelement location="${lib}/commons-logging.jar"/>
     </path>
   </target>
     
@@ -50,7 +47,12 @@
 
   <target name="dist" depends="compile, javadoc">
     <mkdir dir="${dist}" />
+
     <jar jarfile="${dist}/astranslator-${version}.jar">
+      <fileset dir="${build}"/>
+    </jar>
+
+    <zip destfile="${dist}/astranslator-${version}.zip">
       <fileset dir="${basedir}">
         <include name="LICENSE"/>
         <include name="build.*"/>
@@ -58,14 +60,12 @@
         <include name="${props}/**"/>
         <include name="${lib}/**"/>
         <include name="${doc}/**"/>
+        <include name="${dist}/**"/>
+        <exclude name="${lib}/flashgateway.jar"/>
+        <exclude name="${lib}/log4j*.jar"/>
+        <exclude name="${dist}/astranslator-${version}.zip"/>
       </fileset>
-      <fileset dir="${build}"/>
-    </jar>
-  </target>
-
-  <target name="deploy" depends="dist">
-    <copy todir="C:/JRun4/servers/crave/destructo-ear/destructo-war/WEB-INF/lib" 
-          file="${dist}/astranslator-${version}.jar" overwrite="true"/>
+    </zip>
   </target>
 
   <target name="clean" depends="init">

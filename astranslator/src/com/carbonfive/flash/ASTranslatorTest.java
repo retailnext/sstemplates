@@ -2,7 +2,6 @@ package com.carbonfive.flash;
 
 import java.util.*;
 import java.io.*;
-import org.w3c.dom.*;
 import org.apache.commons.logging.*;
 import junit.framework.*;
 import flashgateway.io.ASObject;
@@ -136,14 +135,11 @@ public class ASTranslatorTest
     as.setType(TestBean.class.getName());
     as.put("strField", "A string");
     as.put("intField", new Double(3));
-    as.put("xmlField", TestBean.getXmlDocument());
 
     TestBean bean = (TestBean) new ASTranslator().fromActionScript(as);
     assertNotNull(bean);
     assertEquals(as.get("intField"), new Double(bean.getIntField()));
     assertEquals(as.get("strField"), bean.getStrField());
-    Document xmlField = (Document) as.get("xmlField");
-    assertEquals(xmlField.getDocumentElement().getTagName(), TestBean.getXmlDocument().getDocumentElement().getTagName());
   }
 
   public void testDeepTranslateToBean()
@@ -488,11 +484,6 @@ public class ASTranslatorTest
     Object strField = as.get("strField");
     assertTrue(msg, strField instanceof String);
     assertEquals(msg, bean.getStrField(), strField);
-    
-    assertTrue(msg, as.containsKey("xmlField"));
-    Object xmlField = as.get("xmlField");
-    assertTrue(msg, xmlField instanceof Document);
-    assertEquals(msg, bean.getXmlField().getDocumentElement().getTagName(), TestBean.getXmlDocument().getDocumentElement().getTagName());
   }
 
   public void testCacheGetsEmptied()
