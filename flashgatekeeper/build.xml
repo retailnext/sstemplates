@@ -1,0 +1,106 @@
+<project name="flashgatekeeper" default="dist" basedir=".">
+  <property file="build.properties"/>
+
+  <target name="init">
+    <tstamp/>
+    <property name="build" value="classes"/>
+    <property name="props" value="properties"/>
+    <property name="dist"  value="dist"/>
+    <property name="doc"   value="doc"/>
+    <property name="src"   value="src"/>
+    <property name="lib"   value="lib"/>
+
+    <path id="build.class.path">
+      <fileset dir="${lib}">
+        <include name="*.jar"/>
+      </fileset>
+      <pathelement location="${props}"/>
+    </path>
+  </target>
+
+  <target name="prepare" depends="init">
+    <mkdir dir="${build}" />
+  </target>
+
+  <target name="compile" depends="prepare">
+    <javac srcdir="${src}" destdir="${build}"
+           classpathref="build.class.path"
+           deprecation="off" debug="on" optimize="off" target="1.2"/>
+  </target>
+
+  <target name="javadoc" depends="prepare">
+  	<mkdir dir="${doc}"/>
+
+  	<javadoc destdir="${doc}/api"
+  	         classpathref="build.class.path"
+  	         stylesheetfile="${props}/javadoc.css"
+  	         access="public"
+  	         windowtitle="Flash Gatekeeper Security Filter for Macromedia Flash Remoting MX">
+      <fileset dir="${src}">
+        <include name="com/carbonfive/flashgateway/**/*.java"/>
+        <exclude name="**/*Test.java"/>
+      </fileset>
+    </javadoc>
+  </target>
+
+  <target name="dist" depends="compile, javadoc">
+    <mkdir dir="${dist}" />
+
+    <jar jarfile="${dist}/flashgatekeeper-${version}.jar">
+      <fileset dir="${build}" includes="**/*.class"/>
+    </jar>
+
+    <zip destfile="${dist}/flashgatekeeper-${version}.zip">
+      <zipfileset dir="${basedir}" prefix="flashgatekeeper-${version}">
+        <include name="LICENSE"/>
+        <include name="build.*"/>
+        <include name="${src}/**"/>
+        <include name="${props}/**"/>
+        <include name="${lib}/**"/>
+        <include name="${doc}/**"/>
+        <include name="${dist}/**"/>
+        <exclude name="${lib}/flashgateway.jar"/>
+        <exclude name="${lib}/log4j*.jar"/>
+        <exclude name="${dist}/flashgatekeeper-${version}.zip"/>
+      </zipfileset>
+    </zip>
+  </target>
+
+  <target name="clean" depends="init">
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+    <delete dir="${doc}"/>
+  </target>
+
+  <target name="deploy-test-war" depends="compile">
+    <copy file="${props}/remotingservices.properties" toDir="${build}"/>
+
+    <war warfile="${webapps.root}/flashgatekeeper.war"
+         webxml="${props}/test-web.xml">
+      <classes dir="${build}"/>
+      <lib dir="${lib}"/>
+    </war>
+
+  </target>
+
+  <target name="test" depends="deploy-test-war">
+    <junit printsummary="withOutAndErr" haltonfailure="yes" haltonerror="yes">
+
+      <sysproperty key="log4j.debug" value="false"/>
+      <sysproperty key="log4j.configuration" value="log4j-junit.properties"/>
+
+      <classpath>
+        <pathelement location="${build}"/>
+        <path refid="build.class.path"/>
+      </classpath>
+      <formatter type="plain" usefile="false"/>
+      <batchtest fork="yes">
+        <fileset dir="${src}">
+          <include name="**/*Test.java" />
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+</project>
+

@@ -1,0 +1,166 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../../../../properties/javadoc.css" title="style">
+</head>
+<body>
+FlashGatekeeper is an implementation of a Servlet 2.3 Filter that limits the services that can be invoked by Flash clients through Macromedia Flash Remoting MX for J2EE and for ColdFusion J2EE Edition on any Java application server.
+
+<h2><a name="documentation">FlashGatekeeper Security Filter for Macromedia Flash Remoting MX</a></h2>
+
+FlashGatekeeper is designed to be used with <a target="_top" href="http://www.macromedia.com/software/flashremoting/">Macromedia Flash Remoting MX</a> on any J2EE application server. It allows developers to limit the services that can be invoked through Flash Remoting. For details on why this is important, <a href="#overview">read the overview</a>.
+
+<p>
+FlashGatekeeper is supported by <a target="_top" href="http://www.carbonfive.com/opensource-main-1.html">Carbon Five</a> and can be deployed on application servers with Flash Remoting MX including Macromedia JRun, Jakarta Tomcat, JBoss, Caucho Resin, IBM WebSphere, BEA Weblogic and ATG Dynamo.
+
+<ul>
+<li><a href="#overview">Overview</a>
+<li><a href="#download">Download</a>
+<li><a href="#prerequisites">Prerequisites</a>
+<li><a href="#install">Install</a>
+<li><a href="#support">Support</a>
+<li><a href="#developers">Developers</a>
+<li><a href="#reference">Reference</a>
+<li><a href="#credits">Credits</a>
+</ul>
+
+<hr size="1">
+
+<h3><a name="overview">Overview</a></h3>
+
+FlashGatekeeper gives developers the ability to configure the services that can be invoked through Flash Remoting.
+
+<p>
+Flash Remoting is implemented as a servlet that uses introspection to invoke methods on a class in the application server. The class and method are both named by the Flash client. A Flash MX client can invoke any method through the Flash Remoting gateway on any class that has a no argument constructor and can therefore be created by the Flash Remoting gateway servlet using Class.forName("package.ClassName").newInstance( ). 
+</p>
+
+<p>
+This opens up many potential security issues. A malicious user could write a Flash client to access known core Java classes, classes in the application server APIs, or classes in your application. The potential exploits are numerous. A Flash client could access application server classes to manipulate the state of the server or gain access to protected information.
+</p>
+
+<p>
+Using the core Java APIs a Flash client can connect to java.util.ArrayList as a Remoting service through Flash Remoting and invoke ArrayList.addAll(new Array("some string")) in an infinite loop. This is basically a denial of service attack that will fill up the memory available to the application server. Before long, it will crash the JVM (Java Virtual Machine) running the application server.
+</p>
+
+<p>
+Macromedia's recommended approach for dealing with this security issue is to enable the Java Security Manager for your application server and edit the Java security policy file to limit the classes the Remoting gateway servlet can access. Unfortunately, the Java Security Manager will slow down your application server, security policy files are a pain to edit and manage, and you can't even prevent the ArrayList exploit above because the Remoting gateway needs access to ArrayList to function. The Security Manager can not distinguish between the gateway using a class as a Remoting service or as part of its written code.
+
+<h3><a name="download">Download</a></h3>
+
+The latest release of FlashGatekeeper is available for download from <a target="_top"  href="http://sourceforge.net/project/showfiles.php?group_id=52145">SourceForge.net</a>. For the adventurous, you can check out the <a target="_top" href="http://sourceforge.net/cvs/?group_id=52145">latest changes from CVS</a>.
+
+<h3><a name="prerequisites">Prerequisites</a></h3>
+
+If you are not using Flash Remoting, you do not have a need for FlashGatekeeper. Get <a target="_top"  href="http://www.macromedia.com/software/flashremoting/downloads/">Flash Remoting for J2EE from Macromedia.</a>
+
+<p>
+FlashGatekeeper also utilizes specific components from other open source project.  These libraries are provided in the distribution, and can be freely used by commercial and non-commercial applications.  More information can be found here:
+<ul>
+<li>Jakarta Commons Logging - <a target="_top" href="http://jakarta.apache.org/commons/logging.html">home page</a>
+<li>openAMF - <a target="_top" href="http://www.openamf.org">home page</a>
+</ul>
+
+<h3><a name="install">Install</a></h3>
+
+To install FlashGatekeeper unzip astranslator-x.x.zip and copy the following jars to your web application's WEB-INF/lib/ directory:
+<ul>
+<li>lib/flashgatekeeper-x.x.jar
+<li>lib/commons-logging.jar
+<li>lib/openamf.jar
+</ul>
+
+<p>
+openAMF is a rapidly evolving project. It is a good idea to get the latest distribution of openamf.jar from the openAMF project listed above in <a href="#prerequisites">Prerequisites</a> rather than the version provided with FlashGatekeeper.
+</p>
+
+<p>
+Configure FlashGatekeeper in your application's WEB-INF/web.xml file as a servlet filter mapped to the URL of the Flash Remoting gateway servlet. For example:
+</p>
+
+<pre class="code">
+  &lt;filter>
+    &lt;filter-name>GatekeeperFilter&lt;/filter-name>
+    &lt;filter-class>com.carbonfive.flashgateway.security.GatekeeperFilter&lt;/filter-class>
+    &lt;init-param>
+      &lt;param-name>properties-file&lt;/param-name>
+      &lt;param-value>remotingservices.properties&lt;/param-value>
+    &lt;/init-param>
+  &lt;/filter>
+
+  &lt;filter-mapping>
+    &lt;filter-name>GatekeeperFilter&lt;/filter-name>
+      &lt;url-pattern>/gateway&lt;/url-pattern>
+  &lt;/filter-mapping>
+</pre>
+
+<p>
+FlashGatekeeper looks for its properties file in the classpath of your web application. In this example, you would put <i>remotingservices.properties</i> in WEB-INF/classes or in another directory in your web applications classpath.
+</p>
+
+<p>
+Put each allowed service on a new line in the properties file. You may list a package name instead of a class or a JNDI context instead of an object in JNDI. FlashGatekeeper only allows services to be invoked whose name starts with one of the values in the properties file.
+</p>
+
+A sample <i>remotingservices.properties</i> properties file:
+
+<pre class="code">
+com.carbonfive.flashservices
+com.carbonfive.util.SampleFlashService
+java\:comp/env/ejb
+</pre>
+
+This properties file allows only services in or below the package <tt>com.carbonfive.flashservices</tt>, the service implementation <tt>com.carbonfive.util.SampleFlashService</tt> and any EJB services in JNDI under <tt>java:comp/env/ejb</tt>.
+
+<h3><a name="support">Support</a></h3>
+
+For support, please read and post to the <a target="_top"  href="http://sourceforge.net/forum/forum.php?forum_id=191315">forums on SourceForge.net</a>.
+
+<h3><a name="developers">Developers</a></h3>
+
+</p>
+
+<p>
+GatekeeperFilter is a standard Servlet 2.3 Filter that is designed to inspect the AMF messsage sent by a Flash MX client when trying to invoke a service in the servlet container through Macromedia Flash Remoting MX for J2EE. GatekeeperFilter uses the <a target="_new" href="http://www.openamf.org">openAMF</a> library to parse AMF messages.
+</p>
+
+<p>
+GatekeeperFilter only allows AMF messages that are trying to invoke a configured list of services to get to the Flash Remoting gateway. If it encounters an AMF request that it not allowed, it logs a warning with the full details of the service request and returns a <b>403 Forbidden</b> status to the client.
+</p>
+
+For those interesting in peeking under the hood or making changes, the <a href="#download">distribution</a> includes the source code, an Ant build script and JUnit unit tests that can be used to make changes. Simply unzip the distribution to get started.
+
+<h3><a name="reference">Reference</a></h3>
+
+<ul>
+<li> <a href="http://www.onjava.com/pub/a/onjava/2003/02/26/flash_remoting.html">Flash Remoting for J2EE Developers</a><br/>
+
+<li> <a href="http://www.macromedia.com/software/flashremoting/">Flash Remoting MX Homepage</a><br/>
+     Macromedia resource.</li>
+
+<li> <a href="http://www.macromedia.com/software/flashremoting/downloads/components/">Download Flash MX Remoting Components</a><br/>
+     Macromedia resource.</li>
+
+<li> <a href="http://www.macromedia.com/software/trial_download/">Download Flash Remoting MX</a><br/>
+     Macromedia resource.</li>
+
+<li> <a href="http://www.macromedia.com/desdev/mx/blackboard/articles/flash_remoting_design_2.0.html">Flash Remoting 101 for Java Users</a><br/>
+     Macromedia resource.</li>
+
+<li> <a href="http://www.macromedia.com/software/flashremoting/whitepapers/pdf/flr_j2ee.pdf">A Technical Overview of Flash Remoting MX for Java Developers</a> (PDF)<br/>
+     Macromedia resource.</li>
+
+<li> <a href="http://www.macromedia.com/support/flash_remoting/ts/documents/presalesfaq.htm">Common Questions About Flash Remoting</a><br/>
+     Macromedia resource.</li>
+
+<li> <a href="http://www.macromedia.com/support/flash_remoting/ts/documents/presalesfaq.htm#jrunrestriction">Modifying Java Security Policy for Remoting</a><br/>
+     Macromedia resource.</li>
+
+</ul>
+
+<h3><a name="credits">Credits</a></h3>
+
+Alon J Salant, <a href="http://www.carbonfive.com">Carbon Five</a><br>
+Mike Wynholds, <a href="http://www.carbonfive.com">Carbon Five</a><br>
+The openAMF Team, <a href="http://www.openamf.org">www.openamf.org</a><br>
+
+</body>
+</html>
