@@ -2,6 +2,7 @@ package com.carbonfive.flash.decoder;
 
 import java.util.*;
 import java.beans.*;
+import org.apache.commons.logging.*;
 
 /**
  * Decodes an ActionScript object to a Java map.
@@ -9,7 +10,7 @@ import java.beans.*;
 public class MapDecoder
   implements ActionScriptDecoder
 {
-  private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MapDecoder.class);
+  private static final Log log = LogFactory.getLog(MapDecoder.class);
   
   public Object decodeObject( Object encodedObject, Class desiredClass )
   {

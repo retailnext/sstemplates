@@ -3,10 +3,9 @@ package com.carbonfive.flash.encoder;
 import java.util.*;
 import java.lang.reflect.*;
 import java.beans.*;
-import java.io.*;
 import flashgateway.io.ASObject;
 import org.apache.commons.beanutils.*;
-import org.apache.log4j.*;
+import org.apache.commons.logging.*;
 import com.carbonfive.flash.encoder.*;
 
 /**
@@ -15,7 +14,7 @@ import com.carbonfive.flash.encoder.*;
 public class JavaBeanEncoder
   implements ActionScriptEncoder
 {
-  private static final Logger log = Logger.getLogger(JavaBeanEncoder.class);
+  private static final Log log = LogFactory.getLog(JavaBeanEncoder.class);
 
   private static Set objectAttributes = new HashSet(Arrays.asList(PropertyUtils.getPropertyDescriptors(Object.class)));
 
@@ -53,12 +52,6 @@ public class JavaBeanEncoder
       }
       catch ( Exception failedToInvoke )
       {
-        continue;
-      }
-
-      if (decoded.equals(attributeValue))
-      {
-        log.warn("Child of JavaBean is itself: " + decoded);
         continue;
       }
 

@@ -2,7 +2,7 @@ package com.carbonfive.flash.decoder;
 
 import java.util.*;
 import java.beans.*;
-import org.apache.log4j.*;
+import org.apache.commons.logging.*;
 
 /**
  * Decodes an ActionScript list to a Java collection (list or set).
@@ -10,7 +10,7 @@ import org.apache.log4j.*;
 public class CollectionDecoder
   implements ActionScriptDecoder
 {
-  private static final Logger log = Logger.getLogger(CollectionDecoder.class);
+  private static final Log log = LogFactory.getLog(CollectionDecoder.class);
   
   public Object decodeObject( Object encodedObject, Class desiredClass )
   {

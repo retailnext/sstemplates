@@ -2,7 +2,7 @@ package com.carbonfive.flash.encoder;
 
 import com.carbonfive.flash.encoder.*;
 import com.carbonfive.flash.*;
-import org.apache.log4j.*;
+import org.apache.commons.logging.*;
 
 /**
  * Provides reference-based caching for Java to ActionScript encoding.
@@ -10,9 +10,8 @@ import org.apache.log4j.*;
 public class CachingEncoder
   implements ActionScriptEncoder
 {
-  private static final Logger log = Logger.getLogger(CachingEncoder.class);
-  private static final int MAXIMUM_DEPTH = 100;
-  
+  private static final Log log = LogFactory.getLog(CachingEncoder.class);
+
   private ActionScriptEncoder nextEncoder = null;
 
   public CachingEncoder(ActionScriptEncoder next)
