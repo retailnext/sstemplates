@@ -1,5 +1,6 @@
 package com.carbonfive.flash;
 
+import java.util.*;
 import flashgateway.io.ASObject;
 import com.carbonfive.flash.decoder.*;
 import com.carbonfive.flash.encoder.*;
@@ -184,6 +185,9 @@ public class ASTranslator
     if (aso instanceof ASObject)
     {
       String classOfActionScriptObject = ( (ASObject) aso).getType();
+
+      if (classOfActionScriptObject == null) return Map.class;
+
       try
       {
         asoClass = Class.forName( classOfActionScriptObject );

@@ -2,6 +2,7 @@ package com.carbonfive.flash.decoder;
 
 import java.util.*;
 import junit.framework.*;
+import flashgateway.io.*;
 
 public class MapDecoderTest
   extends    TestCase
@@ -49,6 +50,19 @@ public class MapDecoderTest
     assertTrue(decoder.decodeObject(map, Map.class)       instanceof HashMap);
     assertTrue(decoder.decodeObject(map, HashMap.class)   instanceof HashMap);
     assertTrue(decoder.decodeObject(map, Hashtable.class) instanceof Hashtable);
+  }
+
+  public void testDecodeNullValue() throws Exception
+  {
+    ASObject aso = new ASObject();
+    aso.put("one", "one");
+    aso.put("two", null);
+
+    MapDecoder decoder = new MapDecoder();
+    Map decoded = (Map) decoder.decodeObject(aso, Map.class);
+    assertNotNull(decoded);
+    assertEquals("one", decoded.get("one"));
+    assertNull(decoded.get("two"));
   }
 
 }

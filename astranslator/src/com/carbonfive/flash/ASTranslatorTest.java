@@ -504,6 +504,29 @@ public class ASTranslatorTest
     }
   }
 
+  public void testDecodeASObjectWithDeepNullValue() throws Exception
+  {
+    ASObject a = new ASObject();
+    ASObject b = new ASObject();
+    a.put("a-foo", "a-bar");
+    b.put("b-foo", "b-bar");
+    b.put("b-null", null);
+    a.put("a-b", b);
+
+    Object decoded = new ASTranslator().fromActionScript(a);
+    assertNotNull(decoded);
+    assertTrue(decoded instanceof Map);
+    Map amap = (Map) decoded;
+
+    assertEquals("a-bar", amap.get("a-foo"));
+    assertNotNull(amap.get("a-b"));
+    assertTrue(amap.get("a-b") instanceof Map);
+
+    Map bmap = (Map) amap.get("a-b");
+    assertNull(bmap.get("b-null"));
+    assertEquals("b-bar", bmap.get("b-foo"));
+  }
+
   private void validateTestBean(TestBean bean, ASObject as)
     throws Exception
   {

@@ -44,6 +44,8 @@ public class MapDecoder
       key   = keys.next();
       value = ((Map) encodedObject).get( key );
 
+      if (value == null) { map.put(key, null); continue; }
+
       decoder = DecoderFactory.getInstance().getDecoder( value, value.getClass() );
       decodedValue = decoder.decodeObject(value, value.getClass());
       map.put( key, decodedValue );
