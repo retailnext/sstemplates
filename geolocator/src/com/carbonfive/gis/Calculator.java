@@ -160,21 +160,22 @@ public class Calculator
    *
    * @param source The source Location
    * @param possibles The collection of possible Locations to be used
-   * @param n The desired amount of Locations to be returned
-   * @return The list of up to n Locations located nearest to the source, sorted by increasing distance
+   * @param maxLocations The desired amount of Locations to be returned
+   * @return The list of up to maxLocations Locations located nearest to the source, sorted by increasing distance
    * @throws CalculatorException If the source location cannot be found in the Zip Code database
    * @see SpatialLocation#getLocationsNearby(Collection, int)
    */
-  public List getLocationsNearby(Location source, Collection possibles, int n)
+  public List getLocationsNearby(Location source, Collection possibles, int maxLocations)
     throws CalculatorException
   {
     SpatialLocation sourceSL = getSpatialLocation(source);
 
     if (sourceSL == null) throw new CalculatorException("Location not found: " + source.getZipCode());
 
-    Collection               possibleSLs = new ArrayList();
-    Location                 loc         = null;
-    SpatialLocationDecorator sld         = null;
+    Location                 loc = null;
+    SpatialLocationDecorator sld = null;
+
+    Map byDistance = new TreeMap();
     for (Iterator i = possibles.iterator(); i.hasNext(); )
     {
       loc = (Location) i.next();
@@ -185,19 +186,14 @@ public class Calculator
       }
       else
       {
-        possibleSLs.add(sld);
+        double dist = getDistance(source, loc);
+        byDistance.put(new Double(dist), loc);
       }
     }
-    
-    List resultSLs = sourceSL.getLocationsWithinRadius(possibleSLs, n);
-    List resultLs = new ArrayList();
-    for (Iterator i = resultSLs.iterator(); i.hasNext(); )
-    {
-      sld = (SpatialLocationDecorator) i.next();
-      resultLs.add(sld.getLocation());
-    }
 
-    return resultLs;
+    List all = new ArrayList(byDistance.values());
+    if (all.size() <= maxLocations) return all;
+    return all.subList(0, maxLocations);
   }
 
   SpatialLocationDecorator getSpatialLocation(Location loc)

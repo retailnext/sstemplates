@@ -6,11 +6,14 @@
     <property name="build" value="classes"/>
     <property name="props" value="properties"/>
     <property name="dist"  value="dist"/>
-    <property name="doc"   value="doc"/>
+    <property name="doc"   value="doc/api"/>
     <property name="src"   value="src"/>
+    <property name="lib"   value="lib"/>
 
     <path id="build.class.path">
-      <pathelement location="${junit.jar}"/>
+      <fileset dir="${lib}">
+        <include name="*.jar"/>
+      </fileset>
       <pathelement location="${props}"/>
     </path>
   </target>
@@ -28,7 +31,11 @@
   <target name="javadoc" depends="prepare">
   	<mkdir dir="${doc}"/>
   	
-  	<javadoc destdir="${doc}" classpathref="build.class.path">
+  	<javadoc destdir="${doc}"
+             classpathref="build.class.path"
+             stylesheetfile="${props}/javadoc.css"
+             access="public"
+             windowtitle="GeoLocator - Java Spatial / Zip Code Utilities">
       <fileset dir="${src}">
         <include name="com/carbonfive/gis/*.java"/>
         <exclude name="**/*Test.java"/>
@@ -38,16 +45,23 @@
 
   <target name="dist" depends="compile, javadoc">
     <mkdir dir="${dist}" />
+
     <jar jarfile="${dist}/geolocator-${version}.jar">
-      <fileset dir="${basedir}">
+      <fileset dir="${build}"/>
+    </jar>
+
+    <zip destfile="${dist}/geolocator-${version}.zip">
+      <zipfileset dir="${basedir}" prefix="geolocator-${version}">
         <include name="LICENSE"/>
         <include name="build.*"/>
         <include name="${src}/**"/>
         <include name="${props}/**"/>
+        <include name="${lib}/**"/>
         <include name="${doc}/**"/>
-      </fileset>
-      <fileset dir="${build}"/>
-    </jar>
+        <include name="${dist}/**"/>
+        <exclude name="${dist}/geolocator-${version}.zip"/>
+      </zipfileset>
+    </zip>
   </target>
 
   <target name="clean" depends="init">
@@ -74,6 +88,17 @@
       </batchtest>
     </junit>
   </target>
-  
+
+  <target name="publish" depends="dist">
+    <ftp server="upload.sourceforge.net"
+         userid="anonymous"
+         password="astranslator@carbonfive.com"
+         remotedir="/incoming">
+      <fileset dir="${dist}">
+        <include name="geolocator-${version}.zip"/>
+      </fileset>
+    </ftp>
+  </target>
+
 </project>
 
