@@ -111,13 +111,20 @@ public class ASTranslator
 
     CachingManager.createEncoderCache(this.useEquivalence); // create the cache here
 
-    Context ctx = Context.getBaseContext();
-    ctx.setFilter(filter);
+    Object result = null;
 
-    ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder(ctx, serverObject);
-    Object              result  = encoder.encodeObject(ctx, serverObject);
+    try
+    {
+      Context ctx = Context.getBaseContext();
+      ctx.setFilter(filter);
 
-    CachingManager.removeEncoderCache(); // remove it here
+      ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder(ctx, serverObject);
+      result  = encoder.encodeObject(ctx, serverObject);
+    }
+    finally
+    {
+      CachingManager.removeEncoderCache(); // remove it here
+    }
 
     return result;
   }
@@ -164,10 +171,17 @@ public class ASTranslator
 
     CachingManager.getDecoderCache();
 
-    ActionScriptDecoder decoder = DecoderFactory.getInstance().getDecoder( actionScriptObject, desiredBeanClass );
-    Object              result  = decoder.decodeObject( actionScriptObject, desiredBeanClass );
+    Object result = null;
 
-    CachingManager.removeDecoderCache();
+    try
+    {
+      ActionScriptDecoder decoder = DecoderFactory.getInstance().getDecoder( actionScriptObject, desiredBeanClass );
+      result  = decoder.decodeObject( actionScriptObject, desiredBeanClass );
+    }
+    finally
+    {
+      CachingManager.removeDecoderCache();
+    }
 
     return result;
   }
