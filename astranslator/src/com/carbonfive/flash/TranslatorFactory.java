@@ -46,30 +46,29 @@ public class TranslatorFactory
     {
       translator = new NativeTranslator(astranslator);
     }
-    
     else if ( isNumberObject )              // all numbers become doubles
     {
       translator = new NumberTranslator(astranslator);
     }
-
     else if ( isArray )                     // create ArrayList
     {
       translator = new ArrayTranslator(astranslator);
     }
-
     else if ( isMap )                       // create ASObject
     {
       translator = new MapTranslator(astranslator);
     }
-
     else if ( isCollection )
     {
       translator = new CollectionTranslator(astranslator);
     }
-
     else if ( isJavaBean )
     {
       translator = new JavaBeanTranslator(astranslator);
+    }
+    else
+    {
+      translator = new NativeTranslator(astranslator);
     }
 
     return translator;
