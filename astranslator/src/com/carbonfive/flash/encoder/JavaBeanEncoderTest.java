@@ -1,7 +1,6 @@
 package com.carbonfive.flash.encoder;
 
 import junit.framework.*;
-import org.w3c.dom.*;
 import flashgateway.io.ASObject;
 import com.carbonfive.flash.encoder.*;
 import com.carbonfive.flash.*;
@@ -63,4 +62,19 @@ public class JavaBeanEncoderTest
     assertEquals(bean.getStrField(), aso.get("strField"));
   }
 
+  public void testNoObjectProperties() throws Exception
+  {
+    TestBean bean = TestBean.getTestBean();
+
+    ActionScriptEncoder encoder = factory.getEncoder(Context.getBaseContext(), bean);
+    assertNotNull(encoder);
+
+    Object encodedObject = encoder.encodeObject(Context.getBaseContext(), bean);
+    assertNotNull(encodedObject);
+    assertTrue(encodedObject instanceof ASObject);
+
+    ASObject aso = (ASObject) encodedObject;
+
+    assertTrue(! aso.containsKey("class"));
+  }
 }
