@@ -67,6 +67,11 @@ public class GatekeeperFilter
       MessageDeserializer des = new MessageDeserializer(GatewayConstants.SERVER_J2EE);
       des.setInputStream(buffered);
       ActionMessage requestMessage = des.readMessage();
+
+      // todo: provide hook to container authentication
+      //MessageHeader credentials = getSecurityHeader(requestMessage);
+      //if (credentials != null) log.info("Handling Security Header: " + credentials.getData());
+
       for (Iterator bodies = requestMessage.getBodies().iterator(); bodies.hasNext();)
       {
         MessageBody requestBody = (MessageBody) bodies.next();
@@ -91,6 +96,16 @@ public class GatekeeperFilter
     // Reset and move on as if nothing happened
     buffered.reset();
     chain.doFilter(wrapped, response);
+  }
+
+  private MessageHeader getSecurityHeader(ActionMessage requestMessage)
+  {
+    for (Iterator i = requestMessage.getHeaders().iterator(); i.hasNext();)
+    {
+      MessageHeader header = (MessageHeader) i.next();
+      if (GatewayConstants.SECURITY_HEADER_NAME.equals(header.getName())) return header;
+    }
+    return null;
   }
 
   private String getRequestDetails(ServletRequest request)

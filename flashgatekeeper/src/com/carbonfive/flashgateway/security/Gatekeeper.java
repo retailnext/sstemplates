@@ -28,7 +28,7 @@ public class Gatekeeper
   {
     if (log.isDebugEnabled())
     {
-      log.debug("Checking access for service " + serviceName + ", method" + methodName
+      log.debug("Checking access for service " + serviceName + ", method " + methodName
                 + " by user principal " + request.getUserPrincipal());
     }
 

@@ -4,7 +4,6 @@ import java.security.*;
 import javax.servlet.http.*;
 import junit.framework.*;
 import org.apache.commons.logging.*;
-import com.carbonfive.flashgateway.security.*;
 import com.carbonfive.flashgateway.security.config.*;
 
 public class GatekeeperTest

@@ -83,7 +83,7 @@ ssh [username]@shell.sourceforge.net 'cd /home/groups/c/ca/carbonfive/htdocs/fla
   </target>
 
   <target name="deploy-test-war" depends="compile">
-    <copy file="${props}/remotingservices.properties" toDir="${build}"/>
+    <copy file="${props}/flashgatekeeper.xml" toDir="${build}"/>
 
     <war warfile="${webapps.root}/flashgatekeeper.war"
          webxml="${props}/test-web.xml">
