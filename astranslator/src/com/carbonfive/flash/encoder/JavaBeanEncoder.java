@@ -53,6 +53,8 @@ public class JavaBeanEncoder
 
       if ( getter == null )  continue;
 
+      if (log.isDebugEnabled()) log.debug("Encoding " + attributeName);
+
       try
       {
         attributeValue = getter.invoke( decoded, null );
