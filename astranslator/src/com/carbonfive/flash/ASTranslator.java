@@ -1,5 +1,7 @@
 package com.carbonfive.flash;
 
+import java.util.*;
+import java.io.*;
 import flashgateway.io.ASObject;
 import com.carbonfive.flash.decoder.*;
 import com.carbonfive.flash.encoder.*;
@@ -16,6 +18,29 @@ import org.apache.commons.logging.*;
 public class ASTranslator
 {
    private static final Log log = LogFactory.getLog(ASTranslator.class);
+
+   private Set ignoreClasses    = new HashSet();
+   private Map ignoreProperties = new HashMap();
+
+   public ASTranslator()
+   {
+     ignoreProperty(File.class, "parentFile");
+     ignoreProperty(File.class, "canonicalFile");
+     ignoreProperty(File.class, "absoluteFile");
+   }
+
+   public void ignoreClass(Class klass)
+   {
+     ignoreClasses.add(klass);
+   }
+
+   public void ignoreProperty(Class klass, String property)
+   {
+     Set properties = (Set) ignoreProperties.get(klass);
+     if (properties == null) properties = new HashSet();
+     properties.add(property);
+     ignoreProperties.put(klass, properties);
+   }
 
   /**
    * Given an Object, toActionScript creates a corresponding ASObject
@@ -44,7 +69,7 @@ public class ASTranslator
     CachingManager.getEncoderCache(); // create the cache here
 
     ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder( serverObject );
-    Object              result  = encoder.encodeObject(encoder.encodeShell(serverObject), serverObject);
+    Object              result  = encoder.encodeObject(serverObject);
 
     CachingManager.removeEncoderCache(); // remove it here
 
@@ -71,6 +96,8 @@ public class ASTranslator
    */
   public Object fromActionScript( Object asObject )
   {
+    if (asObject == null) return null;
+    
     try
     {
       Class desiredBeanClass = decideClassToTranslateInto( asObject );
@@ -99,8 +126,7 @@ public class ASTranslator
     CachingManager.getDecoderCache();
 
     ActionScriptDecoder decoder = DecoderFactory.getInstance().getDecoder( actionScriptObject, desiredBeanClass );
-    Object              result  = decoder.decodeObject( decoder.decodeShell(actionScriptObject, desiredBeanClass),
-                                                        actionScriptObject, desiredBeanClass );
+    Object              result  = decoder.decodeObject( actionScriptObject, desiredBeanClass );
 
     CachingManager.removeEncoderCache();
 

@@ -6,7 +6,7 @@ import com.carbonfive.flash.*;
  * Provides referenced-based caching for ActionScript to Java decoding.
  */
 public class CachingDecoder
-  implements ActionScriptDecoder
+  extends ActionScriptDecoder
 {
   private ActionScriptDecoder nextDecoder = null;
 
@@ -22,7 +22,7 @@ public class CachingDecoder
 
   public Object decodeObject(Object shell, Object encodedObject, Class desiredClass)
   {
-    ReferenceBasedCache decoderCache = CachingManager.getDecoderCache();
+    IdentityMap decoderCache = CachingManager.getDecoderCache();
 
     if ( decoderCache.containsKey(encodedObject) )
     {

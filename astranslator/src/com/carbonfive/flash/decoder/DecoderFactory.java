@@ -3,9 +3,12 @@ package com.carbonfive.flash.decoder;
 import java.util.*;
 import flashgateway.io.ASObject;
 import com.carbonfive.flash.encoder.*;
+import org.apache.commons.logging.*;
 
 public class DecoderFactory
 {
+  private static final Log log = LogFactory.getLog(DecoderFactory.class);
+  
   private static DecoderFactory instance;
 
   private DecoderFactory() { }

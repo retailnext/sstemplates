@@ -8,7 +8,7 @@ import org.apache.commons.logging.*;
  * Decodes an ActionScript list to a Java collection (list or set).
  */
 public class CollectionDecoder
-  implements ActionScriptDecoder
+  extends ActionScriptDecoder
 {
   private static final Log log = LogFactory.getLog(CollectionDecoder.class);
 
@@ -38,7 +38,7 @@ public class CollectionDecoder
       desiredObjClass = ( forceClass == null ? obj.getClass() : forceClass );
 
       decoder = DecoderFactory.getInstance().getDecoder( obj, desiredObjClass );
-      decodedObject = decoder.decodeObject(decoder.decodeShell(obj, desiredObjClass), obj, desiredObjClass);
+      decodedObject = decoder.decodeObject(obj, desiredObjClass);
       decodedCollection.add( decodedObject );
     }
 

@@ -7,23 +7,23 @@ public class CachingManager
   private static HashMap encoderCaches = new HashMap();
   private static HashMap decoderCaches = new HashMap();
 
-  public static ReferenceBasedCache getEncoderCache()
+  public static IdentityMap getEncoderCache()
   {
     return getCache(encoderCaches);
   }
 
-  public static ReferenceBasedCache getDecoderCache()
+  public static IdentityMap getDecoderCache()
   {
     return getCache(decoderCaches);
   }
 
-  private static ReferenceBasedCache getCache(HashMap caches)
+  private static IdentityMap getCache(HashMap caches)
   {
     if (! caches.containsKey(Thread.currentThread()))
     {
-      caches.put(Thread.currentThread(), new ReferenceBasedCache());
+      caches.put(Thread.currentThread(), new IdentityMap());
     }
-    return (ReferenceBasedCache) caches.get(Thread.currentThread());
+    return (IdentityMap) caches.get(Thread.currentThread());
   }
 
   static void removeEncoderCache()

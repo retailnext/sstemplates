@@ -8,7 +8,7 @@ import org.apache.commons.logging.*;
  * Decodes an ActionScript object to a Java map.
  */
 public class MapDecoder
-  implements ActionScriptDecoder
+  extends ActionScriptDecoder
 {
   private static final Log log = LogFactory.getLog(MapDecoder.class);
 
@@ -45,7 +45,7 @@ public class MapDecoder
       value = ((Map) encodedObject).get( key );
 
       decoder = DecoderFactory.getInstance().getDecoder( value, value.getClass() );
-      decodedValue = decoder.decodeObject(decoder.decodeShell(value, value.getClass()), value, value.getClass());
+      decodedValue = decoder.decodeObject(value, value.getClass());
       map.put( key, decodedValue );
     }
     

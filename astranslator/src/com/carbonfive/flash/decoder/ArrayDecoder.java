@@ -7,7 +7,7 @@ import java.lang.reflect.*;
  * Decodes an ActionScript list to a Java array.
  */
 public class ArrayDecoder
-  implements ActionScriptDecoder
+  extends ActionScriptDecoder
 {
   public Object decodeShell(Object encodedObject, Class desiredClass)
   {
@@ -30,8 +30,7 @@ public class ArrayDecoder
     {
       encodedValue = i.next();
       decoder      = DecoderFactory.getInstance().getDecoder( encodedValue, arrayElementClass );
-      decodedValue = decoder.decodeObject(decoder.decodeShell(encodedValue, arrayElementClass),
-                                          encodedValue, arrayElementClass);
+      decodedValue = decoder.decodeObject(encodedValue, arrayElementClass);
       Array.set(decodedArray, n++, decodedValue);
     }
 

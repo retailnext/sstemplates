@@ -6,7 +6,7 @@ import java.math.*;
  * Decode an ActionScript number (a double) to a Java number (of any type).
  */
 public class NumberDecoder
-  implements ActionScriptDecoder
+  extends ActionScriptDecoder
 {
   public Object decodeShell(Object encodedObject, Class desiredClass)
   {

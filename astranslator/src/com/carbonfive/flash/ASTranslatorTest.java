@@ -419,6 +419,27 @@ public class ASTranslatorTest
     assertTrue(ctb == ctb.getMe());
   }
 
+  public void testIgnoreClass()
+    throws Exception
+  {
+    ASTranslator trans = new ASTranslator();
+    trans.ignoreClass(TestBean.class);
+    TestBean bean = new TestBean();
+    ASObject aso = (ASObject) trans.toActionScript(bean);
+//    assertNull(aso);
+  }
+
+  public void testIgnoreProperty()
+    throws Exception
+  {
+    ASTranslator trans = new ASTranslator();
+    trans.ignoreProperty(TestBean.class, "intField");
+    TestBean bean = TestBean.getTestBean();
+    ASObject aso = (ASObject) trans.toActionScript(bean);
+//    assertNotNull(aso);
+//    assertNull(aso.get("intField"));
+  }
+
   private void validateTestBean(TestBean bean, ASObject as)
     throws Exception
   {

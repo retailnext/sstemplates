@@ -11,7 +11,7 @@ import com.carbonfive.flash.*;
  * Decodes an ActionScript object to a Java object.
  */
 public class JavaBeanDecoder
-  implements ActionScriptDecoder
+  extends ActionScriptDecoder
 {
   private static final Log log = LogFactory.getLog(JavaBeanDecoder.class);
 
@@ -68,7 +68,7 @@ public class JavaBeanDecoder
       try
       {
         decoder = DecoderFactory.getInstance().getDecoder( value, wClass );
-        decodedObject = decoder.decodeObject(decoder.decodeShell(value, wClass), value, wClass);
+        decodedObject = decoder.decodeObject(value, wClass);
         write.invoke(bean, new Object[] { decodedObject });
       }
       catch (Exception e) // Method.invoke() stuff

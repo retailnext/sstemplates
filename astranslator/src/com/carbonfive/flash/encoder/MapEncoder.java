@@ -8,7 +8,7 @@ import com.carbonfive.flash.encoder.*;
  * Encodes a Java map to an ActionScript object.
  */
 public class MapEncoder
-  implements ActionScriptEncoder
+  extends ActionScriptEncoder
 {
   public Object encodeShell(Object decodedObject)
   {
@@ -31,7 +31,7 @@ public class MapEncoder
       value = asMap.get(key);
 
       encoder = EncoderFactory.getInstance().getEncoder( value );
-      encodedValue = encoder.encodeObject(encoder.encodeShell(value), value);
+      encodedValue = encoder.encodeObject(value);
       encodedObject.put( key, encodedValue );
     }
 

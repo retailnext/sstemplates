@@ -7,7 +7,7 @@ import com.carbonfive.flash.encoder.*;
  * Encodes a Java array to an ActionScript list.
  */
 public class ArrayEncoder
-  implements ActionScriptEncoder
+  extends ActionScriptEncoder
 {
   public Object encodeShell(Object decodedObject)
   {

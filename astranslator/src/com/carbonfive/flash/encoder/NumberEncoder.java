@@ -6,7 +6,7 @@ import com.carbonfive.flash.encoder.*;
  * Encodes a Java number (any type) to an ActionScript number (a double).
  */
 public class NumberEncoder
-  implements ActionScriptEncoder
+  extends ActionScriptEncoder
 {
   public Object encodeShell(Object decodedObject)
   {

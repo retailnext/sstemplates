@@ -7,7 +7,7 @@ import com.carbonfive.flash.encoder.*;
  * Encodes a Java collection to an ActionScript list.
  */
 public class CollectionEncoder
-  implements ActionScriptEncoder
+  extends ActionScriptEncoder
 {
   public Object encodeShell(Object decodedObject)
   {
@@ -26,7 +26,7 @@ public class CollectionEncoder
     {
       decoded = i.next();
       encoder = EncoderFactory.getInstance().getEncoder( decoded );
-      encoded = encoder.encodeObject( encoder.encodeShell(decoded), decoded );
+      encoded = encoder.encodeObject( decoded );
       list.add( encoded );
     }
     return list;

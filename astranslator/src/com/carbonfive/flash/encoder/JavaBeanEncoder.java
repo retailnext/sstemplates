@@ -12,7 +12,7 @@ import com.carbonfive.flash.encoder.*;
  * Encodes a Java object to an ActionScript object.
  */
 public class JavaBeanEncoder
-  implements ActionScriptEncoder
+  extends ActionScriptEncoder
 {
   private static final Log log = LogFactory.getLog(JavaBeanEncoder.class);
 
@@ -62,7 +62,7 @@ public class JavaBeanEncoder
       }
 
       encoder = EncoderFactory.getInstance().getEncoder( attributeValue );
-      encodedAttributeValue = encoder.encodeObject( encoder.encodeShell(attributeValue), attributeValue );
+      encodedAttributeValue = encoder.encodeObject(  attributeValue );
       encoded.put( attributeName, encodedAttributeValue );
     }
 

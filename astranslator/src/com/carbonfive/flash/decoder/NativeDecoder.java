@@ -4,7 +4,7 @@ package com.carbonfive.flash.decoder;
  * Decodes an ActionScript native object to a Java native object.
  */
 public class NativeDecoder
-  implements ActionScriptDecoder
+  extends ActionScriptDecoder
 {
   public Object decodeShell(Object encodedObject, Class desiredClass)
   {

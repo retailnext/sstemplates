@@ -6,7 +6,7 @@ import com.carbonfive.flash.encoder.*;
  * Encodes a Java native object to an ActionScript native object.
  */
 public class NativeEncoder
-  implements ActionScriptEncoder
+  extends ActionScriptEncoder
 {
   public Object encodeShell(Object decodedObject)
   {

@@ -3,9 +3,12 @@ package com.carbonfive.flash.encoder;
 import java.util.*;
 import java.io.*;
 import com.carbonfive.flash.encoder.*;
+import org.apache.commons.logging.*;
 
 public class EncoderFactory
 {
+  private static final Log log = LogFactory.getLog(EncoderFactory.class);
+
   private static EncoderFactory instance;
 
   private EncoderFactory() { }
@@ -49,14 +52,23 @@ public class EncoderFactory
     return encoder;
   }
 
+  /**
+   * Determines whether a Java object is handles natively by the Flash
+   * Remoting gateway.  This information is gathered from the Macromedia's
+   * <a href="http://livedocs.macromedia.com/frdocs/Using_Flash_Remoting_MX/UseASData4.jsp">
+   * Data Conversion Chart</a>.
+   */
   public static boolean isActionScriptNative(Object obj)
   {
-    if (obj == null)                         return false;
-    if (obj instanceof Boolean)              return true;
-    if (obj instanceof Date)                 return true;
-    if (obj instanceof String)               return true;
-    if (obj instanceof org.w3c.dom.Document) return true;
-    if (obj instanceof java.sql.ResultSet)   return true;
+    if (obj == null)                                       return false;
+    if (obj instanceof Boolean)                            return true;
+    if (obj instanceof Date)                               return true;
+    if (obj instanceof String)                             return true;
+    if (obj instanceof Character)                          return true;
+    if (obj instanceof org.w3c.dom.Document)               return true;
+    if (obj instanceof flashgateway.io.ASXMLString)        return true;
+    if (obj instanceof java.sql.ResultSet)                 return true;
+    if (obj instanceof flashgateway.sql.PageableResultSet) return true;
     return false;
   }
 }

@@ -8,7 +8,7 @@ import org.apache.commons.logging.*;
  * Provides reference-based caching for Java to ActionScript encoding.
  */
 public class CachingEncoder
-  implements ActionScriptEncoder
+  extends ActionScriptEncoder
 {
   private static final Log log = LogFactory.getLog(CachingEncoder.class);
 
@@ -26,10 +26,13 @@ public class CachingEncoder
 
   public Object encodeObject(Object shell, Object decodedObject)
   {
-    ReferenceBasedCache encoderCache = CachingManager.getEncoderCache();
+    IdentityMap encoderCache = CachingManager.getEncoderCache();
 
     if ( encoderCache.containsKey(decodedObject) )
     {
+//      log.debug("Found cached object: " + decodedObject.getClass().getName());
+//      if (decodedObject instanceof String)
+//        log.debug("  (String): " + decodedObject);
       return encoderCache.get( decodedObject );
     }
 
