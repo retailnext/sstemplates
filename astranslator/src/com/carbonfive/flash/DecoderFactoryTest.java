@@ -61,6 +61,8 @@ public class DecoderFactoryTest
     throws Exception
   {
     validate(new ArrayList(), ArrayList.class, CollectionDecoder.class);
+    validate(new ArrayList(), List.class, CollectionDecoder.class);
+    validate(new ArrayList(), Set.class, CollectionDecoder.class);
     validate(new ArrayList(), HashSet.class, CollectionDecoder.class);
   }
 
@@ -68,6 +70,7 @@ public class DecoderFactoryTest
     throws Exception
   {
     validate(new ASObject(), HashMap.class, MapDecoder.class);
+    validate(new ASObject(), Map.class, MapDecoder.class);
     validate(new ASObject(), Hashtable.class, MapDecoder.class);
   }
 

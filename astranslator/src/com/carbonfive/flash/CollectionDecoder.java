@@ -6,6 +6,8 @@ import java.beans.*;
 public class CollectionDecoder
   implements ActionScriptDecoder
 {
+  private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(CollectionDecoder.class);
+  
   public Object decodeObject( Object encodedObject, Class desiredClass )
   {
     Collection    decodedCollection = createCollection(desiredClass);
@@ -30,23 +32,27 @@ public class CollectionDecoder
     
     try
     {
-      boolean isList = List.class.isAssignableFrom( clazz );
-      boolean isSet  = Set.class.isAssignableFrom( clazz );
+      boolean isList        = List.class.isAssignableFrom( clazz );
+      boolean isSet         = Set.class.isAssignableFrom( clazz );
+      boolean isCollection  = Collection.class.isAssignableFrom( clazz );
 
       ClassLoader classLoader = this.getClass().getClassLoader();
-      Object      colBean     = Beans.instantiate( classLoader, clazz.getName() );
 
       boolean isInterface = clazz.isInterface();
 
       if ( isList )
       {
         if ( isInterface ) col = new ArrayList();
-        else               col = (List) colBean;
+        else               col = (List) Beans.instantiate( classLoader, clazz.getName() );
       }
       else if ( isSet )
       {
         if ( isInterface ) col = new HashSet();
-        else               col = (Set) colBean;
+        else               col = (Set) Beans.instantiate( classLoader, clazz.getName() );
+      }
+      else if ( isCollection )
+      {
+        col = (Collection) new ArrayList();
       }
       else
       {
@@ -55,6 +61,7 @@ public class CollectionDecoder
     }
     catch (Exception e)
     {
+      log.error("Exception trying to create Collection", e);
       return null;
     }
     

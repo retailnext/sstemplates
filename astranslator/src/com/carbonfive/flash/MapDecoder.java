@@ -6,19 +6,21 @@ import java.beans.*;
 public class MapDecoder
   implements ActionScriptDecoder
 {
+  private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MapDecoder.class);
+  
   public Object decodeObject( Object encodedObject, Class desiredClass )
   {
     Map map = null;
     try
     {
       ClassLoader classLoader = this.getClass().getClassLoader();
-      Object      mapBean     = Beans.instantiate( classLoader, desiredClass.getName() );
 
       if (desiredClass.isInterface()) map = new HashMap();
-      else                            map = (Map) mapBean;
+      else                            map = (Map) Beans.instantiate( classLoader, desiredClass.getName() );
     }
     catch (Exception e)
     {
+      log.error("Exception creating appropriate Map class", e);
       return null;
     }
 

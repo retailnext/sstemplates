@@ -239,8 +239,49 @@ public class ASTranslatorTest
   public void testComplexGenericTranslateToASObject()
     throws Exception
   {
-  }
+    ASObject as = new ASObject();
+    as.setType(ComplexGenericTestBean.class.getName());
 
+    ArrayList asList = new ArrayList();
+    asList.add("one");
+    asList.add("two");
+
+    ASObject as2 = new ASObject();
+    as2.setType(TestBean.class.getName());
+    as2.put("strField", "hello");
+    as2.put("intField", new Double(10));
+    asList.add(as2);
+
+    ASObject asMap = new ASObject();
+    asMap.put("hi", "there");
+    asMap.put("bean", as2);
+
+    as.put("listField", asList);
+    as.put("mapField", asMap);
+
+    // translate
+    ComplexGenericTestBean cbean = (ComplexGenericTestBean) new ASTranslator().fromActionScript(as);
+    assertNotNull(cbean);
+
+    // validate
+    assertNotNull(cbean.getListField());
+    assertEquals(3, cbean.getListField().size());
+    assertEquals("one", cbean.getListField().get(0));
+    assertEquals("two", cbean.getListField().get(1));
+    assertTrue(cbean.getListField().get(2) instanceof TestBean);
+
+    TestBean tbean = (TestBean) cbean.getListField().get(2);
+    assertEquals("hello", tbean.getStrField());
+    assertEquals(10, tbean.getIntField());
+
+    assertNotNull(cbean.getMapField());
+    assertEquals("there", cbean.getMapField().get("hi"));
+    assertTrue(cbean.getMapField().get("bean") instanceof TestBean);
+
+    tbean = (TestBean) cbean.getMapField().get("bean");
+    assertEquals("hello", tbean.getStrField());
+    assertEquals(10, tbean.getIntField());
+  }
 
   public void testComplexGenericTranslateToBean()
     throws Exception

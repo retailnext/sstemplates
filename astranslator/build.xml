@@ -50,6 +50,11 @@
     </jar>
   </target>
 
+  <target name="deploy" depends="dist">
+    <copy todir="C:/JRun4/servers/crave/destructo-ear/destructo-war/WEB-INF/lib" 
+          file="${dist}/astranslator-${version}.jar" overwrite="true"/>
+  </target>
+
   <target name="clean" depends="init">
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
