@@ -132,7 +132,7 @@ public class FakeSmtpdThread extends Thread
   }
 
   /**
-   * Accepts data from teh client until a single '.' line is entered.
+   * Accepts data from the client until a single '.' line is entered.
    */
   private String receiveData()
     throws IOException 
