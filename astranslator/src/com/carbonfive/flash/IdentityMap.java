@@ -13,7 +13,6 @@ import java.util.*;
  */
 public class IdentityMap
 {
-
   private HashMap map;
 
   public IdentityMap()
@@ -44,6 +43,11 @@ public class IdentityMap
   private Object wrap(Object obj)
   {
     return new WrappedObject(obj);
+  }
+
+  public String toString()
+  {
+    return String.valueOf(map);
   }
 
   private class WrappedObject

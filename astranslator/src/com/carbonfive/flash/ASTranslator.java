@@ -190,7 +190,8 @@ public class ASTranslator
 
       try
       {
-        asoClass = Class.forName( classOfActionScriptObject );
+        // asoClass = Class.forName( classOfActionScriptObject );
+        asoClass = getClass().getClassLoader().loadClass(classOfActionScriptObject);
       }
       catch ( ClassNotFoundException cnfe )
       {
