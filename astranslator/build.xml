@@ -8,6 +8,7 @@
     <property name="dist"  value="dist"/>
     <property name="doc"   value="doc/api"/>
     <property name="src"   value="src"/>
+    <property name="lib"   value="lib"/>
 
     <path id="build.class.path">
       <pathelement location="${flashgateway.jar}"/>
@@ -15,6 +16,9 @@
       <pathelement location="${junit.jar}"/>
       <pathelement location="${xerces.jar}"/>
       <pathelement location="${props}"/>
+      <pathelement location="${lib}/commons-beanutils.jar"/>
+      <pathelement location="${lib}/commons-collections.jar"/>
+      <pathelement location="${lib}/log4j-1.2.5.jar"/>
     </path>
   </target>
     
@@ -37,7 +41,7 @@
   	         access="public"
   	         windowtitle="ASTranslator for Macromedia Flash Remoting MX">
       <fileset dir="${src}">
-        <include name="com/carbonfive/flash/*.java"/>
+        <include name="com/carbonfive/flash/**/*.java"/>
         <exclude name="**/*Test.java"/>
         <exclude name="**/*TestBean.java"/>
       </fileset>
@@ -52,6 +56,7 @@
         <include name="build.*"/>
         <include name="${src}/**"/>
         <include name="${props}/**"/>
+        <include name="${lib}/**"/>
         <include name="${doc}/**"/>
       </fileset>
       <fileset dir="${build}"/>
