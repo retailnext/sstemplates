@@ -12,6 +12,12 @@ public class NativeEncoder
 {
   private static final Log log = LogFactory.getLog(NativeEncoder.class);
 
+  /**
+   * Passes decodedObject straight through.  The only exception is that this method
+   * transforms any object that extends Date into a regular Date object, as that is
+   * all that Flash can handle.  Actually, passing the extended object will work but
+   * is wasteful.
+   */
   public Object encodeShell(Context ctx, Object decodedObject)
   {
     if (decodedObject == null) return null;
@@ -24,12 +30,6 @@ public class NativeEncoder
     return decodedObject;
   }
 
-  /**
-   * Passes decodedObject straight through.  The only exception is that this method
-   * transforms any object that extends Date into a regular Date object, as that is
-   * all that Flash can handle.  Actually, passing the extended object will work but
-   * is wasteful.
-   */
   public Object encodeObject(Context ctx, Object shell, Object decodedObject)
   {
     return shell;

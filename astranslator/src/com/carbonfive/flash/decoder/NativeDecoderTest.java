@@ -52,4 +52,19 @@ public class NativeDecoderTest
     assertEquals(string, decodedString);
     assertEquals(bool,   decodedBool);
   }
+
+  public void testNativeDecodeConversion() throws Exception
+  {
+    NativeDecoder decoder = new NativeDecoder();
+
+    assertTrue(decoder.decodeObject("true", Boolean.class) instanceof Boolean);
+    assertTrue(decoder.decodeObject("10",   Integer.class) instanceof Integer);
+    assertTrue(decoder.decodeObject("10",   Float.class)   instanceof Float);
+    assertTrue(decoder.decodeObject("10",   Double.class)  instanceof Double);
+
+    assertEquals(Boolean.TRUE,    decoder.decodeObject("true", Boolean.class));
+    assertEquals(new Integer(10), decoder.decodeObject("10",   Integer.class));
+    assertEquals(new Float(10),   decoder.decodeObject("10",   Float.class));
+    assertEquals(new Double(10),  decoder.decodeObject("10",   Double.class));
+  }
 }
