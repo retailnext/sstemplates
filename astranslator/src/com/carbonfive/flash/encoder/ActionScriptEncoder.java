@@ -1,4 +1,4 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.encoder;
 
 /**
  * Encode a Java object (of some type) to an ActionScript object (of some type).

@@ -1,11 +1,8 @@
 package com.carbonfive.flash;
 
-import java.io.*;
-import java.util.*;
-import java.text.*;
-import java.beans.*;
-import java.lang.reflect.*;
 import flashgateway.io.ASObject;
+import com.carbonfive.flash.decoder.*;
+import com.carbonfive.flash.encoder.*;
 
 
  /**
@@ -17,11 +14,6 @@ import flashgateway.io.ASObject;
   */
 public class ASTranslator
 {
-
-  // these maps are used to maintain references
-  private ReferenceBasedCache asToBeanCache = new ReferenceBasedCache();
-  private ReferenceBasedCache beanToASCache = new ReferenceBasedCache();
-
 
   /**
    * Given an Object, toActionScript creates a corresponding ASObject
@@ -49,8 +41,6 @@ public class ASTranslator
 
     CachingManager.getEncoderCache(); // create the cache here
 
-//    Translator translator = TranslatorFactory.getInstance().getTranslatorToActionScript( this, serverObject );
-//    Object result = translator.translateToActionScript();
     ActionScriptEncoder encoder = EncoderFactory.getInstance().getEncoder( serverObject );
     Object              result  = encoder.encodeObject( serverObject );
 
@@ -105,9 +95,6 @@ public class ASTranslator
     if (actionScriptObject == null) return null;
 
     CachingManager.getDecoderCache();
-
-//    Translator translator = TranslatorFactory.getInstance().getTranslatorFromActionScript( this, actionScriptObject, desiredBeanClass );
-//    Object result = translator.translateFromActionScript();
 
     ActionScriptDecoder decoder = DecoderFactory.getInstance().getDecoder( actionScriptObject, desiredBeanClass );
     Object              result  = decoder.decodeObject( actionScriptObject, desiredBeanClass );

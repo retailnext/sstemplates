@@ -1,9 +1,10 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.encoder;
 
-import java.util.*;
 import junit.framework.*;
 import org.w3c.dom.*;
 import flashgateway.io.ASObject;
+import com.carbonfive.flash.encoder.*;
+import com.carbonfive.flash.*;
 
 public class JavaBeanEncoderTest
   extends    TestCase

@@ -1,7 +1,6 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.encoder;
 
-import flashgateway.io.ASObject;
-import java.util.*;
+import com.carbonfive.flash.encoder.*;
 
 /**
  * Encodes a Java native object to an ActionScript native object.

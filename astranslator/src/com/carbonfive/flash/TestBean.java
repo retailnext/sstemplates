@@ -27,7 +27,7 @@ public class TestBean
   public Document getXmlField() { return this.xmlDocument; }
   public void setXmlField(Document d) { this.xmlDocument = d; }
 
-  static TestBean getTestBean()
+  public static TestBean getTestBean()
   {
     TestBean bean = new TestBean();
     bean.setIntField(1);

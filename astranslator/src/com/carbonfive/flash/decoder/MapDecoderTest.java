@@ -1,10 +1,7 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.decoder;
 
 import java.util.*;
-import org.w3c.dom.*;
-import org.apache.xerces.dom.*;
 import junit.framework.*;
-import flashgateway.io.ASObject;
 
 public class MapDecoderTest
   extends    TestCase

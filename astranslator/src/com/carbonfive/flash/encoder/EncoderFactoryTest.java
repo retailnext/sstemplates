@@ -1,28 +1,19 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.encoder;
 
 import java.util.*;
 import java.math.*;
 import junit.framework.*;
-import flashgateway.io.ASObject;
+import com.carbonfive.flash.encoder.*;
+import com.carbonfive.flash.*;
 
 public class EncoderFactoryTest
   extends    TestCase
 {
-  /**
-   * This contructor provides a new EncoderFactoryTest.
-   * </p>
-   * @param name The String needed to build this object
-   */
   public EncoderFactoryTest(String name)
   {
     super(name);
   }
 
-  /**
-   * Builds the test suite using introspection.
-   * </p>
-   * @return Test - The Test to be returned
-   */
   public static Test suite()
   {
     TestSuite suite = new TestSuite(EncoderFactoryTest.class);

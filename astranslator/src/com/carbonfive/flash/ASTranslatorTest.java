@@ -2,7 +2,6 @@ package com.carbonfive.flash;
 
 import java.util.*;
 import org.w3c.dom.*;
-import org.apache.xerces.dom.*;
 import junit.framework.*;
 import flashgateway.io.ASObject;
 

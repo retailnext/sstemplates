@@ -1,8 +1,8 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.encoder;
 
 import java.util.*;
 import junit.framework.*;
-import org.w3c.dom.*;
+import com.carbonfive.flash.encoder.*;
 
 public class NativeEncoderTest
   extends    TestCase

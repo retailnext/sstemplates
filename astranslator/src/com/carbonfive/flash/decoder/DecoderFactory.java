@@ -1,8 +1,8 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.decoder;
 
 import java.util.*;
-import java.io.*;
 import flashgateway.io.ASObject;
+import com.carbonfive.flash.encoder.*;
 
 public class DecoderFactory
 {
@@ -10,7 +10,7 @@ public class DecoderFactory
 
   private DecoderFactory() { }
 
-  static synchronized DecoderFactory getInstance()
+  public static synchronized DecoderFactory getInstance()
   {
     if (instance == null) { instance = new DecoderFactory(); }
     return instance;
@@ -23,7 +23,7 @@ public class DecoderFactory
   private static final CollectionDecoder collectionDecoder = new CollectionDecoder();
   private static final JavaBeanDecoder   javaBeanDecoder   = new JavaBeanDecoder();
 
-  ActionScriptDecoder getDecoder(Object encodedObject, Class desiredClass)
+  public ActionScriptDecoder getDecoder(Object encodedObject, Class desiredClass)
   {
     boolean isNativeObject = ( EncoderFactory.isActionScriptNative( encodedObject ) );
     boolean isNumberObject = ( encodedObject instanceof Number );

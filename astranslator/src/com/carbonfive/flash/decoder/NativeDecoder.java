@@ -1,4 +1,4 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.decoder;
 
 /**
  * Decodes an ActionScript native object to a Java native object.

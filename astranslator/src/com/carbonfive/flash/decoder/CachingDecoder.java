@@ -1,4 +1,6 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.decoder;
+
+import com.carbonfive.flash.*;
 
 /**
  * Provides referenced-based caching for ActionScript to Java decoding.

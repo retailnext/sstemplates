@@ -1,30 +1,16 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.decoder;
 
 import java.util.*;
-import org.w3c.dom.*;
-import org.apache.xerces.dom.*;
 import junit.framework.*;
-import flashgateway.io.ASObject;
 
 public class CollectionDecoderTest
   extends    TestCase
 {
-
-  /**
-   * This contructor provides a new CollectionDecoderTest.
-   * </p>
-   * @param name The String needed to build this object
-   */
   public CollectionDecoderTest(String name)
   {
     super(name);
   }
 
-  /**
-   * Builds the test suite using introspection.
-   * </p>
-   * @return Test - The Test to be returned
-   */
   public static Test suite()
   {
     TestSuite suite = new TestSuite(CollectionDecoderTest.class);
@@ -54,6 +40,27 @@ public class CollectionDecoderTest
     assertTrue(decoder.decodeObject(list, Set.class)        instanceof HashSet);
     assertTrue(decoder.decodeObject(list, HashSet.class)    instanceof HashSet);
     assertTrue(decoder.decodeObject(list, Collection.class) instanceof ArrayList);
+  }
+
+  public void testDecodeIntegerCollection()
+    throws Exception
+  {
+    List list = new ArrayList();
+    list.add(new Double(1));
+    list.add(new Double(2));
+    CollectionDecoder decoder = new CollectionDecoder();
+    List list2 = (List) decoder.decodeObject(list, Collection.class);
+    assertTrue(list2.get(0) instanceof Integer);
+    assertTrue(list2.get(1) instanceof Integer);
+    assertEquals(Arrays.asList(new Integer[] { new Integer(1), new Integer(2) }), list2);
+
+    list = new ArrayList();
+    list.add(new Double(1.5));
+    list.add(new Double(2));
+    list2 = (List) decoder.decodeObject(list, Collection.class);
+    assertTrue(list2.get(0) instanceof Double);
+    assertTrue(list2.get(1) instanceof Double);
+    assertEquals(Arrays.asList(new Double[] { new Double(1.5), new Double(2) }), list2);
   }
 
 }

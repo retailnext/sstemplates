@@ -1,7 +1,8 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.encoder;
 
 import java.util.*;
 import java.io.*;
+import com.carbonfive.flash.encoder.*;
 
 public class EncoderFactory
 {
@@ -9,7 +10,7 @@ public class EncoderFactory
 
   private EncoderFactory() { }
 
-  static synchronized EncoderFactory getInstance()
+  public static synchronized EncoderFactory getInstance()
   {
     if (instance == null) { instance = new EncoderFactory(); }
     return instance;
@@ -22,7 +23,7 @@ public class EncoderFactory
   private static final CollectionEncoder collectionEncoder = new CollectionEncoder();
   private static final JavaBeanEncoder   javaBeanEncoder   = new JavaBeanEncoder();
 
-  ActionScriptEncoder getEncoder(Object decodedObject)
+  public ActionScriptEncoder getEncoder(Object decodedObject)
   {
     if (decodedObject == null) return new NativeEncoder();
 
@@ -48,7 +49,7 @@ public class EncoderFactory
     return encoder;
   }
 
-  static boolean isActionScriptNative(Object obj)
+  public static boolean isActionScriptNative(Object obj)
   {
     if (obj == null)                         return false;
     if (obj instanceof Boolean)              return true;

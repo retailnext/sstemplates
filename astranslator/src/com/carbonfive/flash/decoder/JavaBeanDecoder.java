@@ -1,9 +1,10 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.decoder;
 
-import java.util.*;
 import java.lang.reflect.*;
 import java.beans.*;
 import flashgateway.io.ASObject;
+import org.apache.commons.beanutils.*;
+import com.carbonfive.flash.*;
 
 /**
  * Decodes an ActionScript object to a Java object.
@@ -17,18 +18,16 @@ public class JavaBeanDecoder
     String   type = aso.getType();
 
     Object   bean = null;
-    BeanInfo info = null;
     try
     {
       bean = Beans.instantiate(ASTranslator.class.getClassLoader(), type);
-      info = Introspector.getBeanInfo(bean.getClass(), Object.class);
     }
     catch (Exception e) // ClassNotFoundException, IOException, IntrospectionException
     {
       return null;
     }
 
-    PropertyDescriptor[] pds = info.getPropertyDescriptors();
+    PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(bean);
 
     String        name       = null;
     Method        write      = null;

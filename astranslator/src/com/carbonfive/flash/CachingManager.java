@@ -7,12 +7,12 @@ public class CachingManager
   private static HashMap encoderCaches = new HashMap();
   private static HashMap decoderCaches = new HashMap();
 
-  static ReferenceBasedCache getEncoderCache()
+  public static ReferenceBasedCache getEncoderCache()
   {
     return getCache(encoderCaches);
   }
 
-  static ReferenceBasedCache getDecoderCache()
+  public static ReferenceBasedCache getDecoderCache()
   {
     return getCache(decoderCaches);
   }

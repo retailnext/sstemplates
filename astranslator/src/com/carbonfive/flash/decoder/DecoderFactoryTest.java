@@ -1,28 +1,19 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.decoder;
 
 import java.util.*;
 import java.math.*;
 import junit.framework.*;
 import flashgateway.io.ASObject;
+import com.carbonfive.flash.*;
 
 public class DecoderFactoryTest
   extends    TestCase
 {
-  /**
-   * This contructor provides a new DecoderFactoryTest.
-   * </p>
-   * @param name The String needed to build this object
-   */
   public DecoderFactoryTest(String name)
   {
     super(name);
   }
 
-  /**
-   * Builds the test suite using introspection.
-   * </p>
-   * @return Test - The Test to be returned
-   */
   public static Test suite()
   {
     TestSuite suite = new TestSuite(DecoderFactoryTest.class);
@@ -89,13 +80,13 @@ public class DecoderFactoryTest
     assertNotNull(decoder);
     if (decoder instanceof CachingDecoder)
     {
-      String msg = "Decoding " + obj.getClass().getName() + " -> " + desiredClass.getName() + " does not use a " + decoderClass.getName() + 
+      String msg = "Decoding " + obj.getClass().getName() + " -> " + desiredClass.getName() + " does not use a " + decoderClass.getName() +
                    ".  It uses a " + ((CachingDecoder) decoder).getNextDecoder().getClass().getName();
       assertTrue(msg, decoderClass.isAssignableFrom(((CachingDecoder) decoder).getNextDecoder().getClass()));
     }
     else
     {
-      String msg = "Decoding " + obj.getClass().getName() + " -> " + desiredClass.getName() + " does not use a " + decoderClass.getName() + 
+      String msg = "Decoding " + obj.getClass().getName() + " -> " + desiredClass.getName() + " does not use a " + decoderClass.getName() +
                    ".  It uses a " + decoder.getClass().getName();
       assertTrue(msg, decoderClass.isAssignableFrom(decoder.getClass()));
     }

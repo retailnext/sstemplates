@@ -1,7 +1,8 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.encoder;
 
 import java.util.*;
 import junit.framework.*;
+import com.carbonfive.flash.encoder.*;
 
 public class ArrayEncoderTest
   extends    TestCase

@@ -1,6 +1,5 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.decoder;
 
-import java.util.*;
 import java.math.*;
 import junit.framework.*;
 

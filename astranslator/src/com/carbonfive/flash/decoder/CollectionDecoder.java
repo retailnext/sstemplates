@@ -1,7 +1,8 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.decoder;
 
 import java.util.*;
 import java.beans.*;
+import org.apache.log4j.*;
 
 /**
  * Decodes an ActionScript list to a Java collection (list or set).
@@ -9,21 +10,51 @@ import java.beans.*;
 public class CollectionDecoder
   implements ActionScriptDecoder
 {
-  private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(CollectionDecoder.class);
+  private static final Logger log = Logger.getLogger(CollectionDecoder.class);
   
   public Object decodeObject( Object encodedObject, Class desiredClass )
   {
     Collection    decodedCollection = createCollection(desiredClass);
     Object        decodedObject     = null;
     Object        obj               = null;
+
+    // forceClass allows us to heuristically guess that a Collection full of
+    // Doubles that map VERY closely to Integers is really a Collection full
+    // of Integers.
+    Class forceClass = null;
+    if (isFullOfIntegers((Collection) encodedObject)) forceClass = Integer.class;
+
+    Class desiredObjClass = null;
     for (Iterator i = ( (Collection) encodedObject ).iterator(); i.hasNext(); )
     {
       obj = i.next();
-      decodedObject = DecoderFactory.getInstance().getDecoder( obj, obj.getClass() ).decodeObject( obj, obj.getClass()  );
+
+      desiredObjClass = ( forceClass == null ? obj.getClass() : forceClass );
+
+      decodedObject = DecoderFactory.getInstance().getDecoder( obj, desiredObjClass ).decodeObject( obj, desiredObjClass );
       decodedCollection.add( decodedObject );
     }
 
     return decodedCollection;
+  }
+
+  private boolean isFullOfIntegers(Collection c)
+  {
+    Object  obj = null;
+    Double  dbl = null;
+    for (Iterator i = c.iterator(); i.hasNext(); )
+    {
+      obj = i.next();
+      if (! (obj instanceof Double)) return false;
+      dbl = (Double) obj;
+      if (! isReallyAnInteger(dbl)) return false;
+    }
+    return true;
+  }
+
+  private boolean isReallyAnInteger(Double d)
+  {
+    return d.equals(new Double(d.intValue()));
   }
 
   /**
@@ -55,7 +86,7 @@ public class CollectionDecoder
       }
       else if ( isCollection )
       {
-        col = (Collection) new ArrayList();
+        col = new ArrayList();
       }
       else
       {

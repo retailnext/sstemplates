@@ -1,9 +1,11 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.encoder;
 
 import java.util.*;
 import java.lang.reflect.*;
 import java.beans.*;
 import flashgateway.io.ASObject;
+import org.apache.commons.beanutils.*;
+import com.carbonfive.flash.encoder.*;
 
 /**
  * Encodes a Java object to an ActionScript object.
@@ -11,6 +13,8 @@ import flashgateway.io.ASObject;
 public class JavaBeanEncoder
   implements ActionScriptEncoder
 {
+  private static Set objectAttributes = new HashSet(Arrays.asList(PropertyUtils.getPropertyDescriptors(Object.class)));
+
   public Object encodeObject( Object decodedObject )
   {
     ASObject encodedObject = new ASObject();
@@ -28,9 +32,10 @@ public class JavaBeanEncoder
     String               attributeName         = null;
     Object               attributeValue        = null;
     Method               getter                = null;
-    PropertyDescriptor[] attributes            = getAttributes( decoded );
+    PropertyDescriptor[] attributes            = PropertyUtils.getPropertyDescriptors(decoded);
     for (int i = 0; i < attributes.length; i++)
     {
+      if (objectAttributes.contains(attributes[i])) continue;
       attributeName  = attributes[i].getName();
       getter  = attributes[i].getReadMethod();
 
@@ -50,27 +55,5 @@ public class JavaBeanEncoder
     }
 
     return encoded;
-  }
-
-//------------------------------------------------------------------------------
-
-  private PropertyDescriptor[] getAttributes( Object object )
-  {
-    BeanInfo beanInformation = null;
-    try
-    {
-      // introspect the bean, but don't go down to Object level
-      Class noIntrospectionOfObjects = Object.class;
-      beanInformation = Introspector.getBeanInfo( object.getClass(),
-                                                  noIntrospectionOfObjects );
-    }
-    catch (IntrospectionException ie)
-    {
-      return null;
-    }
-
-    PropertyDescriptor[] attributes = beanInformation.getPropertyDescriptors();
-
-    return attributes;
   }
 }

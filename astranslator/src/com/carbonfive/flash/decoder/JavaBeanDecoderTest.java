@@ -1,8 +1,8 @@
-package com.carbonfive.flash;
+package com.carbonfive.flash.decoder;
 
-import java.util.*;
 import junit.framework.*;
 import flashgateway.io.ASObject;
+import com.carbonfive.flash.*;
 
 public class JavaBeanDecoderTest
   extends    TestCase
