@@ -1,9 +1,10 @@
 package com.carbonfive.flash.encoder;
 
-import java.util.*;
-import java.io.*;
 import com.carbonfive.flash.*;
 import org.apache.commons.logging.*;
+
+import java.io.*;
+import java.util.*;
 
 public class EncoderFactory
 {
@@ -64,7 +65,7 @@ public class EncoderFactory
     {
       if (! (decodedObject instanceof Serializable))
         log.warn("Cannot encode object: " + clazz.getName() + " - It must implement Serializable");
-      encoder = new CachingEncoder(nativeEncoder);
+      encoder = new CachingEncoder(nullEncoder);
     }
 
     return encoder;

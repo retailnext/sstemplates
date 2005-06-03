@@ -1,11 +1,11 @@
 package com.carbonfive.flash.encoder;
 
-import java.util.*;
-import java.math.*;
-import junit.framework.*;
-import com.carbonfive.flash.encoder.*;
 import com.carbonfive.flash.*;
 import com.carbonfive.flash.test.*;
+import junit.framework.*;
+
+import java.math.*;
+import java.util.*;
 
 public class EncoderFactoryTest
   extends    TestCase
@@ -73,6 +73,11 @@ public class EncoderFactoryTest
     assertTrue(EncoderFactory.instanceOf(String.class, "java.lang.String"));
     assertTrue(EncoderFactory.instanceOf(Integer.class, "java.lang.Number"));
     assertTrue(! EncoderFactory.instanceOf(String.class, "java.lang.Number"));
+  }
+
+  public void testSerializable() throws Exception
+  {
+    validate(this.getClass().getMethod("testSerializable", null), NullEncoder.class);
   }
 
   private void validate(Object obj, Class encoderClass)

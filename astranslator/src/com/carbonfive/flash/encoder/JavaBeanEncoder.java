@@ -43,7 +43,6 @@ public class JavaBeanEncoder
     Method               getter                = null;
     ActionScriptEncoder  encoder               = null;
     PropertyDescriptor[] attributes            = PropertyUtils.getPropertyDescriptors(decoded);
-    Field                field                 = null;
 
     for (int i = 0; i < attributes.length; i++)
     {
@@ -56,27 +55,13 @@ public class JavaBeanEncoder
 
       if ( ctx.getFilter().doIgnoreClass(getter.getReturnType()) ) continue;
 
-      // we can't do this because we can't know what the name of the field is just by
-      // the bean property name -mike
-      /*
-      try
-      {
-        field = decoded.getClass().getDeclaredField(attributeName);
-        if (Modifier.isTransient(field.getModifiers())) continue;
-      }
-      catch (Exception e)
-      {
-        // log.warn("Cannot access field: " + decoded.getClass().getName() + "." + attributeName);
-      }
-      */
-
       try
       {
         attributeValue = getter.invoke( decoded, null );
       }
       catch ( Exception failedToInvoke )
       {
-        log.warn("Failed to invoke getter: " + decoded.getClass().getName() + "." + getter.getName(), failedToInvoke);
+        warn("Failed to invoke getter: " + decoded.getClass().getName() + "." + getter.getName(), failedToInvoke);
         continue;
       }
 
@@ -86,5 +71,11 @@ public class JavaBeanEncoder
     }
 
     return encoded;
+  }
+
+  private void warn(String message, Exception e)
+  {
+    if (log.isDebugEnabled()) log.debug(message, e);
+    else                      log.warn(message);
   }
 }

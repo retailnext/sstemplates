@@ -1,10 +1,11 @@
 package com.carbonfive.flash.decoder;
 
-import java.lang.reflect.*;
-import java.beans.*;
-import flashgateway.io.ASObject;
+import flashgateway.io.*;
 import org.apache.commons.beanutils.*;
 import org.apache.commons.logging.*;
+
+import java.beans.*;
+import java.lang.reflect.*;
 
 /**
  * Decodes an ActionScript object to a Java object.
@@ -72,10 +73,17 @@ public class JavaBeanDecoder
       }
       catch (Exception e) // Method.invoke() stuff
       {
+        warn("Unable to invoke method: " + bean.getClass().getName() + "." + write.getName(), e);
         continue;
       }
     }
     
     return bean;
+  }
+
+  private void warn(String message, Exception e)
+  {
+    if (log.isDebugEnabled()) log.debug(message, e);
+    else                      log.warn(message);
   }
 }
