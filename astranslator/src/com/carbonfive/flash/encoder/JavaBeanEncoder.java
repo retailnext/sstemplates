@@ -56,6 +56,9 @@ public class JavaBeanEncoder
 
       if ( ctx.getFilter().doIgnoreClass(getter.getReturnType()) ) continue;
 
+      // we can't do this because we can't know what the name of the field is just by
+      // the bean property name -mike
+      /*
       try
       {
         field = decoded.getClass().getDeclaredField(attributeName);
@@ -65,6 +68,7 @@ public class JavaBeanEncoder
       {
         // log.warn("Cannot access field: " + decoded.getClass().getName() + "." + attributeName);
       }
+      */
 
       try
       {

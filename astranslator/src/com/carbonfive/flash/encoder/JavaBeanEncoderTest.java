@@ -53,7 +53,7 @@ public class JavaBeanEncoderTest
     assertTrue(aso.get("longField") instanceof Double);
     assertTrue(aso.get("doubleField") instanceof Double);
     assertTrue(aso.get("strField") instanceof String);
-    assertTrue(aso.get("transObj") == null);
+    assertTrue(aso.get("transObj") instanceof String);
     assertTrue(aso.get("staticObj") == null);
     assertTrue(aso.get("staticFinalObj") == null);
     assertTrue(aso.get("volObj") instanceof String);
@@ -63,6 +63,7 @@ public class JavaBeanEncoderTest
     assertEquals(bean.getLongField(), ((Double) aso.get("longField")).longValue());
     assertEquals(bean.getDoubleField(), ((Double) aso.get("doubleField")).doubleValue(), DELTA);
     assertEquals(bean.getStrField(), aso.get("strField"));
+    assertEquals(bean.getTransObj(), aso.get("transObj"));
     assertEquals(bean.getVolObj(), aso.get("volObj"));
   }
 
