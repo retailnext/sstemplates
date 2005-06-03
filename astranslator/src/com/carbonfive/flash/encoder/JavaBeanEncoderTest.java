@@ -1,10 +1,9 @@
 package com.carbonfive.flash.encoder;
 
-import junit.framework.*;
-import flashgateway.io.ASObject;
-import com.carbonfive.flash.encoder.*;
 import com.carbonfive.flash.*;
 import com.carbonfive.flash.test.*;
+import flashgateway.io.*;
+import junit.framework.*;
 
 public class JavaBeanEncoderTest
   extends    TestCase
@@ -36,8 +35,7 @@ public class JavaBeanEncoderTest
 
   private static final double DELTA = 0.00001;
 
-  public void testJavaBeanDecode()
-    throws Exception
+  public void testJavaBeanEncode() throws Exception
   {
     com.carbonfive.flash.test.TestBean bean = com.carbonfive.flash.test.TestBean.getTestBean(); // gets a filled in TestBean
 
@@ -55,12 +53,17 @@ public class JavaBeanEncoderTest
     assertTrue(aso.get("longField") instanceof Double);
     assertTrue(aso.get("doubleField") instanceof Double);
     assertTrue(aso.get("strField") instanceof String);
+    assertTrue(aso.get("transObj") == null);
+    assertTrue(aso.get("staticObj") == null);
+    assertTrue(aso.get("staticFinalObj") == null);
+    assertTrue(aso.get("volObj") instanceof String);
 
     assertEquals(bean.getIntField(), ((Double) aso.get("intField")).intValue());
     assertEquals(bean.getShortField(), ((Double) aso.get("shortField")).shortValue());
     assertEquals(bean.getLongField(), ((Double) aso.get("longField")).longValue());
     assertEquals(bean.getDoubleField(), ((Double) aso.get("doubleField")).doubleValue(), DELTA);
     assertEquals(bean.getStrField(), aso.get("strField"));
+    assertEquals(bean.getVolObj(), aso.get("volObj"));
   }
 
   public void testNoObjectProperties() throws Exception

@@ -1,12 +1,12 @@
 package com.carbonfive.flash.encoder;
 
-import java.util.*;
-import java.lang.reflect.*;
-import java.beans.*;
-import flashgateway.io.ASObject;
+import com.carbonfive.flash.*;
+import flashgateway.io.*;
 import org.apache.commons.beanutils.*;
 import org.apache.commons.logging.*;
-import com.carbonfive.flash.*;
+
+import java.beans.*;
+import java.lang.reflect.*;
 
 /**
  * Encodes a Java object to an ActionScript object.
@@ -43,6 +43,8 @@ public class JavaBeanEncoder
     Method               getter                = null;
     ActionScriptEncoder  encoder               = null;
     PropertyDescriptor[] attributes            = PropertyUtils.getPropertyDescriptors(decoded);
+    Field                field                 = null;
+
     for (int i = 0; i < attributes.length; i++)
     {
       if (ctx.getFilter().doIgnoreProperty(decoded.getClass(), attributes[i].getName())) continue;
@@ -56,10 +58,21 @@ public class JavaBeanEncoder
 
       try
       {
+        field = decoded.getClass().getDeclaredField(attributeName);
+        if (Modifier.isTransient(field.getModifiers())) continue;
+      }
+      catch (Exception e)
+      {
+        // log.warn("Cannot access field: " + decoded.getClass().getName() + "." + attributeName);
+      }
+
+      try
+      {
         attributeValue = getter.invoke( decoded, null );
       }
       catch ( Exception failedToInvoke )
       {
+        log.warn("Failed to invoke getter: " + decoded.getClass().getName() + "." + getter.getName(), failedToInvoke);
         continue;
       }
 
