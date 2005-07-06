@@ -1,0 +1,167 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../../../properties/javadoc.css" title="style">
+</head>
+<body>
+SpringBeanAdapter is an adapter for locating Flash Remoting services in a Spring
+application context.
+
+<h2><a name="documentation">SpringBeanAdapter For Macromedia Flash Remoting</a></h2>
+
+SpringBeanAdapter is designed to be used with <a target="_top" href="http://www.macromedia.com/software/flashremoting/">Macromedia Flash Remoting MX</a> on any J2EE application server.
+This adapter only works with versions of Flash Remoting that allow registering custom adapters, specifically, the version provided with Macromedia Flex.
+
+<p>
+SpringBeanAdapter is supported by <a target="_top" href="http://www.carbonfive.com">Carbon Five</a>.
+
+<ul>
+<li><a href="#overview">Overview</a>
+<li><a href="#features">Features</a>
+<li><a href="#download">Download</a>
+<li><a href="#prerequisites">Prerequisites</a>
+<li><a href="#install">Install</a>
+<li><a href="#usage">Usage</a>
+<li><a href="#errors">Error Handling</a>
+<li><a href="#support">Support</a>
+<li><a href="#developers">Developers</a>
+<li><a href="#credits">Credits</a>
+</ul>
+
+<hr size="1">
+
+<h3><a name="overview">Overview</a></h3>
+
+Flash Remoting comes with a number of adapters for locating remote services implemented as Java classes, EJBs, servlets, and JMX Beans.
+</p>
+The <a target="_top" href="http://www.springframework.org/">Spring Framework</a> is a popular open source framework for managing
+enterprise Java application components.
+</p>
+SpringBeanAdapter provides the ability to locate Flash Remoting services in a Spring application context.
+
+<h3><a name="features">Features</a></h3>
+
+
+<ul>
+<li>Locate Remoting services by bean name in Spring application context
+<li>Customizable error handling of server-side exceptions
+</ul>
+
+
+<h3><a name="download">Download</a></h3>
+
+The latest release of SpringBeanAdapter is available for download from <a target="_top"  href="http://sourceforge.net/project/showfiles.php?group_id=52145">SourceForge.net</a>. For the adventurous, you can check out the <a target="_top" href="http://sourceforge.net/cvs/?group_id=52145">latest changes from CVS</a>.
+
+<h3><a name="prerequisites">Prerequisites</a></h3>
+
+SpringBeanAdapter depends on:
+<ul>
+<li>The Spring Framework - <a target="_top" href="http://www.springframework.org">home page</a>
+<li>Macromedia Flash Remoting (Flex version) - <a target="_top" href="http://www.macromedia.com/software/flex/">Flex home page</a>
+</ul>
+
+<h3><a name="install">Install</a></h3>
+
+To install SpringBeanAdapter you must unzip springadapter-x.x.zip and copy the following jars to your web application's WEB-INF/lib/ directory:
+<ul>
+<li>lib/springadapter-x.x.jar
+</ul>
+<p>
+
+Configure Flash Remoting to use SpringBeanAdapter by editing your Flex Flash Remoting configuration file located in WEB-INF/flex/gateway-config.xml.
+
+<pre class="code">
+  &lt;service-adapters>
+    &lt;adapter type="stateless-class">com.carbonfive.flash.spring.SpringBeanAdapter&lt;/adapter>
+  &lt;/service-adapters>
+</pre>
+
+<h3><a name="usage">Usage</a></h3>
+
+SpringBeanAdapter handles services named with a 'spring://' prefix. We recommend using named remote services in Flex by adding services to your Flex configuration in WEB-INF/flex/flex-config.xml:
+<p/>
+
+The following is just a sample from a flex-config.xml file:
+
+<pre class="code">
+  &lt;remote-objects>
+    &lt;named>
+      &lt;object name="LocalServiceName">
+      &lt;source>spring://RemoteServiceName&lt;/source>
+      &lt;type>stateless-class&lt;/type>
+      &lt;allow-unnamed-access>false&lt;/allow-unnamed-access>
+    &lt;/object>
+    &lt;/named>
+  &lt;/remote-objects>
+</pre>
+
+<p/>
+With this configuration, you can then use remote object services from your Flex application with:
+
+<pre class="code">
+  <mx:RemoteObject id="serviceName" named="LocalServiceName"/>
+</pre>
+
+<h3><a name="errors">Error Handling</a></h3>
+
+SpreadBeanAdapter provides a nice feature for developers who want control over how errors that happen on the server are sent to the Flash client.
+<p/>
+In the standard adapters provided by Macromedia, server errors are converted to a class, flashgateway.GatewayException, that contains the same properties as the fault object received by the Flash client:
+
+<ul>
+<li>type
+<li>code
+<li>message
+<li>details
+</ul>
+
+SpringBeanAdapter allows you to provide a factory class to produce your own GatewayExceptions when an error occurs on the server. To use this feature, register a bean that implements the interface com.carbonfive.flash.spring.RemotingExceptionFactory with the name 'remotingExceptionFactory' in your Spring application context. SpringBeanAdapter will look for and use this class if found.
+<p/>
+
+An example implementation of RemotingExceptionFactory looks like:
+
+<pre class="code">
+public class ExampleExceptionFactory
+    implements java.io.Serializable, RemotingExceptionFactory
+{
+  public static String CUSTOM_CODE = "Server.Custom";
+
+  public void throwException(Throwable t) throws Exception
+  {
+    if (t instanceof SecurityException)
+    {
+      GatewayException e = new GatewayException(t.getMessage());
+      e.setRootCause(t);
+      e.setCode(GatewayException.SERVER_AUTHORIZATION);
+      throw e;
+    }
+    else if (t instanceof IndexOutOfBoundsException)
+    {
+      GatewayException e = new GatewayException(t.getMessage());
+      e.setRootCause(t);
+      e.setCode(CUSTOM_CODE);
+      throw e;
+    }
+
+    if (t instanceof Exception) throw (Exception) t;
+    else if (t instanceof Error) throw (Error) t;
+  }
+}
+</pre>
+
+If you do not convert the exception to a GatewayException in your implementation of RemotingExceptionFactory, it will be handled by the standard Flash Remoting exception handling process.
+
+<h3><a name="support">Support</a></h3>
+
+For support, please read and post to the <a target="_top"  href="http://sourceforge.net/forum/forum.php?forum_id=191315">forums on SourceForge.net</a>.
+
+<h3><a name="developers">Developers</a></h3>
+
+For those interesting in peeking under the hood or making changes, the <a href="#download">distribution</a> includes the source code, an Ant build script and JUnit unit tests that can be used to make changes. Simply unzip/unjar the distribution to get started.
+
+<h3><a name="credits">Credits</a></h3>
+
+Alon J Salant, <a href="http://www.carbonfive.com">Carbon Five</a><br>
+Alex Cruikshank, <a href="http://www.carbonfive.com">Carbon Five</a><br>
+
+</body>
+</html>
