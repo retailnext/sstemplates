@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class TestBean
-  implements Serializable
+  implements Serializable, Testable
 {
   private int intField;
   private short shortField;

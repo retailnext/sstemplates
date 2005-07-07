@@ -1,9 +1,10 @@
 package com.carbonfive.flash.decoder;
 
-import java.util.*;
-import junit.framework.*;
-import flashgateway.io.ASObject;
 import com.carbonfive.flash.test.*;
+import flashgateway.io.*;
+import junit.framework.*;
+
+import java.util.*;
 
 public class JavaBeanDecoderTest
   extends    TestCase
@@ -82,5 +83,22 @@ public class JavaBeanDecoderTest
     TestBean decodedBean = (TestBean) decodedObject;
     assertNotNull(decodedBean.getColField());
     assertEquals(HashSet.class, decodedBean.getColField().getClass());
+  }
+
+  public void testJavaBeanInterfaceDecode() throws Exception
+  {
+    ASObject bean = new ASObject();
+    bean.setType(TestBean.class.getName());
+    bean.put("intField", new Double(30));
+
+    ActionScriptDecoder decoder = factory.getDecoder(bean, Testable.class);
+    assertNotNull(decoder);
+
+    Object decodedObject = decoder.decodeObject(bean, Testable.class);
+    assertNotNull(decodedObject);
+    assertEquals(TestBean.class, decodedObject.getClass());
+
+    TestBean decodedBean = (TestBean) decodedObject;
+    assertEquals(30, decodedBean.getIntField());
   }
 }

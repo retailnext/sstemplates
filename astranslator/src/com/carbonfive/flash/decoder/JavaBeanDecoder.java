@@ -19,7 +19,10 @@ public class JavaBeanDecoder
   {
     try
     {
-      Object bean = Beans.instantiate(Thread.currentThread().getContextClassLoader(), desiredClass.getName());
+      Class classToTranslateInto = desiredClass;
+      if (desiredClass.isInterface()) classToTranslateInto = DecoderFactory.decideClassToTranslateInto(encodedObject);
+
+      Object bean = Beans.instantiate(Thread.currentThread().getContextClassLoader(), classToTranslateInto.getName());
       return bean;
     }
     catch (Exception e) // ClassNotFoundException, IOException, IntrospectionException
