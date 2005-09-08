@@ -78,9 +78,6 @@ public class Calculator
     SpatialLocation sourceSL = getSpatialLocation(source);
     SpatialLocation destSL   = getSpatialLocation(dest);
 
-    if (sourceSL == null) throw new CalculatorException("Location not found: " + source.getZipCode());
-    if (destSL   == null) throw new CalculatorException("Location not found: " + dest.getZipCode());
-
     return sourceSL.getDistance(destSL);
   }
 
@@ -100,22 +97,20 @@ public class Calculator
   {
     SpatialLocation sourceSL = getSpatialLocation(source);
 
-    if (sourceSL == null) throw new CalculatorException("Location not found: " + source.getZipCode());
-
     Collection               possibleSLs = new ArrayList();
     Location                 loc         = null;
     SpatialLocationDecorator sld         = null;
     for (Iterator i = possibles.iterator(); i.hasNext(); )
     {
       loc = (Location) i.next();
-      sld = getSpatialLocation(loc);
-      if (sld == null)
+      try
       {
-        log.warning("Location not found: " + loc.getZipCode());
-      }
-      else
-      {
+        sld = getSpatialLocation(loc);
         possibleSLs.add(sld);
+      }
+      catch(CalculatorException ce)
+      {
+        log.warning(ce.getMessage());
       }
     }
     
@@ -146,9 +141,6 @@ public class Calculator
     SpatialLocation sourceSL = getSpatialLocation(source);
     SpatialLocation destSL   = getSpatialLocation(dest);
 
-    if (sourceSL == null) throw new CalculatorException("Location not found: " + source.getZipCode());
-    if (destSL   == null) throw new CalculatorException("Location not found: " + dest.getZipCode());
-
     return sourceSL.getHeading(destSL);
   }
 
@@ -170,8 +162,6 @@ public class Calculator
   {
     SpatialLocation sourceSL = getSpatialLocation(source);
 
-    if (sourceSL == null) throw new CalculatorException("Location not found: " + source.getZipCode());
-
     Location                 loc = null;
     SpatialLocationDecorator sld = null;
 
@@ -179,15 +169,15 @@ public class Calculator
     for (Iterator i = possibles.iterator(); i.hasNext(); )
     {
       loc = (Location) i.next();
-      sld = getSpatialLocation(loc);
-      if (sld == null)
+      try
       {
-        log.warning("Location not found: " + loc.getZipCode());
-      }
-      else
-      {
+        sld = getSpatialLocation(loc);
         double dist = getDistance(source, loc);
         byDistance.put(new Double(dist), loc);
+      }
+      catch(CalculatorException ce)
+      {
+        log.warning(ce.getMessage());
       }
     }
 
@@ -197,8 +187,10 @@ public class Calculator
   }
 
   SpatialLocationDecorator getSpatialLocation(Location loc)
+      throws CalculatorException
   {
     SpatialLocation          sl  = ZipCodeManager.getLocation(loc.getZipCode());
+    if (sl == null) throw new CalculatorException("Location not found: " + loc.getZipCode());
     SpatialLocationDecorator sld = new SpatialLocationDecorator(sl);
     sld.setLocation(loc);
     return sld;

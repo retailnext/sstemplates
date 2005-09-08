@@ -1,8 +1,13 @@
 package com.carbonfive.gis;
 
-import java.util.*;
-import java.util.logging.*;
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class SpatialLocationTest
   extends    TestCase
