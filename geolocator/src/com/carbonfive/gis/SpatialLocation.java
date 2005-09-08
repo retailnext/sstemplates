@@ -213,6 +213,8 @@ public class SpatialLocation
 
   List getLocationsWithinSquare(Collection locations, double radius)
   {
+    if (radius > MAX_RADIUS) return new ArrayList(locations);
+    
     double longRange = getLongitudeRange(radius);
     double latRange  = getLatitudeRange(radius);
 
