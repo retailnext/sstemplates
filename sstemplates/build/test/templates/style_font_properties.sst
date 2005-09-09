@@ -1,0 +1,32 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 13">
+    <row>
+      <forEach var="typeOffset" items="${paramValues.typeOffsets}">
+        <style typeOffset="${pageScope.typeOffset}">
+          <cell>1</cell>
+        </style>
+      </forEach>
+    </row>
+    <row>
+      <forEach var="fontWeight" items="${paramValues.fontWeights}">
+        <style fontWeight="${pageScope.fontWeight}">
+          <cell>1</cell>
+        </style>
+      </forEach>
+    </row>
+    <row>
+      <forEach var="fontColor" items="${paramValues.fontColors}">
+        <style fontColor="${pageScope.fontColor}">
+          <cell>1</cell>
+        </style>
+      </forEach>
+    </row>
+    <row>
+      <forEach var="underline" items="${paramValues.underlines}">
+        <style underline="${pageScope.underline}">
+          <cell>1</cell>
+        </style>
+      </forEach>
+    </row>
+  </sheet>
+</workbook>

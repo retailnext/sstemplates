@@ -1,0 +1,8 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <style name="${param.style}" borderTop="thin"/>
+  <sheet name="Sheet Test 3" style="${param.style}">
+    <row>
+      <cell>test</cell>
+    </row>
+  </sheet>
+</workbook>

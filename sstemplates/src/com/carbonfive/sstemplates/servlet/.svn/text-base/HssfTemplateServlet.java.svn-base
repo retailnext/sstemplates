@@ -1,0 +1,136 @@
+package com.sivoh.hssftemplates.servlet;
+
+import com.sivoh.hssftemplates.tags.*;
+import com.sivoh.hssftemplates.*;
+import org.apache.poi.hssf.usermodel.*;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.*;
+import java.util.*;
+import java.util.logging.*;
+
+/**
+ * 
+ * @author sivoh
+ * @version $REVISION
+ */
+public class HssfTemplateServlet extends HttpServlet
+{
+  private static final Logger log = Logger.getLogger(HssfTemplateServlet.class.getName());
+
+  private static final String HSSF_DIRECTORY_PARAM_KEY = "templatesDirectory";
+  private static final String CUSTOM_TAGS_PARAM_KEY = "customTags";
+
+  private String          templateDirectory = "/";
+  private ServletContext  context = null;
+  private HssfServletTemplateProcessor processor;
+
+  public void init( ServletConfig config ) throws ServletException
+  {
+    if ( config.getInitParameter(HSSF_DIRECTORY_PARAM_KEY) != null )
+      templateDirectory = config.getInitParameter(HSSF_DIRECTORY_PARAM_KEY);
+
+    Collection customTags = null;
+    if ( config.getInitParameter(CUSTOM_TAGS_PARAM_KEY) != null )
+      customTags = getCustomTags(config.getInitParameter(CUSTOM_TAGS_PARAM_KEY));
+
+    this.context = config.getServletContext();
+    try { this.processor = HssfServletTemplateProcessor.getInstance(customTags); }
+    catch (HssfTemplateException he) { throw new ServletException(he); }
+  }
+
+  private Collection getCustomTags(String names)
+    throws ServletException
+  {
+    List tags = new ArrayList();
+
+    for (StringTokenizer tok = new StringTokenizer(names, ", "); tok.hasMoreTokens();)
+    {
+      String name = tok.nextToken();
+      try
+      {
+        Class clazz = Class.forName(name);
+
+        if (!HssfTag.class.isAssignableFrom(clazz))
+          throw new ServletException("Custom tags must implement HssfTag");
+
+        tags.add(clazz);
+      }
+      catch (ClassNotFoundException e)
+      {
+        throw new ServletException(e);
+      }
+    }
+
+    return tags;
+  }
+
+  public void doGet( HttpServletRequest request, HttpServletResponse response )
+    throws ServletException, IOException
+  {
+    File templateFile = new File(pathFromRequestURL(request));
+
+    if (( ! templateFile.exists() ) || ( ! templateFile.getName().endsWith(".hssft")))
+    {
+      response.sendError( HttpServletResponse.SC_NOT_FOUND, "Could not find hssft template " + templateFile.getName() );
+      return;
+    }
+
+    HSSFWorkbook workbook = null;
+    try { workbook = processor.process(request, context, new File(getTemplateDirectory()), templateFile); }
+    catch (HssfTemplateException he) { throw new ServletException(he); }
+
+    response.setContentType("application/vnd-ms-excel");
+    response.setHeader("Content-Disposition", "attachment; filename=" + filenameWithXLSExtension(request));
+
+    if ( workbook != null )
+      workbook.write(response.getOutputStream());
+    response.getOutputStream().close();
+  }
+
+  public void doPost( HttpServletRequest request, HttpServletResponse response )
+    throws ServletException, IOException
+  {
+    doGet( request, response );
+  }
+
+  private String findFileInTemplateDirectory(String path)
+  {
+    String file = ( path == null ? "" : path );
+    String templateDir = getTemplateDirectory();
+    if ( file.startsWith("/") ) file = file.substring(1);
+    if ( templateDir.endsWith("/") ) templateDir = templateDir.substring(0, templateDir.length()-1);
+
+    return  context.getRealPath(getTemplateDirectory() + "/" + file);
+  }
+
+  private String filenameWithXLSExtension(HttpServletRequest request)
+  {
+    String filename =  new File(request.getPathInfo()).getName();
+    int dotIndex = filename.lastIndexOf('.');
+    if ( dotIndex >= 0 )
+      filename = filename.substring( 0, dotIndex ) + ".xls";
+    return filename;
+  }
+
+  public String pathFromRequestURL( HttpServletRequest request )
+  {
+    return findFileInTemplateDirectory(request.getPathInfo());
+  }
+
+  String getTemplateDirectory()
+  {
+    return templateDirectory;
+  }
+
+  public HssfTemplateProcessor getProcessor()
+  {
+    return processor;
+  }
+
+  public HssfTemplateServletContext createTemplateContext(HttpServletRequest request)
+  {
+    return processor.createTemplateContext(request, context, new File(getTemplateDirectory()));
+  }
+}

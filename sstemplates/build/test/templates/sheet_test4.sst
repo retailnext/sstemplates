@@ -1,0 +1,12 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Sheet 1">
+    <row>
+      <cell>value</cell>
+    </row>
+  </sheet>
+  <sheet name="Sheet 2">
+    <row>
+      <cell>value</cell>
+    </row>
+  </sheet>
+</workbook>

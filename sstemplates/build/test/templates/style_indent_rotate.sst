@@ -1,0 +1,9 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 9">
+    <row>
+      <style indention="${param.indention}" rotation="${param.rotation}">
+        <cell>1</cell>
+      </style>
+    </row>
+  </sheet>
+</workbook>

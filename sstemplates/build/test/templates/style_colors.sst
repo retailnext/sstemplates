@@ -1,0 +1,18 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 6">
+    <row>
+      <forEach var="color" items="${paramValues.c}">
+        <style foreground="${pageScope.color}" fillPattern="solid-foreground">
+          <cell>X</cell>
+        </style>
+      </forEach>
+    </row>
+    <row>
+      <forEach var="color" items="${paramValues.c}">
+        <style background="${pageScope.color}" fillPattern="solid-foreground">
+          <cell>X</cell>
+        </style>
+      </forEach>
+    </row>
+  </sheet>
+</workbook>

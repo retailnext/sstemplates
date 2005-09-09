@@ -1,0 +1,9 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 8">
+    <row>
+      <style hidden="${param.flag}" locked="${param.flag}" wrapText="${param.flag}">
+        <cell>1</cell>
+      </style>
+    </row>
+  </sheet>
+</workbook>

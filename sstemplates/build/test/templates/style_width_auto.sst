@@ -1,0 +1,16 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <style autoColumnWidth="true">
+  <sheet name="Style Tag Test 16">
+    <row>
+      <cell>${param.str1}</cell>
+    </row>
+    <row>
+      <cell>${param.str2}</cell>
+    </row>
+    <row>
+      <cell>${param.str3}</cell>
+    </row>
+  </sheet>
+  </style>
+</workbook>
+

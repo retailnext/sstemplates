@@ -1,0 +1,13 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <function name="test0" clazz="com.carbonfive.sstemplates.tags.FunctionTagTest"
+    methodName="test"/>
+  <function name="test1" clazz="com.carbonfive.sstemplates.tags.FunctionTagTest"
+    methodName="test" parameterTypes="java.lang.String"/>
+  <function name="test2" clazz="com.carbonfive.sstemplates.tags.FunctionTagTest"
+    methodName="test" parameterTypes="java.lang.String java.lang.String"/>
+  
+  <sheet name="${test0()}"/>
+  <sheet name="${test1('functions')}"/>
+  <sheet name="${test2('apples','oranges')}"/>
+</workbook
+>

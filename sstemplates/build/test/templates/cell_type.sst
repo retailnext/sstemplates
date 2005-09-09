@@ -1,0 +1,12 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Cell Test">
+    <row>
+      <cell type="blank"></cell>
+      <cell type="boolean">true</cell>
+      <cell type="error"></cell>
+      <cell type="formula">0</cell>
+      <cell type="numeric">2342.32</cell>
+      <cell type="string">test string</cell>
+    </row>
+  </sheet>
+</workbook>

@@ -1,0 +1,18 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 10">
+    <row>
+      <style valign="${param.valign1}">
+        <cell>1</cell>
+      </style>
+      <style valign="${param.valign2}">
+        <cell>2</cell>
+      </style>
+      <style valign="${param.valign3}">
+        <cell>3</cell>
+      </style>
+      <style valign="${param.valign4}">
+        <cell>4</cell>
+      </style>
+    </row>
+  </sheet>
+</workbook>

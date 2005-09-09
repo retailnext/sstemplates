@@ -1,0 +1,16 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="If Test">
+    <row>
+      <if test="${ true }">
+        <cell>Here I Am 0</cell>
+      </if>
+      <if test="${ false }">
+        <cell>Here I Am 1</cell>
+      </if>
+      <if var="result" test="${ true }"/>
+      <if test="${ result }">
+        <cell>Here I Am 2</cell>
+      </if>
+    </row>
+  </sheet>
+</workbook>

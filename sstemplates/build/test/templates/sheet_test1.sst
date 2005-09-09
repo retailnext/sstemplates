@@ -1,0 +1,6 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="${param.sheet1}"/>
+  <sheet name="${param.sheet2}"/>
+  <sheet name="${param.sheet3}"/>
+  <sheet name="${param.sheet4}"/>
+</workbook>

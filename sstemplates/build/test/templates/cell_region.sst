@@ -1,0 +1,49 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Cell Test 4">
+    <row>
+      <cell>00</cell>
+      <cell rowspan="3">01</cell>
+      <cell>02</cell>
+      <cell>03</cell>
+      <cell>04</cell>
+      <cell>05</cell>
+      <cell>06</cell>
+    </row>
+    <row>
+      <cell>10</cell>
+      <cell>12</cell>
+      <cell colspan="3" rowspan="2">13</cell>
+      <cell>16</cell>
+    </row>
+    <row>
+      <cell>20</cell>
+      <cell>22</cell>
+      <cell>26</cell>
+    </row>
+    <row>
+      <cell>30</cell>
+      <cell>31</cell>
+      <cell>32</cell>
+      <cell>33</cell>
+      <cell>34</cell>
+      <cell>35</cell>
+      <cell>36</cell>
+    </row>
+    <row>
+      <cell colspan="3">40</cell>
+      <cell>43</cell>
+      <cell>44</cell>
+      <cell>45</cell>
+      <cell>46</cell>
+    </row>
+    <row>
+      <cell>50</cell>
+      <cell>51</cell>
+      <cell>52</cell>
+      <cell>53</cell>
+      <cell>54</cell>
+      <cell>55</cell>
+      <cell>56</cell>
+    </row>
+  </sheet>
+</workbook>

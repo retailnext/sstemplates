@@ -1,0 +1,9 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Iterator Test 2">
+    <row>
+      <forEach var="item" varStatus="status" items="${columnIndexes}">
+        <cell type="numeric" column="${item}">${status.index}</cell>
+      </forEach>
+    </row>
+  </sheet>
+</workbook>

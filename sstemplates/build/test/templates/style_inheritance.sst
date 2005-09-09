@@ -1,0 +1,12 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 14">
+    <row>
+      <style align="${param.alignment1}" border="${param.border1}" fontHeight="${param.fontHeight1}"
+             fontWeight="${param.fontWeight1}">
+        <style border="${param.border2}" background="${param.background2}" fontWeight="${param.fontWeight2}">
+          <cell>1</cell>
+        </style>
+      </style>
+    </row>
+  </sheet>
+</workbook>

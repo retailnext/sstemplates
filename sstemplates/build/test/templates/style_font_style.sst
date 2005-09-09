@@ -1,0 +1,9 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 12">
+    <row>
+      <style fontHeight="${param.fontHeight}" italic="${param.italic}" strikeout="${param.strikeout}">
+        <cell>1</cell>
+      </style>
+    </row>
+  </sheet>
+</workbook>

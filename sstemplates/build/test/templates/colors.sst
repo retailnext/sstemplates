@@ -1,0 +1,11 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Colors">
+    <forEach var="color" items="${paramValues.c}">
+      <row>
+        <style foreground="${pageScope.color}" fillPattern="solid-foreground">
+          <cell>${pageScope.color}</cell>
+        </style>
+      </row>
+    </forEach>
+  </sheet>
+</workbook>

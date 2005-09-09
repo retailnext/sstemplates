@@ -1,0 +1,9 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 1">
+    <row>
+      <style>
+        <cell>Hello</cell>
+      </style>
+    </row>
+  </sheet>
+</workbook>

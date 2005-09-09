@@ -1,0 +1,15 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Set Test 1">
+    <row>
+      <set var="var1" value="0"/>
+      <cell>${var1}</cell>
+
+      <set target="var1" value="1"/>
+      <cell>${var1}</cell>
+
+      <set var="fooBean" value="${fooAttr}"/>
+      <set target="fooBean" property="bar" value="2"/>
+      <cell>${fooBean.bar}</cell>
+    </row>
+  </sheet>
+</workbook>

@@ -1,0 +1,9 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <style name="widthIsX" columnWidth="${param.columnWidth}" rowHeight="${param.rowHeight}"/>
+  <sheet name="Style Tag Test 16">
+    <row>
+      <cell style="widthIsX">test</cell>
+    </row>
+  </sheet>
+</workbook>
+

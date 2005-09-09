@@ -1,0 +1,11 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Iterator Test 4">
+    <forEach var="x" varStatus="xStatus" items="${emptyArray}">
+      <row>
+        <forEach var="y" varStatus="yStatus" items="${emptyArray}">
+          <cell type="numeric">${(xStatus.index*5)+(yStatus.index*7)}</cell>
+        </forEach>
+      </row>
+    </forEach>
+  </sheet>
+</workbook>

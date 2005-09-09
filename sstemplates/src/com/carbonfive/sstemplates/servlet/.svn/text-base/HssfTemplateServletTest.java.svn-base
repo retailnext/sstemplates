@@ -1,0 +1,104 @@
+package com.sivoh.hssftemplates.servlet;
+
+import com.meterware.httpunit.*;
+import com.meterware.servletunit.*;
+import com.sivoh.hssftemplates.tags.*;
+import com.sivoh.hssftemplates.*;
+
+import java.util.*;
+
+/**
+ * 
+ * @author Alex Cruikshank
+ * @version $REVISION
+ */
+public class HssfTemplateServletTest
+    extends HssfTemplateServletBaseTest
+{
+
+  public HssfTemplateServletTest( String name )
+  {
+    super(name);
+  }
+
+  public void testTemplateDirectory() throws Exception
+  {
+    InvocationContext context = getTestInvocation();
+
+    assertEquals( "Template directory", "/WEB-INF/hssf",
+                  ((HssfTemplateServlet) context.getServlet()).getTemplateDirectory() );
+  }
+
+  public void testFindDefaultHssfTemplateTags() throws Exception
+  {
+    InvocationContext context = getTestInvocation();
+
+    List tags = ((HssfTemplateServlet) context.getServlet()).getProcessor().getHssfTemplateTags();
+    assertTrue( "Finds at least one template tag", ! tags.isEmpty() );
+
+    for (Iterator it = tags.iterator(); it.hasNext();)
+    {
+      Class o = (Class) it.next();
+      assertTrue( "all tags extend HssfBaseTag", HssfTag.class.isAssignableFrom(o) );
+    }
+  }
+
+  public void testParseSimpleTemplate() throws Exception
+  {
+    InvocationContext invocationContext = getTestInvocation("tests/servlet_test1.hssft");
+
+    HssfWorkbookTag workbookTag = getRenderTree(invocationContext);
+    assertNotNull( "Should have parsed render tree from " + getPathFromServlet(invocationContext), workbookTag );
+    assertTrue( "workbook should have at least one child tag", workbookTag.getChildTags().size() > 0 );
+    assertTrue( "child of workbook " + workbookTag.getChildTags().get(0).getClass().getName() + " should be sheet",
+                workbookTag.getChildTags().get(0) instanceof HssfSheetTag );
+
+    assertEquals("sheet name should be 'testSheet'", "testSheet",
+        ((HssfSheetTag) workbookTag.getChildTags().get(0)).getName() );
+  }
+
+  public void testEvaluateEL() throws Exception
+  {
+    InvocationContext invocationContext = getTestInvocation("tests/servlet_test1.hssft");
+
+    HssfWorkbookTag workbookTag = getRenderTree(invocationContext);
+    HssfTemplateContextImpl context = getHssfTemplateContext(invocationContext);
+
+    invocationContext.getRequest().setAttribute("var1",new Integer(14));
+    invocationContext.getRequest().setAttribute("var2",new Integer(21));
+
+    String expression = "${ var1 + var2 }";
+    assertEquals( "Expression " + expression + " should be 35", 35,
+        ((Integer) workbookTag.parseExpression(expression,Integer.class,context)).intValue());
+  }
+
+  public void test404() throws Exception
+  {
+    WebResponse response = getResponse("tests/servlet_test1.hssft");
+    assertEquals( "Should get 200 from existing hssft file", 200, response.getResponseCode() );
+
+    try
+    {
+      response = getResponse("file_that_does_not_exist.hssft");
+      fail("Should get 404 from non-existant file");
+    }
+    catch ( HttpNotFoundException hnfe ) { }
+
+    try
+    {
+      response = getResponse("tests/worksheet_test1.xls");
+      fail("Should get 404 from existing non-hssft file");
+    }
+    catch ( HttpNotFoundException hnfe ) { }
+  }
+
+  public void testRenderTreeCache() throws Exception
+  {
+    InvocationContext invocationContext = getTestInvocation("tests/servlet_test1.hssft");
+
+    HssfWorkbookTag workbookTag1 = getRenderTree(invocationContext);
+    HssfWorkbookTag workbookTag2 = getRenderTree(invocationContext);
+    assertTrue( "Retrieving render tree from same path twice should return same instance",
+                workbookTag1 == workbookTag2 );
+  }
+}

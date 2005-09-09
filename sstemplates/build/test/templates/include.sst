@@ -1,0 +1,7 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Include Test 1">
+    <row>
+      <include template="include/include_incl.sst"/>
+    </row>
+  </sheet>
+</workbook>

@@ -1,0 +1,24 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 2">
+    <row>
+      <style align="center">
+        <cell>1</cell>
+      </style>
+      <style align="center-selection">
+        <cell>2</cell>
+      </style>
+      <style align="fill">
+        <cell>3</cell>
+      </style>
+      <style align="general">
+        <cell>4</cell>
+      </style>
+      <style align="left">
+        <cell>5</cell>
+      </style>
+      <style align="right">
+        <cell>6</cell>
+      </style>
+    </row>
+  </sheet>
+</workbook>

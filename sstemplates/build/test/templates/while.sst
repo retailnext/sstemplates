@@ -1,0 +1,17 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="While Test 1">
+    <row>
+
+      <while condition="${false}">
+        <cell>a</cell>
+      </while>
+
+      <set var="counter" value="0"/>
+      <while condition="${counter lt 3}">
+        <cell>b</cell>
+        <set target="counter" value="${counter+1}"/>
+      </while>
+
+    </row>
+  </sheet>
+</workbook>

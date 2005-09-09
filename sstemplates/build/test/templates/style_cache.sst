@@ -1,0 +1,15 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <style name="${param.style1}" border="${param.border1}" fillPattern="${param.fillPattern1}"
+         fontHeight="${param.fontHeight1}"/>
+  <style name="${param.style2}" fillPattern="${param.fillPattern2}" fontHeight="${param.fontHeight2}"
+         fontWeight="${param.fontWeight2}"/>
+  <style name="${param.style3}" fontHeight="${param.fontHeight3}" fontWeight="${param.fontWeight3}"
+         align="${param.alignment3}"/>
+  <sheet name="Style Tag Test 15">
+    <row>
+      <cell style="bob">test</cell>
+      <cell style="bob jeff harry">test</cell>
+    </row>
+  </sheet>
+</workbook>
+

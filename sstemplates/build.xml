@@ -1,0 +1,325 @@
+<project name="sst" default="usage" basedir=".">
+<!-- YO -->
+  <target name="usage" depends="init">
+    <echo>
+compile - compiles source
+deploy  - creates runnable webapp
+data    - populate database defined in local.properties
+test    - runs unit test suite against test.properties
+dist    - builds distribution including war file
+clean   - removes all generated files
+
+NOTE: you must create a test.properties file for your environment.
+      See test.properties.sample for a starting point.
+
+To start fresh, type:
+
+  > ant clean deploy
+
+    </echo>
+
+  </target>
+
+  <target name="properties">
+
+    <echo>Configuring build from ${build.properties}..</echo>
+
+    <tstamp/>
+
+    <property name="project.root"       value="${basedir}"/>
+
+    <property name="core.src"           value="${project.root}/src"/>
+    <property name="core.lib"           value="${project.root}/lib"/>
+    <property name="core.etc"           value="${project.root}/etc"/>
+    <property name="core.resources"     value="${project.root}/resources"/>
+
+    <property name="build.root"         value="${project.root}/build"/>
+    <property name="build.lib"          value="${build.root}/lib"/>
+    <property name="build.etc"          value="${build.root}/etc"/>
+    <property name="build.resources"    value="${build.root}/resources"/>
+    <property name="build.work"         value="${build.root}/work"/>
+    <property name="build.generated"    value="${build.work}/generated"/>
+    <property name="build.classes"      value="${build.work}/classes"/>
+    <property name="build.instrumented" value="${build.work}/instrumented"/>
+
+    <property name="examples.root"      value="${project.root}/examples"/>
+    <property name="web.root"           value="${examples.root}/webapp"/>
+
+    <!-- deployDir will be set by AntHill -->
+    <property name="deployDir"          value="${project.root}/dist"/>
+    <property name="dist.root"          value="${deployDir}"/>
+    <property name="dist.schema"        value="${deployDir}/schema"/>
+    <property name="dist.tests"         value="${deployDir}/tests"/>
+    <property name="dist.metrics"       value="${deployDir}/metrics"/>
+    <property name="dist.coverage"      value="${deployDir}/coverage"/>
+    <property name="dist.api"           value="${deployDir}/api"/>
+
+    <property name="webapp.deploy"      value="${deployDir}/webapp"/>
+
+    <path id="core.class.path">
+      <pathelement location="${core.resources}"/>
+      <fileset dir="${core.lib}">
+        <include name="*.jar"/>
+      </fileset>
+    </path>
+
+    <path id="build.class.path">
+      <path refid="core.class.path"/>
+      <pathelement location="${build.resources}"/>
+      <fileset dir="${build.lib}">
+        <include name="*.jar"/>
+      </fileset>
+    </path>
+
+  </target>
+
+  <target name="init" depends="properties">
+
+    <echo>
+java.home           = ${java.home}
+user.home           = ${user.home}
+build.version       = ${build.version}
+project.root        = ${project.root}
+web.root            = ${web.root}
+webapp.deploy       = ${webapp.deploy}
+    </echo>
+
+  </target>
+
+  <target name="prepare" depends="init">
+
+    <mkdir dir="${build.classes}" />
+  	<mkdir dir="${dist.root}"/>
+
+  </target>
+
+  <target name="compile" depends="prepare">
+    <javac deprecation="on"
+           debug="yes"
+           destdir="${build.classes}"
+           includes="**/*.java">
+      <src path="${core.src}"/>
+      <classpath refid="build.class.path"/>
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile">
+    <jar destfile="${dist.root}/sst.jar">
+      <fileset dir="${build.classes}">
+        <exclude name="**/*.xml"/>
+        <exclude name="**/*Test.class"/>
+      </fileset>
+    </jar>
+  </target>
+
+  <target name="prepare-deploy" depends="init">
+    <mkdir dir="${webapp.deploy}"/>
+    <mkdir dir="${webapp.deploy}/WEB-INF"/>
+  </target>
+
+  <target name="deploy" depends="prepare-deploy, jar">
+
+    <copy todir="${webapp.deploy}" preservelastmodified="true">
+      <fileset dir="${web.root}">
+        <include name="**"/>
+      </fileset>
+    </copy>
+
+    <copy todir="${webapp.deploy}/examples" preservelastmodified="true">
+      <fileset dir="${examples.root}">
+        <include name="templates/**"/>
+      </fileset>
+    </copy>
+
+    <copy todir="${webapp.deploy}/WEB-INF/lib">
+      <fileset dir="${core.lib}"/>
+      <fileset dir="${dist.root}">
+        <include name="sst.jar"/>
+      </fileset>
+    </copy>
+
+  </target>
+
+  <target name="war" depends="deploy">
+  	<mkdir dir="${dist.root}"/>
+
+    <war destfile="${dist.root}/sst.war" webxml="${webapp.deploy}/WEB-INF/web.xml">
+      <fileset dir="${webapp.deploy}">
+        <exclude name="WEB-INF/web.xml"/>
+      </fileset>
+    </war>
+  </target>
+
+  <target name="clean" depends="prepare">
+    <delete dir="${build.work}" includeemptydirs="true"/>
+    <delete dir="${dist.root}" includeemptydirs="true"/>
+  </target>
+
+  <target name="dist" depends="clean, war">
+
+    <echo file="${build.work}/README.txt">
+This is build number ${build.version} for Spread Sheet Templates (SST).
+    </echo>
+
+    <zip destfile="${dist.root}/${ant.project.name}-${build.version}.zip">
+      <fileset dir="${dist.root}">
+        <include name="*.war"/>
+      </fileset>
+      <fileset file="${build.work}/README.txt"/>
+      <fileset dir="${core.etc}">
+        <include name="stage/**"/>
+        <include name="production/**"/>
+        <include name="data_migration.sql"/>
+        <include name="static/**"/>
+      </fileset>
+      <fileset dir="${build.work}">
+        <include name="schema.sql"/>
+      </fileset>
+    </zip>
+
+    <copy todir="${dist.root}">
+      <filterset>
+        <filter token="build.version" value="${build.version}"/>
+      </filterset>
+      <fileset dir="${core.etc}">
+        <include name="deploy-*.sh"/>
+      </fileset>
+    </copy>
+
+  </target>
+
+  <target name="test" depends="compile">
+  
+    <junit maxmemory="256m" fork="yes" forkmode="once" printsummary="withOutAndErr"
+           haltonfailure="no" failureProperty="tests.failed"
+           haltonerror="no"   errorProperty="tests.errored">
+
+      <sysproperty key="log4j.debug" value="false"/>
+      <sysproperty key="log4j.configuration" value="log4j.properties"/>
+
+      <sysproperty key="project.root"     value="${project.root}"/>
+
+      <sysproperty key="emma.coverage.out.file" value="${build.generated}/coverage.emma" />
+      <sysproperty key="emma.coverage.out.merge" value="true" />
+
+      <classpath>
+        <pathelement location="${core.src}"/>
+        <pathelement location="${build.instrumented}"/>
+        <pathelement location="${build.classes}"/>
+        <path refid="build.class.path"/>
+      </classpath>
+
+      <formatter type="plain" usefile="false"/>
+      <formatter type="xml"/>
+
+      <batchtest todir="${build.work}">
+        <fileset dir="${core.src}">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+
+    <mkdir dir="${dist.tests}"/>
+    <junitreport todir="${build.work}">
+      <fileset dir="${build.work}">
+          <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="noframes" todir="${dist.tests}"/>
+    </junitreport>
+    
+    <fail if="tests.failed" message="Test suite failed."/>
+    <fail if="tests.errored" message="Test suite failed."/>
+    
+  </target>
+
+  <target name="javadoc" depends="prepare">
+  	<mkdir dir="${dist.api}"/>
+
+  	<javadoc destdir="${dist.api}"
+  	         access="public"
+  	         windowtitle="Spread Sheet Templates API">
+      <classpath>
+        <path refid="build.class.path"/>
+        <pathelement location="${build.classes}" />
+      </classpath>
+      <fileset dir="${core.src}">
+        <include name="com/carbonfive/sst/**/*.java"/>
+        <exclude name="**/*Test.java"/>
+        <exclude name="**/*TestBean.java"/>
+      </fileset>
+    </javadoc>
+
+  </target>
+
+  <target name="jdepend" depends="compile">
+
+    <delete>
+      <fileset dir="${build.classes}">
+        <include name="**/*Test.class"/>
+        <include name="**/*Test$*.class"/>
+      </fileset>
+    </delete>
+
+    <jdepend format="xml" outputfile="${build.generated}/jdepend-report.xml">
+      <exclude name="java.*"/>
+      <exclude name="javax.*"/>
+      <exclude name="org.apache.commons.*"/>
+      <exclude name="org.springframework.*"/>
+      <classespath>
+        <pathelement location="${build.classes}" />
+      </classespath>
+      <classpath>
+        <path refid="build.class.path"/>
+      </classpath>
+    </jdepend>
+
+    <mkdir dir="${dist.metrics}"/>
+    <style basedir="${build.generated}" destdir="${dist.metrics}"
+        includes="jdepend-report.xml"
+        style="${ant.home}/etc/jdepend.xsl" />
+
+  </target>
+
+  <target name="emma-prepare" description="turns on EMMA instrumentation/reporting" depends="prepare">
+
+    <taskdef resource="emma_ant.properties" classpathref="build.class.path" />
+
+    <property name="emma.enabled" value="true" />
+
+  </target>
+
+  <target name="emma-instrument" depends="emma-prepare">
+
+    <mkdir dir="${build.instrumented}" />
+    <emma enabled="${emma.enabled}" verbosity="verbose">
+      <instr instrpath="${build.classes}"
+             destdir="${build.instrumented}"
+             metadatafile="${build.generated}/metadata.emma"
+             merge="false"
+      />
+    </emma>
+
+  </target>
+
+  <target name="emma-report" depends="emma-prepare">
+
+    <mkdir dir="${dist.coverage}"/>
+    <emma enabled="${emma.enabled}" >
+      <report sourcepath="${core.src}" >
+        <fileset dir="${build.generated}" >
+          <include name="*.emma" />
+        </fileset>
+
+        <html outfile="${dist.coverage}/index.html" />
+      </report>
+    </emma>
+  </target>
+
+  <target name="coverage" depends="compile, emma-instrument, test, emma-report">
+    <delete dir="${build.instrumented}" includeEmptyDirs="true"/>
+  </target>
+
+  <target name="anthill.build" depends="deploy, coverage, test, jdepend, javadoc"/>
+
+</project>
+

@@ -1,0 +1,9 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Iterator Test">
+    <row>
+      <forEach var="x" items="${paramValues.x}">
+        <cell>${pageScope.x}</cell>
+      </forEach>
+    </row>
+  </sheet>
+</workbook>

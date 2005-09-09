@@ -1,0 +1,16 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Form Example">
+    <row>
+      <style fontWeight="bold">
+        <cell>Animal</cell>
+      </style>
+      <cell>${param.animal}</cell>
+    </row>
+    <row>
+      <style fontWeight="bold">
+        <cell>Name</cell>
+      </style>
+      <cell>${param.name}</cell>
+    </row>
+  </sheet>
+</workbook>

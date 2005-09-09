@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app>
+
+<servlet>
+  <servlet-name>SsTemplateServlet</servlet-name>
+  <servlet-class>com.carbonfive.sstemplates.servlet.SsTemplateServlet</servlet-class>
+  <load-on-startup>1</load-on-startup>
+  <init-param>
+    <param-name>templatesDirectory</param-name>
+    <param-value>/templates</param-value>
+  </init-param>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>SsTemplateServlet</servlet-name>
+  <url-pattern>*.sst</url-pattern>
+</servlet-mapping>
+
+</web-app>

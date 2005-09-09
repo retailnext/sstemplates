@@ -1,0 +1,13 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="ForEach Test 5">
+    <forEach var="item" varStatus="status" items="${items}" begin="2" end="9" step="3">
+      <row>
+        <cell type="numeric" >${item}</cell>
+        <cell type="numeric" >${status.index}</cell>
+        <cell type="numeric" >${status.count}</cell>
+        <cell>${status.first}</cell>
+        <cell>${status.last}</cell>
+      </row>
+    </forEach>
+  </sheet>
+</workbook>

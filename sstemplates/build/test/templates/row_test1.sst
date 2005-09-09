@@ -1,0 +1,8 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Row Test">
+    <row index="${param.row1}"/>
+    <row index="${param.row2}"/>
+    <row index="${param.row3}"/>
+    <row/>
+  </sheet>
+</workbook>

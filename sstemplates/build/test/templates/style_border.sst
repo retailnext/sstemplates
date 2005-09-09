@@ -1,0 +1,39 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 3">
+    <row>
+      <forEach var="borderStyle" items="${paramValues.bs}">
+        <style borderTop="${pageScope.borderStyle}">
+          <cell/>
+        </style>
+      </forEach>
+    </row>
+    <row>
+      <forEach var="borderStyle" items="${paramValues.bs}">
+        <style borderBottom="${pageScope.borderStyle}">
+          <cell/>
+        </style>
+      </forEach>
+    </row>
+    <row>
+      <forEach var="borderStyle" items="${paramValues.bs}">
+        <style borderRight="${pageScope.borderStyle}">
+          <cell/>
+        </style>
+      </forEach>
+    </row>
+    <row>
+      <forEach var="borderStyle" items="${paramValues.bs}">
+        <style borderLeft="${pageScope.borderStyle}">
+          <cell/>
+        </style>
+      </forEach>
+    </row>
+    <row>
+      <forEach var="borderStyle" items="${paramValues.bs}">
+        <style border="${pageScope.borderStyle}">
+          <cell/>
+        </style>
+      </forEach>
+    </row>
+  </sheet>
+</workbook>

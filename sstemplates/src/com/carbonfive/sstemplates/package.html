@@ -1,0 +1,258 @@
+<html>
+<body>
+
+SsTemplates is a simple yet powerful presentation framwork for creating Excel file output from within
+a Servlet context.  It provides a convenient way to insert and format data produced by another Servlet,
+Struts action, or other business logic object into spreadsheet output that can be further manipulated
+by the user.  Each request processed by the SsTemplates servlet is processed by an XML template
+supplied by the developer to specify how the data is broken out into worksheets, rows, and cells, and
+how the cells are formatted.  The <a href="http://jakarta.apache.org/poi/">Jakarta POI project</a> provides
+the core XLS file generating engine.  The <a href="http://jakarta.apache.org/commons/digester/">Jakarta
+Digester project</a> is used for XML parsing and <a href="http://jakarta.apache.org/commons/el/">Jakarta
+EL</a> is used bind properties within objects to cells.
+
+<h3 class="hssft">Configuration</h3>
+<p>
+Install SsTemplates by placing the hssftemplates.jar all other jars that came with this distribution in
+the /WEB-INF/lib directory of you web application.  Complete the installation by adding something like the
+following lines to your /WEB-INF/web.xml file:
+
+<code class="example">&lt;servlet&gt;
+  &lt;servlet-name&gt;hssftTemplate&lt;/servlet-name&gt;
+  &lt;servlet-class&gt;com.sivoh.hssftemplates.HssfTemplateServlet&lt;/servlet-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;templatesDirectory&lt;/param-name&gt;
+    &lt;param-value&gt;/WEB-INF/hssf&lt;/param-value&gt;
+  &lt;/init-param&gt;
+&lt;/servlet&gt;
+
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;hssftTemplate&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;/hssf/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</code>
+
+In this example, we've set up a templates directory in /WEB-INF/hssf.  This directory specifies where
+your template files will be stored.  This directory may be anywhere within your webapp directory.  The
+servlet is mapped to /hssf/* so any request that begins with http://yourhost:yourport/yourwebapp/hssf
+(eg. http://localhost:8080/test/hssf/test.hssft) will be processed by the template.  The template
+used for processing is given by the url path after the servlet mapping, so
+http://localhost:8080/test/hssf/examples/test.hssft will look in the 'examples' sub-directory of the
+template directory to find a template named 'test.hssft'.  Alternately, you can configure the servlet
+mapping to '*.sst' and configure your templates directory to '/'.  This lets you store your template
+files amongst your html or jsp files in the root of your webapp.</p>
+
+<p>
+To test your configuration, place a text file called text.hssft containing the following XML in your
+templates directory:
+
+<code class="example">&lt;workbook&gt;
+  &lt;sheet name="Test Spreadsheet"&gt;
+    &lt;row&gt;
+      &lt;cell&gt;Test was Successful&lt;/cell&gt;
+    &lt;/row&gt;
+  &lt;/sheet&gt;
+&lt;/workbook&gt;</code>
+
+Open a browser and go to http://yourhost:yourport/yourwebapp/hssf/test.hssft (leave out the /hssf if
+your servlet's mapped to *.sst instead of the hssf directory).  Your browser should either download
+an XLS file or display it in its window (depending on your the browser).  The spreadsheet should have
+the text "Test was Successful" in the upper-left-most cell.</p>
+
+<h3 class="hssft">Authoring Templates</h3>
+<p>The template files are XML configuration files that specify how the spreadsheet is to be structured,
+where data should be inserted, and how the data should be formatted.  It is possible (though not
+particularly useful) to create entire spreadsheets with multiple sheets, formulas, and rich styling
+using only the SsTemplates servlet and hssft templates files.  More often you'll want to bind your
+application data to your spreadsheet (<a href="#binding">described below</a>) to create spreadsheet
+reports of database queries or server side calculations.  This section describes how to create
+spreadsheet components from a few basic tags.  For a complete reference of all the available tags
+with their attributes and capabilities, see the <a href="tags/package-summary.html">tags package
+documentation</a>.</p>
+
+<h4 class="hssft">Workbooks</h4>
+<p>Every hssftemplate file begins with the {@link com.carbonfive.sst.tags.HssfWorkbookTag workbook}
+tag.  It is possible to load an existing spreadsheet to provide a template into which you can insert data.
+This is particularly handy when incorporating images or graphs into the spreadsheet; neither of which
+are currently supported by POI or SsTemplates.  To do so, specify the file in the templates attribute
+of the worksheet tag.  The template XLS file should be stored in your templates directory.</p>
+
+<h4 class="hssft">Sheets</h4>
+<p>Sheets appear as tabs at the bottom of the spreadsheet and allow you to contain multiple related
+spreadsheets within a single workbook (xls) file.  To create a new sheet in your template, add a
+{@link com.sivoh.hssftemplates.HSSFSheetTag sheet} tag.  All data tags (rows and cells) within the
+sheet tag will appear on that sheet.  The sheet tag has ann optional name attribute that specifies
+the name that appears in the tab at the bottom.</p>
+
+<h4 class="hssft">Rows</h4>
+<p>The {@link com.sivoh.hssftemplates.HSSFRowTag row} tag places the editing context within a
+specific row within the spreadsheet.  That is to say all cell tag data contained within the row
+tag will be rendered on the corresponding row in the spreadsheet.  If the row's index attribute
+is unspecified, it will represent either the first row or the row after the row represented by
+the last row tag.  If you do specify an index, the index specifies the row (starting with 1) for
+the current tag, and all subsequent row tags without indexes will follow this index. For example,
+the template:
+<code class="example">&lt;workbook&gt;&lt;sheet&gt;
+  &lt;row&gt;&lt;cell&gt;Apples&lt;/cell&gt;&lt;/row&gt;
+  &lt;row index="3"&gt;&lt;cell&gt;Bananas&lt;/cell&gt;&lt;/row&gt;
+  &lt;row&gt;&lt;cell&gt;Cantaloupe&lt;/cell&gt;&lt;/row&gt;
+&lt;/sheet&gt;&lt;/workbook&gt;</code>
+Will produce the spreadsheet:
+<table class="example">
+  <tr><th class="example">&nbsp;</th><th class="example">A</th><th class="example">B</th></tr>
+  <tr><th class="example">1</th><td class="example">Apples</td><td class="example">&nbsp;</td></tr>
+  <tr><th class="example">2</th><td class="example">&nbsp;</td><td class="example">&nbsp;</td></tr>
+  <tr><th class="example">3</th><td class="example">Bananas</td><td class="example">&nbsp;</td></tr>
+  <tr><th class="example">4</th><td class="example">Cantaloupe</td><td class="example">&nbsp;</td></tr>
+</table>
+</p>
+
+<h4 class="hssft">Cells</h4>
+<p>All data and formulas displayed in the spreadsheet are contained as body content within a
+{@link com.sivoh.hssftemplates.HSSFCellTag cell} tag.  Like the row tag, the position of the
+cell tag within the spreadsheet may either be specified explicitly with the column attribute or defaulted
+to the cell to the right of the previous cell tag in the row.  Each cell has a type which can be
+"numeric", "string", "formula", "blank", "boolean", or "error" (the last three are seldom used).  The
+default is "string" which adds the content to the spreadsheet as litteral data.  If you want to be
+able format or peform calculations on numeric values, you must use the "numeric" type.  Using the
+"formula" type, you can enter any valid Excel formula.  Formulas should be entered
+<strong>without</strong> the preceeding "=".</p>
+
+<p>Cells can span spreadsheet columns and rows much like the td tag can span columns or rows in an HTML table.  In
+fact, cells use the same colspan and rowspan attributes to accomplish this.  If a cell spans columns, the next cell
+(without a column attribute) will be located after the span, and a cell that spans rows will force cell tags in the
+next row to skip the column(s) occupied by the span.  For example, the template:
+<code class="example">&lt;workbook&gt;&lt;sheet&gt;
+  &lt;row&gt;&lt;cell rowspan="2"&gt;Apples&lt;/cell&gt;&lt;cell&gt;Fuji&lt;/cell&gt;&lt;cell type="numeric"&gt;23.00&lt;/cell&gt;&lt;/row&gt;
+  &lt;row&gt;&lt;cell&gt;Red Delicious&lt;/cell&gt;&lt;cell type="numeric"&gt;41.00&lt;/cell&gt;&lt;/row&gt;
+  &lt;row&gt;&lt;cell colspan="2"&gt;Bananas&lt;/cell&gt;&lt;cell type="numeric"&gt;34.00&lt;/cell&gt;&lt;/row&gt;
+  &lt;row&gt;&lt;cell colspan="2"&gt;Cantaloupe&lt;/cell&gt;&lt;cell type="numeric"&gt;15.00&lt;/cell&gt;&lt;/row&gt;
+  &lt;row&gt;&lt;cell column="3" type="formula"&gt;sum(C1:c4)&lt;/cell&gt;&lt;/row&gt;
+&lt;/sheet&gt;&lt;/workbook&gt;</code>
+returns the spreadsheet:
+<table class="example">
+  <tr><th class="example">&nbsp;</th><th class="example">A</th><th class="example">B</th><th class="example">C</th></tr>
+  <tr><th class="example">1</th><td class="example" rowspan="2">Apples</td><td class="example">Fuji</td><td class="example">23</td></tr>
+  <tr><th class="example">2</th><td class="example">Red Delicious</td><td class="example">41</td></tr>
+  <tr><th class="example">3</th><td class="example" colspan="2">Bananas</td><td class="example">34</td></tr>
+  <tr><th class="example">4</th><td class="example" colspan="2">Cantaloupe</td><td class="example">15</td></tr>
+  <tr><th class="example">5</th><td class="example">&nbsp;</td><td class="example">&nbsp;</td><td class="example">113</td></tr>
+</table>
+</p>
+
+<h4 class="hssft">Styles</h4>
+<p>The style tag configures all visual aspects of the spreadsheet including font, color, spacing,
+data format, and borders.  Please look at the
+{@link com.carbonfive.sst.tags.HssfStyleTag style tag documentation} for a complete list of the style
+tag's attributes and their values.  Styles can be applied to tags either by enclosing the cell tags
+within a style tag or by specifying the name of previously defined style in the 'style' attribute
+of the sheet, row, or cell tag.  Using the latter method, it is possible to specify more than one
+style per cell by separating the names of those styles with spaces.  Much like css classes, the
+attributes of the right-most style(s) will over-ride the attributes of the left-most.  For example,
+both
+<code class="example">&lt;worksheet&gt;&lt;sheet&gt;
+  &lt;style foreground="blue" italic="true"&gt;
+    &lt;row&gt;&lt;cell&gt;Apples&lt;/cell&gt;&lt;/row&gt;
+  &lt;/style&gt;
+  &lt;style foreground="green" italic="true" fontWeight="bold"&gt;
+    &lt;row&gt;&lt;cell&gt;Bananas&lt;/cell&gt;&lt;/row&gt;
+  &lt;/style&gt;
+  &lt;style font-weight="bold"&gt;
+    &lt;row&gt;&lt;cell&gt;Cantaloupe&lt;/cell&gt;&lt;/row&gt;
+  &lt;/style&gt;
+&lt;/sheet&gt;&lt;/workbook&gt;</code>
+and
+<code class="example">&lt;worksheet&gt;&lt;sheet&gt;
+  &lt;style name="blue-style" foreground="blue" italic="true"/&gt;
+  &lt;style name="bold-style" foreground="green" fontWeight="bold"/&gt;
+  &lt;row&gt;&lt;cell style="blue-style"&gt;Apples&lt;/cell&gt;&lt;/row&gt;
+  &lt;row&gt;&lt;cell style="blue-style bold-style"&gt;Bananas&lt;/cell&gt;&lt;/row&gt;
+  &lt;row&gt;&lt;cell style="bold-style"&gt;Cantaloupe&lt;/cell&gt;&lt;/row&gt;
+&lt;/sheet&gt;&lt;/worksheet&gt;</code>
+will produce the same spreadsheet:
+<table class="example">
+  <tr><th class="example">&nbsp;</th><th class="example">A</th><th class="example">B</th></tr>
+  <tr><th class="example">1</th><td class="example" style="color:blue;font-style:italic;">Apples</td><td class="example">&nbsp;</td></tr>
+  <tr><th class="example">2</th><td class="example" style="color:green;font-style:italic;font-weight: bold;">Bananas</td><td class="example">&nbsp;</td></tr>
+  <tr><th class="example">3</th><td class="example" style="color:green;font-weight:bold;">Cantaloupe</td><td class="example">&nbsp;</td></tr>
+</table>
+</p>
+
+<h4 class="hssft">Includes</h4>
+<p>The {@link com.carbonfive.sst.tags.HssfIncludeTag include tag} allows the developer to import template
+code from another file.  The include tag must have a template attribute that specifies the path to the template
+file relative to the template directory provided in the servlet configuration.  Note that included template files
+cannot be specified relative to the including template file and that the starting slash of the template path is
+optional (eg. if the template directory is '/t' and a template file '/t/ex/a.html' contains an include to 'b.html',
+the HssfTemplate will try to include '/t/b.html' not '/t/ex/b.html'). Included files always start with
+&lt;template&gt; rather than &lt;workbook&gt;.
+</p>
+
+<p> When a template file is included, its tags are executed in exactly the same context as if they had been cut and
+pasted into the including template.  This means that included cell tags will default to then increment the current
+column, row tags will default to then increment the currrent row, all styles defined before the include tag will be
+available to the included tags, and all styles defined within the included file will be available after the include
+tag. Included files can be shared amongst multiple templates.  This capability can be used to create something akin to
+a css stylesheet by creating a file that contains nothing but named style tags and including it at the top of every
+template.  If a template called apple-description.hssft (in the template directory) contains:
+<code class="example">&lt;template&gt;
+  &lt;cell style="description"&gt;Red Fruit&lt;/cell&gt;
+&lt;/template&gt;</code>
+then the following file:
+<code class="example">&lt;workbook&gt;&lt;sheet&gt;
+  &lt;style name="description" italic="true"/&gt;
+  &lt;row&gt;
+    &lt;cell&gt;Apples&lt;/cell&gt;&lt;include template="apple-description.sst"/&gt;
+  &lt;/row&gt;
+&lt;/sheet&gt;&lt;/workbook&gt;</code>
+will produce the following spreadsheet:
+<table class="example">
+  <tr><th class="example">&nbsp;</th><th class="example">A</th><th class="example">B</th></tr>
+  <tr><th class="example">1</th><td class="example">Apples</td><td class="example" style="font-style:italic;">Red Fruit</td></tr>
+  <tr><th class="example">2</th><td class="example">&nbsp;</td><td class="example">&nbsp;</td></tr>
+</table>
+</p>
+
+<h3 class="hssft"><a name="binding">Binding Application Data to Spreadsheet Cells and Display Attributes</a></h3>
+<p>
+The ability to dynamically create spreadsheets means little without the ability to bind data from some
+other application source into the spreadsheet.  SsTemplates combines the EL scripting language with two
+'logic' tags to support a wide variety of display logic tasks without requiring a long learning curve or excessive
+system complexity.  HssfTemplate scripting is analogous and intentionally similar to JSP 2.0 scripting (without the
+capacity to inline Java) and should be second nature to developers familiar with EL and JSTL or Struts tags.
+</p>
+
+<h4 class="hssft"><a name="el">EL Expressions</a></h4>
+<p>
+All SsTemplates tags process their attributes as EL expressions, and the &lt;cell&gt; tag processes its body
+content as an EL expression as well.  EL expressions are strings that may contain escaped sequences of JSP
+Expresion Language (EL), and EL is a simple script that provides access to application data's bean properties
+and permits some basic operations on that data. A complete description of EL is beyond the scope of this document,
+but the <a href="http://jcp.org/aboutJava/communityprocess/final/jsr152/index.html">JSP 2.0 Specification</a>, a
+<a href="http://java.sun.com/developer/technicalArticles/javaserverpages/JSP20/">tutorial from Sun</a>, and a
+<a href="http://otn.oracle.com/pub/articles/cioroianu_jspapi.html">tutorial from Oracle</a> should provide a
+complete understanding of this relatively simple technology.
+</p>
+
+<p>
+EL uses a dot syntax to specify and retrieve bean properties, so that the expression,
+<code>"${apple.peel.color}"</code> locates a object named "apple" (we'll explain how it finds it later), calls
+the getPeel() method on this object, calls the getColor() method on the object returned by getPeel(), then
+converts the getColor() return value to a string which is the result.  EL also supports a bracket syntax, so
+the expression <code>"${apple['peel']['color']</code> is equivalent to the above.  EL also provides special
+support for Java Maps and Collections.  Map contents can be accessed using either the dot or bracket syntax.
+If the <code>apple</code> object has a property <code>surfaceProperties</code> that returns a Map, you can
+retrieve the texture of the object with the expressions <code>"${apple.surfaceProperties['texture']}"</code> or
+<code>"${apple.surfaceProperties.texture}"</code>.  EL can index into an array by putting an integer index within
+brackets.  For example, if the apple has a Collection of <code>Seed</code> objects, each of which has a
+<code>size</code> property, we can retrieve the size of the third (zero indexed) seed with the expression
+<code>"${apple.seeds[2].size}"</code>.
+</p>
+
+<p>
+EL also defines operators to perform basic arithmetic and logical operations on one or more expression values.
+The expression <code>"${apple.seeds[0].size > cantaloupe.seeds[0].size}"</code> performs a rather unscientific
+botanical experiment and returns the strings "true" or "false" as a result.  The expression
+<code>"${rowIndex % 2 == 0}"</code> determines if a number stored as "rowIndex" is even or odd.
+</p>
+</body>
+</html>

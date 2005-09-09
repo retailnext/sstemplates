@@ -1,0 +1,7 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Cell Test">
+    <row>
+      <cell>Test Cell Contents</cell>
+    </row>
+  </sheet>
+</workbook>

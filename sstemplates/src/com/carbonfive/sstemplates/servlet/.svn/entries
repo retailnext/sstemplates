@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   revision="2131"
+   url="https://logan.carbonfive.com/svn/c5/entreevous/trunk/src/com/sivoh/hssftemplates/servlet"
+   last-author="mike"
+   uuid="676f1931-12fe-0310-9eae-c624df38c41a"
+   committed-date="2005-08-12T21:13:00.000000Z"
+   kind="dir"
+   name=""
+   committed-rev="1283"/>
+<entry
+   checksum="44658afd502c19b68b8d8b2ab6f96e81"
+   last-author="mike"
+   prop-time="2005-08-17T17:58:09.000000Z"
+   text-time="2005-08-17T17:58:09.000000Z"
+   committed-date="2005-08-12T21:13:00.000000Z"
+   kind="file"
+   name="HssfServletTemplateProcessor.java"
+   committed-rev="1283"/>
+<entry
+   checksum="6539820e6a0d07386b2f511b73d1f079"
+   last-author="mike"
+   prop-time="2005-08-17T17:58:09.000000Z"
+   text-time="2005-08-17T17:58:09.000000Z"
+   committed-date="2005-08-12T21:13:00.000000Z"
+   kind="file"
+   name="HssfTemplateServlet.java"
+   committed-rev="1283"/>
+<entry
+   checksum="f8d5f38626bec265ea00fc4bab8ba968"
+   last-author="mike"
+   prop-time="2005-08-17T17:58:09.000000Z"
+   text-time="2005-08-17T17:58:09.000000Z"
+   committed-date="2005-08-12T21:13:00.000000Z"
+   kind="file"
+   name="HssfTemplateServletBaseTest.java"
+   committed-rev="1283"/>
+<entry
+   checksum="86ec0f0f6b89b98ff6d4ef45ff4ff6ed"
+   last-author="mike"
+   prop-time="2005-08-17T17:58:09.000000Z"
+   text-time="2005-08-17T17:58:09.000000Z"
+   committed-date="2005-08-12T17:52:11.000000Z"
+   kind="file"
+   name="HssfTemplateServletContext.java"
+   committed-rev="1281"/>
+<entry
+   checksum="be3ea880769afbd06c6ae5349f81d506"
+   last-author="mike"
+   prop-time="2005-08-17T17:58:09.000000Z"
+   text-time="2005-08-17T17:58:09.000000Z"
+   committed-date="2005-08-12T21:13:00.000000Z"
+   kind="file"
+   name="HssfTemplateServletTest.java"
+   committed-rev="1283"/>
+</wc-entries>

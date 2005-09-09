@@ -1,0 +1,11 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 11">
+    <row>
+      <forEach var="fn" items="${paramValues.fn}">
+        <style fontName="${pageScope.fn}">
+          <cell>1</cell>
+        </style>
+      </forEach>
+    </row>
+  </sheet>
+</workbook>

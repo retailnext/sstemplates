@@ -1,0 +1,11 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Style Test 7">
+    <row>
+      <forEach var="pattern" items="${paramValues.pattern}">
+        <style fillPattern="${pageScope.pattern}">
+          <cell>1</cell>
+        </style>
+      </forEach>
+    </row>
+  </sheet>
+</workbook>

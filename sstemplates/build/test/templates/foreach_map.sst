@@ -1,0 +1,10 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="ForEach Test 6">
+    <forEach var="item" items="${items}">
+      <row>
+        <cell>${item.key}</cell>
+        <cell>${item.value}</cell>
+      </row>
+    </forEach>
+  </sheet>
+</workbook>
