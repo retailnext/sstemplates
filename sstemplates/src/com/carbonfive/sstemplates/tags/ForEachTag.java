@@ -42,9 +42,13 @@ public class ForEachTag extends BaseTag
 
     String parsedVar = (String) parseExpression(var, String.class, context);
     String parsedVarStatus = (String) parseExpression(varStatus, String.class, context);
-    Integer parsedBegin = (Integer) parseExpression(begin, Integer.class, context);
-    Integer parsedEnd = (Integer) parseExpression(end, Integer.class, context);
-    Integer parsedStep = (Integer) parseExpression(step, Integer.class, context);
+    Integer parsedBeginValue = (Integer) parseExpression(begin, Integer.class, context);
+    Integer parsedEndValue = (Integer) parseExpression(end, Integer.class, context);
+    Integer parsedStepValue = (Integer) parseExpression(step, Integer.class, context);
+
+    int parsedBegin = parsedBeginValue == null ? 0 : parsedBeginValue.intValue();
+    int parsedEnd   = parsedEndValue   == null ? 0 : parsedEndValue.intValue();
+    int parsedStep  = parsedStepValue  == null ? 0 : parsedStepValue.intValue();
 
     String parsedIndexVariable = (String) parseExpression(indexVariable, String.class, context);
 
@@ -64,7 +68,7 @@ public class ForEachTag extends BaseTag
       Object current = it.next();
       if (var != null) context.setPageVariable(parsedVar, current);
       if (varStatus != null) context.setPageVariable(parsedVarStatus, varStatusObj);
-      if (indexVariable != null) context.setPageVariable(parsedIndexVariable, varStatusObj.getIndex());
+      if (indexVariable != null) context.setPageVariable(parsedIndexVariable, new Integer(varStatusObj.getIndex()));
       renderChildren(context);
 
       for (int s = 1; s < parsedStep && it.hasNext(); s++) { it.next(); i++; }

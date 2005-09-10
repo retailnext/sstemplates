@@ -1,0 +1,23 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <style name="label" fontWeight="bold"/>
+  <style name="money" dataFormat="$0.00"/>
+
+  <sheet name="Formula Spreadsheet">
+    <row>
+      <cell style="label">January</cell>
+      <cell style="money" type="numeric">1.99</cell>
+    </row>
+    <row>
+      <cell style="label">February</cell>
+      <cell style="money" type="numeric">2.09</cell>
+    </row>
+    <row>
+      <cell style="label">March</cell>
+      <cell style="money" type="numeric">3</cell>
+    </row>
+    <row>
+      <cell style="label">Total</cell>
+      <cell style="money" type="formula">sum(B1:B3)</cell>
+    </row>
+  </sheet>
+</workbook>

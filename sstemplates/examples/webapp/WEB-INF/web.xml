@@ -6,10 +6,6 @@
   <servlet-name>SsTemplateServlet</servlet-name>
   <servlet-class>com.carbonfive.sstemplates.servlet.SsTemplateServlet</servlet-class>
   <load-on-startup>1</load-on-startup>
-  <init-param>
-    <param-name>templatesDirectory</param-name>
-    <param-value>/templates</param-value>
-  </init-param>
 </servlet>
 
 <servlet-mapping>

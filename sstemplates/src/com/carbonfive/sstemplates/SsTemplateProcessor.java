@@ -55,7 +55,7 @@ public class SsTemplateProcessor
       throws SsTemplateException
   {
     this.customTags = customTags;
-    configureDigester(getHssfTemplateTags());
+    configureDigester(getTags());
   }
 
   public HSSFWorkbook process(File templateFile, Map context)
@@ -125,7 +125,7 @@ public class SsTemplateProcessor
     digester.addCallMethod("*/cell","setContents",0);
   }
 
-  public List getHssfTemplateTags()
+  public List getTags()
   {
     List tags = new ArrayList();
 

@@ -1,7 +1,7 @@
 <workbook xmlns="http://carbonfive.com/schema/sstemplates">
   <sheet name="Style Test 5">
     <row>
-      <forEach var="dataFormat" collection="${formats}">
+      <forEach var="dataFormat" items="${formats}">
         <style dataFormat="${pageScope.dataFormat}">
           <cell>1</cell>
         </style>

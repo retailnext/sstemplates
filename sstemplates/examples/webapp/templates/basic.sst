@@ -1,0 +1,7 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Basic Spreadsheet">
+    <row>
+      <cell>Text in a cell</cell>
+    </row>
+  </sheet>
+</workbook>

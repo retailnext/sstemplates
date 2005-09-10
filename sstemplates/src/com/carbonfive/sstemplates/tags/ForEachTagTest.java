@@ -96,7 +96,7 @@ public class ForEachTagTest extends TagTestBase
 
   public void testForEachArray() throws Exception
   {
-    Object[] arr = new Object[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    Object[] arr = new Object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
     Map attrs = new HashMap();
     attrs.put("items", arr);
     SsTemplateContext templateContext = renderWorkbook("foreach_status.sst", attrs);

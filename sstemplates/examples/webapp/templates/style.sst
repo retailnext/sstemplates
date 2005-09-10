@@ -1,0 +1,19 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates"
+          bgcolor="#FFFFFF">
+
+  <style name="header" fontColor="green" fontWeight="bold"
+         foreground="#C9C9C9" fillPattern="solid-foreground"/>
+  <style name="highlight" border="medium-dashed" borderColor="blue"/>
+
+  <sheet name="Styled Spreadsheet">
+    <row>
+      <cell style="header" colspan="3">Styles Example</cell>
+    </row>
+    <row/>
+    <row>
+      <cell style="highlight">Value 1</cell>
+      <cell>Value 2</cell>
+      <cell style="highlight">Value 3</cell>
+    </row>
+  </sheet>
+</workbook>

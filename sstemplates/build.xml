@@ -1,12 +1,12 @@
-<project name="sst" default="usage" basedir=".">
+<project name="sstemplates" default="usage" basedir=".">
 <!-- YO -->
   <target name="usage" depends="init">
     <echo>
 compile - compiles source
-deploy  - creates runnable webapp
-data    - populate database defined in local.properties
-test    - runs unit test suite against test.properties
-dist    - builds distribution including war file
+jar     - builds project jar
+test    - runs unit test suite
+deploy  - creates runnable webapp in ${dist.webapp}
+dist    - builds binary and source distribution
 clean   - removes all generated files
 
 NOTE: you must create a test.properties file for your environment.
@@ -27,10 +27,11 @@ To start fresh, type:
     <tstamp/>
 
     <property name="project.root"       value="${basedir}"/>
+    <property file="${project.root}/build.properties"/>
 
     <property name="core.src"           value="${project.root}/src"/>
     <property name="core.lib"           value="${project.root}/lib"/>
-    <property name="core.etc"           value="${project.root}/etc"/>
+    <property name="core.doc"           value="${project.root}/doc"/>
     <property name="core.resources"     value="${project.root}/resources"/>
 
     <property name="build.root"         value="${project.root}/build"/>
@@ -52,7 +53,7 @@ To start fresh, type:
     <property name="dist.tests"         value="${deployDir}/tests"/>
     <property name="dist.metrics"       value="${deployDir}/metrics"/>
     <property name="dist.coverage"      value="${deployDir}/coverage"/>
-    <property name="dist.api"           value="${deployDir}/api"/>
+    <property name="dist.doc"           value="${deployDir}/doc"/>
 
     <property name="webapp.deploy"      value="${deployDir}/webapp"/>
 
@@ -104,7 +105,7 @@ webapp.deploy       = ${webapp.deploy}
   </target>
 
   <target name="jar" depends="compile">
-    <jar destfile="${dist.root}/sst.jar">
+    <jar destfile="${dist.root}/${ant.project.name}-${build.version}.jar">
       <fileset dir="${build.classes}">
         <exclude name="**/*.xml"/>
         <exclude name="**/*Test.class"/>
@@ -112,12 +113,10 @@ webapp.deploy       = ${webapp.deploy}
     </jar>
   </target>
 
-  <target name="prepare-deploy" depends="init">
+  <target name="deploy" depends="jar">
+
     <mkdir dir="${webapp.deploy}"/>
     <mkdir dir="${webapp.deploy}/WEB-INF"/>
-  </target>
-
-  <target name="deploy" depends="prepare-deploy, jar">
 
     <copy todir="${webapp.deploy}" preservelastmodified="true">
       <fileset dir="${web.root}">
@@ -134,57 +133,69 @@ webapp.deploy       = ${webapp.deploy}
     <copy todir="${webapp.deploy}/WEB-INF/lib">
       <fileset dir="${core.lib}"/>
       <fileset dir="${dist.root}">
-        <include name="sst.jar"/>
+        <include name="*.jar"/>
       </fileset>
     </copy>
 
   </target>
 
-  <target name="war" depends="deploy">
-  	<mkdir dir="${dist.root}"/>
-
-    <war destfile="${dist.root}/sst.war" webxml="${webapp.deploy}/WEB-INF/web.xml">
-      <fileset dir="${webapp.deploy}">
-        <exclude name="WEB-INF/web.xml"/>
-      </fileset>
-    </war>
-  </target>
-
-  <target name="clean" depends="prepare">
+  <target name="clean" depends="init">
     <delete dir="${build.work}" includeemptydirs="true"/>
     <delete dir="${dist.root}" includeemptydirs="true"/>
   </target>
 
-  <target name="dist" depends="clean, war">
+  <target name="dist" depends="dist-binary, dist-source"/>
+
+  <target name="dist-binary" depends="clean, deploy, javadoc">
 
     <echo file="${build.work}/README.txt">
-This is build number ${build.version} for Spread Sheet Templates (SST).
+This is build number ${build.version} for SsTemplates Spreadsheet Templates for Excel.
+See http://carbonfive.sourceforge.net/sstemplates/ for documentation.
     </echo>
 
-    <zip destfile="${dist.root}/${ant.project.name}-${build.version}.zip">
+    <copy todir="${dist.root}/doc">
+      <fileset dir="${core.doc}"/>
+    </copy>
+    <copy todir="${dist.root}/examples">
+      <fileset dir="${examples.root}"/>
+    </copy>
+    <copy todir="${dist.root}/examples/webapp/WEB-INF/lib">
+      <fileset dir="${core.lib}"/>
       <fileset dir="${dist.root}">
-        <include name="*.war"/>
-      </fileset>
-      <fileset file="${build.work}/README.txt"/>
-      <fileset dir="${core.etc}">
-        <include name="stage/**"/>
-        <include name="production/**"/>
-        <include name="data_migration.sql"/>
-        <include name="static/**"/>
-      </fileset>
-      <fileset dir="${build.work}">
-        <include name="schema.sql"/>
-      </fileset>
-    </zip>
-
-    <copy todir="${dist.root}">
-      <filterset>
-        <filter token="build.version" value="${build.version}"/>
-      </filterset>
-      <fileset dir="${core.etc}">
-        <include name="deploy-*.sh"/>
+        <include name="*.jar"/>
       </fileset>
     </copy>
+
+    <property name="prefix" value="${ant.project.name}-${build.version}"/>
+
+    <zip destfile="${dist.root}/${prefix}.zip">
+      <zipfileset prefix="${prefix}" dir="${dist.root}">
+        <include name="*.jar"/>
+        <include name="examples/**"/>
+        <include name="doc/**"/>
+      </zipfileset>
+      <zipfileset prefix="${prefix}" file="${core.resources}/*.xsd"/>
+      <zipfileset prefix="${prefix}" file="${project.root}/LICENSE.txt"/>
+      <zipfileset prefix="${prefix}" file="${build.work}/README.txt"/>
+    </zip>
+
+  </target>
+
+  <target name="dist-source" depends="clean, prepare">
+
+    <echo file="${build.work}/README.txt">
+This is build number ${build.version} for SsTemplates Spreadsheet Templates for Excel.
+See http://carbonfive.sourceforge.net/sstemplates/ for documentation.
+    </echo>
+    <property name="src-prefix" value="${ant.project.name}-${build.version}-src"/>
+
+    <zip destfile="${dist.root}/${src-prefix}.zip">
+      <zipfileset prefix="${src-prefix}" dir="${project.root}">
+        <include name="**/*"/>
+        <exclude name="build/work/**"/>
+        <exclude name="dist/**"/>
+      </zipfileset>
+    </zip>
 
   </target>
 
@@ -233,21 +244,32 @@ This is build number ${build.version} for Spread Sheet Templates (SST).
   </target>
 
   <target name="javadoc" depends="prepare">
-  	<mkdir dir="${dist.api}"/>
+  	<mkdir dir="${dist.doc}/api"/>
 
-  	<javadoc destdir="${dist.api}"
+  	<javadoc destdir="${dist.doc}/api"
   	         access="public"
-  	         windowtitle="Spread Sheet Templates API">
+             stylesheetfile="${build.resources}/javadoc.css"
+             windowtitle="Spread Sheet Templates API">
       <classpath>
         <path refid="build.class.path"/>
         <pathelement location="${build.classes}" />
       </classpath>
       <fileset dir="${core.src}">
-        <include name="com/carbonfive/sst/**/*.java"/>
+        <include name="com/carbonfive/sstemplates/**/*.java"/>
         <exclude name="**/*Test.java"/>
+        <exclude name="**/*TestBase.java"/>
         <exclude name="**/*TestBean.java"/>
       </fileset>
     </javadoc>
+
+    <!-- According to http://java.sun.com/j2se/javadoc/writingdoccomments/#images
+         this should not be necessary but it appears to be
+         -->
+    <copy todir="${dist.doc}/api">
+      <fileset dir="${core.src}">
+        <include name="com/carbonfive/sstemplates/doc-files/**"/>
+      </fileset>
+    </copy>
 
   </target>
 

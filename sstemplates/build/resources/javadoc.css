@@ -1,0 +1,55 @@
+/* Javadoc style sheet */
+
+/* Define colors, fonts and other style attributes here to override the defaults */
+
+/* Page background color */
+body
+{
+  background-color: #FFFFFF;
+  font-family:verdana;
+  font-size:9pt;
+  line-height: 1.5
+  /*color:#666666;*/
+}
+
+a:link    { color:darkred; }
+a:visited { color:darkred; }
+a:active  { color:darkred; }
+a:hover   { color:#666666; }
+
+h2        { font-size:14pt; }
+h3        { font-size:12pt; }
+h4        { font-size:10pt; }
+
+/* Table colors */
+.TableHeadingColor     { background: #993300; color:white; }
+.TableSubHeadingColor  { background: #993300; color:white; }
+.TableRowColor         { background: #FFFFFF }
+
+/* Font used in left-hand frame lists */
+.FrameTitleFont   { font-size: 10pt; font-family: Helvetica, Arial, san-serif }
+.FrameHeadingFont { font-size: 10pt; font-family: Helvetica, Arial, san-serif }
+.FrameItemFont    { font-size: 10pt; font-family: Helvetica, Arial, san-serif }
+
+/* Example of smaller, sans-serif font in frames */
+/* .FrameItemFont  { font-size: 10pt; font-family: Helvetica, Arial, sans-serif } */
+
+/* Navigation bar fonts and colors */
+.NavBarCell1    { background-color:lightgray;}
+.NavBarCell1Rev { background-color:#993300;}
+.NavBarFont1    { font-family: Arial, Helvetica, sans-serif; color:#000000;}
+.NavBarFont1Rev { font-family: Arial, Helvetica, sans-serif; color:#FFFFFF;}
+
+.NavBarCell2    { font-family: Arial, Helvetica, sans-serif; background-color:#FFFFFF;}
+.NavBarCell3    { font-family: Arial, Helvetica, sans-serif; background-color:#FFFFFF;}
+
+/* Custom styles */
+
+.code           { background-color:lightgray; padding:6px; line-height: 1.3; }
+
+table.example    { border-collapse: collapse; }
+table.example td, table.example th
+{
+  padding:3px;
+  border:1px solid #999;
+}

@@ -28,7 +28,7 @@ public class SsTemplateServletTest
 
   public void testFindDefaultHssfTemplateTags() throws Exception
   {
-    List tags = getServlet().getProcessor().getHssfTemplateTags();
+    List tags = getServlet().getProcessor().getTags();
     assertTrue( "Finds at least one template tag", ! tags.isEmpty() );
 
     for (Iterator it = tags.iterator(); it.hasNext();)

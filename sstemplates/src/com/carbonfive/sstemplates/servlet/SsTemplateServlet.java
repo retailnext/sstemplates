@@ -32,7 +32,7 @@ public class SsTemplateServlet extends HttpServlet
       customTags = getCustomTags(config.getInitParameter(CUSTOM_TAGS_PARAM_KEY));
 
     this.context = config.getServletContext();
-    try { this.processor = ServletSsTemplateProcessor.getInstance(customTags); }
+    try { this.processor = (ServletSsTemplateProcessor) ServletSsTemplateProcessor.getInstance(customTags); }
     catch (SsTemplateException he) { throw new ServletException(he); }
 
     log.info("Spreadsheet Templates servlet initialized.");

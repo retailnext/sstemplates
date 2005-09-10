@@ -1,0 +1,19 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates"
+          bgcolor="#FFFFFF">
+  <sheet name="Formatted Spreadsheet">
+    <row>
+      <style fontColor="green" fontWeight="bold"
+             foreground="#C9C9C9" fillPattern="solid-foreground">
+        <cell colspan="3">Formatting Example</cell>
+      </style>
+    </row>
+    <row/>
+    <row>
+      <cell>Value 1</cell>
+      <style border="medium-dashed" borderColor="blue" dataFormat="$0.00">
+        <cell type="numeric">2</cell>
+      </style>
+      <cell>Value 3</cell>
+    </row>
+  </sheet>
+</workbook>

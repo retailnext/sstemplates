@@ -16,7 +16,7 @@ public class ServletSsTemplateProcessor
 
   private static Map processorCache = Collections.synchronizedMap(new HashMap());
 
-  public static ServletSsTemplateProcessor getInstance(Collection customTags)
+  public static SsTemplateProcessor getInstance(Collection customTags)
     throws SsTemplateException
   {
     ServletSsTemplateProcessor processor = (ServletSsTemplateProcessor) processorCache.get(customTags);

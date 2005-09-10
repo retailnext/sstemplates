@@ -1,8 +1,7 @@
 package com.carbonfive.sstemplates.tags;
 
-import org.apache.commons.logging.*;
-
 import java.beans.*;
+import org.apache.commons.logging.*;
 import com.carbonfive.sstemplates.*;
 
 public class SetTag
@@ -85,7 +84,7 @@ public class SetTag
         try
         {
           PropertyDescriptor pd = new PropertyDescriptor(parsedProperty, targetObject.getClass());
-          pd.getWriteMethod().invoke(targetObject, parsedValue);
+          pd.getWriteMethod().invoke(targetObject, new Object[] { parsedValue });
         }
         catch (IntrospectionException ie)
         {
