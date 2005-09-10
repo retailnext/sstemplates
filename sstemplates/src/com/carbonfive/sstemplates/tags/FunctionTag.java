@@ -25,15 +25,15 @@ public class FunctionTag extends BaseTag
     throws SsTemplateException
   {
     if ( name == null )
-      throw new SsTemplateException( "Iterator tag must have a name attribute" );
+      throw new SsTemplateException( "Function tag must have a name attribute" );
     String parsedName = (String) parseExpression(name,String.class,context);
 
     if ( clazz == null )
-      throw new SsTemplateException( "Iterator tag must have a class attribute" );
+      throw new SsTemplateException( "Function tag must have a class attribute" );
     String parsedClazz = (String) parseExpression(clazz,String.class,context);
 
     if ( methodName == null )
-      throw new SsTemplateException( "Iterator tag must have a methodName attribute" );
+      throw new SsTemplateException( "Function tag must have a methodName attribute" );
     String parsedMethodName = (String) parseExpression(methodName,String.class,context);
 
     String parsedParameterTypes = null;
@@ -87,12 +87,12 @@ public class FunctionTag extends BaseTag
     this.name = name;
   }
 
-  public String getClazz()
+  public String getClassName()
   {
     return clazz;
   }
 
-  public void setClazz(String clazz)
+  public void setClassName(String clazz)
   {
     this.clazz = clazz;
   }

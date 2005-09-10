@@ -146,7 +146,7 @@
 
   <xsd:complexType name="FunctionType">
     <xsd:attribute name="name" type='xsd:string' use="required"/>
-    <xsd:attribute name="clazz" type='xsd:string' use="required"/>
+    <xsd:attribute name="className" type='xsd:string' use="required"/>
     <xsd:attribute name="methodName" type='xsd:string' use="required"/>
     <xsd:attribute name="parameterTypes" type='xsd:string' use="optional"/>
   </xsd:complexType>
