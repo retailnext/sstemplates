@@ -192,19 +192,21 @@ When using SsTemplates in a servlet container, an SST file has access to the sam
 <code>el.sst</code>
 
 <pre class="code">
-&lt;workbook>
-  &lt;set var="name" value="${empty param.name ? 'Bob' : param.name}"/>
+&lt;workbook xmlns="http://carbonfive.com/schema/sstemplates">
   &lt;set var="exists" value="${!empty param.name}"/>
-  
+
   &lt;sheet name="EL Spreadsheet">
     &lt;row>
-      &lt;if test="${exists}">
-        &lt;cell>Name param provided:&lt;/cell>
-      &lt;/if>
       &lt;if test="${!exists}">
         &lt;cell>Default name:&lt;/cell>
+        &lt;cell>John&lt;/cell>
       &lt;/if>
-      &lt;cell>${name}&lt;/cell>
+      &lt;if test="${exists}">
+        &lt;cell>Provided names:&lt;/cell>
+        &lt;forEach var="name" items="${paramValues.name}">
+          &lt;cell>${name}&lt;/cell>
+        &lt;/forEach>
+      &lt;/if>
     &lt;/row>
   &lt;/sheet>
 &lt;/workbook>
@@ -214,7 +216,7 @@ When using SsTemplates in a servlet container, an SST file has access to the sam
 <img src="doc-files/el-1.png" alt="EL Example">
 </p>
 
-<code>el.sst?name=Sue</code>
+<code>el.sst?name=Sue&name=Bob</code>
 
 <p>
 <img src="doc-files/el-2.png" alt="EL Example">

@@ -1,16 +1,18 @@
 <workbook xmlns="http://carbonfive.com/schema/sstemplates">
-  <set var="name" value="${empty param.name ? 'Bob' : param.name}"/>
   <set var="exists" value="${!empty param.name}"/>
 
   <sheet name="EL Spreadsheet">
     <row>
-      <if test="${exists}">
-        <cell>Name param provided:</cell>
-      </if>
       <if test="${!exists}">
         <cell>Default name:</cell>
+        <cell>John</cell>
       </if>
-      <cell>${name}</cell>
+      <if test="${exists}">
+        <cell>Provided names:</cell>
+        <forEach var="name" items="${paramValues.name}">
+          <cell>${name}</cell>
+        </forEach>
+      </if>
     </row>
   </sheet>
 </workbook>
