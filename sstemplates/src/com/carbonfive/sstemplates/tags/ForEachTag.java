@@ -1,7 +1,8 @@
 package com.carbonfive.sstemplates.tags;
 
-import java.util.*;
 import com.carbonfive.sstemplates.*;
+
+import java.util.*;
 
 /**
  * 
@@ -34,12 +35,6 @@ public class ForEachTag extends BaseTag
   public void render( SsTemplateContext context )
     throws SsTemplateException
   {
-    //if ( var == null )
-    //  throw new SsTemplateException("ForEach tag must have a 'var' attribute");
-
-    //if (items == null)
-    //  throw new SsTemplateException("ForEach tag must have an 'items' attribute");
-
     String parsedVar = (String) parseExpression(var, String.class, context);
     String parsedVarStatus = (String) parseExpression(varStatus, String.class, context);
     Integer parsedBeginValue = (Integer) parseExpression(begin, Integer.class, context);
@@ -71,6 +66,7 @@ public class ForEachTag extends BaseTag
       if (indexVariable != null) context.setPageVariable(parsedIndexVariable, new Integer(varStatusObj.getIndex()));
       renderChildren(context);
 
+      i++;
       for (int s = 1; s < parsedStep && it.hasNext(); s++) { it.next(); i++; }
       varStatusObj.inc();
     }

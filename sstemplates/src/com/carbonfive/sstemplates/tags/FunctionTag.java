@@ -1,8 +1,9 @@
 package com.carbonfive.sstemplates.tags;
 
+import com.carbonfive.sstemplates.*;
+
 import java.lang.reflect.*;
 import java.util.*;
-import com.carbonfive.sstemplates.*;
 
 /**
  * 
@@ -29,7 +30,7 @@ public class FunctionTag extends BaseTag
     String parsedName = (String) parseExpression(name,String.class,context);
 
     if ( clazz == null )
-      throw new SsTemplateException( "Function tag must have a class attribute" );
+      throw new SsTemplateException( "Function tag must have a className attribute" );
     String parsedClazz = (String) parseExpression(clazz,String.class,context);
 
     if ( methodName == null )
