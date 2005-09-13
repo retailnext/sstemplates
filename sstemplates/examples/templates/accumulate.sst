@@ -1,7 +1,6 @@
 <workbook xmlns="http://carbonfive.com/schema/sstemplates">
   <sheet name="Accumulator Example">
     <row>
-
       <cell type="numeric" accumulator="sum">1</cell>
       <cell type="numeric" accumulator="sum">2</cell>
       <cell type="numeric" accumulator="sum">4</cell>
