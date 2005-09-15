@@ -1,15 +1,15 @@
 package com.carbonfive.sstemplates;
 
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
+import com.carbonfive.sstemplates.tags.*;
 import org.apache.commons.digester.*;
 import org.apache.poi.hssf.usermodel.*;
 import org.xml.sax.*;
-import com.carbonfive.sstemplates.tags.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.logging.*;
 
 /**
- * 
  * @author sivoh
  * @version $REVISION
  */
@@ -19,9 +19,9 @@ public class SsTemplateProcessor
 
   private static final Class[] DEFAULT_TAGS = new Class[]
     { SheetTag.class, RowTag.class, CellTag.class, ForEachTag.class, IfTag.class,
-      IncludeTag.class, StyleTag.class, DefineTag.class, FunctionTag.class,
+      IncludeTag.class, StyleTag.class, FunctionTag.class,
       WhileTag.class, RowBreakTag.class, DefaultStyleTag.class, SetTag.class,
-      IteratorTag.class
+      ChooseTag.class, WhenTag.class, OtherwiseTag.class
     };
 
   private Digester   digester = null;
@@ -82,7 +82,7 @@ public class SsTemplateProcessor
   protected Collection parseIncludeFile(File templateFile)
       throws SsTemplateException
   {
-    if (( ! templateFile.exists() ) || ( ! templateFile.getName().endsWith(".sst")))
+    if ( ! templateFile.exists() )
     {
       throw new SsTemplateException( "Could not find template file: " + templateFile);
     }
@@ -118,7 +118,7 @@ public class SsTemplateProcessor
 
       digester.addObjectCreate("*/" + tag.getTagName(), tag.getClass() );
       digester.addSetProperties("*/" + tag.getTagName());
-      digester.addSetNext("*/" + tag.getTagName(), "addHssfTag" );
+      digester.addSetNext("*/" + tag.getTagName(), "addChildTag" );
     }
 
     // add special rull to add content to cell

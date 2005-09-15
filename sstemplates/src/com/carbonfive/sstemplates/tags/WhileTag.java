@@ -31,12 +31,4 @@ public class WhileTag extends BaseTag
   {
     this.test = test;
   }
-
-  /**
-   * @deprecated
-   */
-  public void setCondition(String condition)
-  {
-    setTest(condition);
-  }
 }

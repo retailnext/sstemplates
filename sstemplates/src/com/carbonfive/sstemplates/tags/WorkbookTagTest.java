@@ -37,7 +37,7 @@ public class WorkbookTagTest
     WorkbookTag workbookTag = getRenderTree("workbook_test2.sst");
 
     TestContextTag testTag = new TestContextTag(this);
-    workbookTag.addHssfTag(testTag);
+    workbookTag.addChildTag(testTag);
 
     workbookTag.render(getHssfTemplateContext());
     assertTrue( "Workbook tag rendered children", testTag.hasTagBeenRendered());

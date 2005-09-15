@@ -10,8 +10,8 @@ import com.carbonfive.sstemplates.*;
 public class IfTag extends BaseTag
 {
   protected String test;
-  private String var;
-  private String scope = "page";
+  protected String var;
+  protected String scope = "page";
 
   public String getTagName()
   {
@@ -39,14 +39,6 @@ public class IfTag extends BaseTag
     {
       if ( parsedTest.booleanValue() ) renderChildren(context);
     }
-  }
-
-  /**
-   * @deprecated Use 'test' attribute instead.
-   */
-  public void setCondition(String condition)
-  {
-    setTest(condition);
   }
 
   public void setTest(String test)

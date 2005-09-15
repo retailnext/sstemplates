@@ -12,13 +12,15 @@
       <xsd:element name="style"     type="StyleType"/>
       <xsd:element name="sheet"     type="SheetType"/>
       <xsd:element name="set"       type="SetType"/>
-      <xsd:element name="forEach"   type="ForEachType"/>
       <xsd:element name="if"        type="IfType"/>
+      <xsd:element name="choose"    type="ChooseType"/>
+      <xsd:element name="forEach"   type="ForEachType"/>
+      <xsd:element name="while"     type="WhileType"/>
       <xsd:element name="include"   type="IncludeType"/>
       <xsd:element name="function"  type="FunctionType"/>
     </xsd:choice>
     <xsd:attribute name="template" type="xsd:string" use="optional"/>
-    <xsd:attribute name="bgcolor" type="xsd:string" use="optional"/>
+    <xsd:attribute name="bgcolor"  type="xsd:string" use="optional"/>
   </xsd:complexType>
 
   <xsd:complexType name="SheetType">
@@ -26,39 +28,41 @@
       <xsd:element name="style"    type="StyleType"/>
       <xsd:element name="row"      type="RowType"/>
       <xsd:element name="set"      type="SetType"/>
-      <xsd:element name="forEach"  type="ForEachType"/>
       <xsd:element name="if"       type="IfType"/>
+      <xsd:element name="choose"   type="ChooseType"/>
+      <xsd:element name="forEach"  type="ForEachType"/>
+      <xsd:element name="while"    type="WhileType"/>
       <xsd:element name="include"  type="IncludeType"/>
       <xsd:element name="rowbreak" type="RowbreakType"/>
     </xsd:choice>
-    <xsd:attribute name="name" type="xsd:string" use="required"/>
-    <xsd:attribute name="style" type="xsd:string" use="optional"/>
-    <xsd:attribute name="marginTop" type="xsd:string" use="optional"/>
-    <xsd:attribute name="marginBottom" type="xsd:string" use="optional"/>
-    <xsd:attribute name="marginLeft" type="xsd:string" use="optional"/>
-    <xsd:attribute name="marginRight" type="xsd:string" use="optional"/>
-    <xsd:attribute name="marginHeader" type="xsd:string" use="optional"/>
-    <xsd:attribute name="marginFooter" type="xsd:string" use="optional"/>
-    <xsd:attribute name="repeatRowFrom" type="xsd:string" use="optional"/>
-    <xsd:attribute name="repeatRowTo" type="xsd:string" use="optional"/>
+    <xsd:attribute name="name"             type="xsd:string" use="required"/>
+    <xsd:attribute name="style"            type="xsd:string" use="optional"/>
+    <xsd:attribute name="marginTop"        type="xsd:string" use="optional"/>
+    <xsd:attribute name="marginBottom"     type="xsd:string" use="optional"/>
+    <xsd:attribute name="marginLeft"       type="xsd:string" use="optional"/>
+    <xsd:attribute name="marginRight"      type="xsd:string" use="optional"/>
+    <xsd:attribute name="marginHeader"     type="xsd:string" use="optional"/>
+    <xsd:attribute name="marginFooter"     type="xsd:string" use="optional"/>
+    <xsd:attribute name="repeatRowFrom"    type="xsd:string" use="optional"/>
+    <xsd:attribute name="repeatRowTo"      type="xsd:string" use="optional"/>
     <xsd:attribute name="repeatColumnFrom" type="xsd:string" use="optional"/>
-    <xsd:attribute name="repeatColumnTo" type="xsd:string" use="optional"/>
-    <xsd:attribute name="printRowFrom" type="xsd:string" use="optional"/>
-    <xsd:attribute name="printRowTo" type="xsd:string" use="optional"/>
-    <xsd:attribute name="printColumnFrom" type="xsd:string" use="optional"/>
-    <xsd:attribute name="printColumnTo" type="xsd:string" use="optional"/>
-    <xsd:attribute name="fitWidth" type="xsd:string" use="optional"/>
-    <xsd:attribute name="fitHeight" type="xsd:string" use="optional"/>
-    <xsd:attribute name="landscape" type="xsd:string" use="optional"/>
-    <xsd:attribute name="headerLeft" type="xsd:string" use="optional"/>
-    <xsd:attribute name="headerCenter" type="xsd:string" use="optional"/>
-    <xsd:attribute name="headerRight" type="xsd:string" use="optional"/>
-    <xsd:attribute name="footerLeft" type="xsd:string" use="optional"/>
-    <xsd:attribute name="footerCenter" type="xsd:string" use="optional"/>
-    <xsd:attribute name="footerRight" type="xsd:string" use="optional"/>
-    <xsd:attribute name="zoom" type="xsd:string" use="optional"/>
-    <xsd:attribute name="firstPageBreak" type="xsd:string" use="optional"/>
-    <xsd:attribute name="nextPageBreak" type="xsd:string" use="optional"/>
+    <xsd:attribute name="repeatColumnTo"   type="xsd:string" use="optional"/>
+    <xsd:attribute name="printRowFrom"     type="xsd:string" use="optional"/>
+    <xsd:attribute name="printRowTo"       type="xsd:string" use="optional"/>
+    <xsd:attribute name="printColumnFrom"  type="xsd:string" use="optional"/>
+    <xsd:attribute name="printColumnTo"    type="xsd:string" use="optional"/>
+    <xsd:attribute name="fitWidth"         type="xsd:string" use="optional"/>
+    <xsd:attribute name="fitHeight"        type="xsd:string" use="optional"/>
+    <xsd:attribute name="landscape"        type="xsd:string" use="optional"/>
+    <xsd:attribute name="headerLeft"       type="xsd:string" use="optional"/>
+    <xsd:attribute name="headerCenter"     type="xsd:string" use="optional"/>
+    <xsd:attribute name="headerRight"      type="xsd:string" use="optional"/>
+    <xsd:attribute name="footerLeft"       type="xsd:string" use="optional"/>
+    <xsd:attribute name="footerCenter"     type="xsd:string" use="optional"/>
+    <xsd:attribute name="footerRight"      type="xsd:string" use="optional"/>
+    <xsd:attribute name="zoom"             type="xsd:string" use="optional"/>
+    <xsd:attribute name="firstPageBreak"   type="xsd:string" use="optional"/>
+    <xsd:attribute name="nextPageBreak"    type="xsd:string" use="optional"/>
   </xsd:complexType>
 
   <xsd:complexType name="RowType">
@@ -66,8 +70,10 @@
       <xsd:element name="style"   type="StyleType"/>
       <xsd:element name="cell"    type="CellType"/>
       <xsd:element name="set"     type="SetType"/>
-      <xsd:element name="forEach" type="ForEachType"/>
       <xsd:element name="if"      type="IfType"/>
+      <xsd:element name="choose"  type="ChooseType"/>
+      <xsd:element name="forEach" type="ForEachType"/>
+      <xsd:element name="while"   type="WhileType"/>
       <xsd:element name="include" type="IncludeType"/>
     </xsd:choice>
     <xsd:attribute name="index" type="xsd:string" use="optional"/>
@@ -103,7 +109,9 @@
       <xsd:element name="style"    type="StyleType"/>
       <xsd:element name="set"      type="SetType"/>
       <xsd:element name="if"       type="IfType"/>
+      <xsd:element name="choose"   type="ChooseType"/>
       <xsd:element name="forEach"  type="ForEachType"/>
+      <xsd:element name="while"    type="WhileType"/>
       <xsd:element name="include"  type="IncludeType"/>
       <xsd:element name="rowbreak" type="RowbreakType"/>
     </xsd:choice>
@@ -115,20 +123,84 @@
     <xsd:attribute name="step"      type="xsd:string" use="optional"/>
   </xsd:complexType>
 
+  <xsd:complexType name="WhileType">
+    <xsd:choice minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="row"      type="RowType"/>
+      <xsd:element name="cell"     type="CellType"/>
+      <xsd:element name="sheet"    type="SheetType"/>
+      <xsd:element name="style"    type="StyleType"/>
+      <xsd:element name="set"      type="SetType"/>
+      <xsd:element name="if"       type="IfType"/>
+      <xsd:element name="choose"   type="ChooseType"/>
+      <xsd:element name="forEach"  type="ForEachType"/>
+      <xsd:element name="while"    type="WhileType"/>
+      <xsd:element name="include"  type="IncludeType"/>
+      <xsd:element name="rowbreak" type="RowbreakType"/>
+    </xsd:choice>
+    <xsd:attribute name="test"      type="xsd:string" use="required"/>
+  </xsd:complexType>
+
   <xsd:complexType name="IfType">
     <xsd:choice minOccurs="0" maxOccurs="unbounded">
       <xsd:element name="row"      type="RowType"/>
       <xsd:element name="cell"     type="CellType"/>
       <xsd:element name="sheet"    type="SheetType"/>
-      <xsd:element name="set"      type="SetType"/>
-      <xsd:element name="forEach"  type="ForEachType"/>
       <xsd:element name="style"    type="StyleType"/>
-      <xsd:element name="include"  type="IncludeType"/>
+      <xsd:element name="set"      type="SetType"/>
       <xsd:element name="if"       type="IfType"/>
+      <xsd:element name="choose"   type="ChooseType"/>
+      <xsd:element name="forEach"  type="ForEachType"/>
+      <xsd:element name="while"    type="WhileType"/>
+      <xsd:element name="include"  type="IncludeType"/>
+      <xsd:element name="rowbreak" type="RowbreakType"/>
+    </xsd:choice>
+    <xsd:attribute name="test"  type="xsd:string" use="required"/>
+    <xsd:attribute name="var"   type="xsd:string" use="optional"/>
+    <xsd:attribute name="scope" type="xsd:string" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="ChooseType">
+    <xsd:sequence minOccurs="1" maxOccurs="1">
+      <xsd:choice minOccurs="1" maxOccurs="unbounded">
+        <xsd:element name="when" type="WhenType"/>
+      </xsd:choice>
+      <xsd:choice minOccurs="0" maxOccurs="1">
+        <xsd:element name="otherwise" type="OtherwiseType"/>
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="WhenType">
+    <xsd:choice minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="row"      type="RowType"/>
+      <xsd:element name="cell"     type="CellType"/>
+      <xsd:element name="sheet"    type="SheetType"/>
+      <xsd:element name="style"    type="StyleType"/>
+      <xsd:element name="set"      type="SetType"/>
+      <xsd:element name="if"       type="IfType"/>
+      <xsd:element name="choose"   type="ChooseType"/>
+      <xsd:element name="forEach"  type="ForEachType"/>
+      <xsd:element name="while"    type="WhileType"/>
+      <xsd:element name="include"  type="IncludeType"/>
       <xsd:element name="rowbreak" type="RowbreakType"/>
     </xsd:choice>
     <xsd:attribute name="test" type="xsd:string" use="required"/>
-    <xsd:attribute name="var" type="xsd:string" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="OtherwiseType">
+    <xsd:choice minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="row"      type="RowType"/>
+      <xsd:element name="cell"     type="CellType"/>
+      <xsd:element name="sheet"    type="SheetType"/>
+      <xsd:element name="style"    type="StyleType"/>
+      <xsd:element name="set"      type="SetType"/>
+      <xsd:element name="if"       type="IfType"/>
+      <xsd:element name="choose"   type="ChooseType"/>
+      <xsd:element name="forEach"  type="ForEachType"/>
+      <xsd:element name="while"    type="WhileType"/>
+      <xsd:element name="include"  type="IncludeType"/>
+      <xsd:element name="rowbreak" type="RowbreakType"/>
+    </xsd:choice>
   </xsd:complexType>
 
   <xsd:complexType name="IncludeType">
@@ -140,10 +212,14 @@
       <xsd:element name="row"      type="RowType"/>
       <xsd:element name="cell"     type="CellType"/>
       <xsd:element name="sheet"    type="SheetType"/>
+      <xsd:element name="style"    type="StyleType"/>
       <xsd:element name="set"      type="SetType"/>
-      <xsd:element name="forEach"  type="ForEachType"/>
       <xsd:element name="if"       type="IfType"/>
+      <xsd:element name="choose"   type="ChooseType"/>
+      <xsd:element name="forEach"  type="ForEachType"/>
+      <xsd:element name="while"    type="WhileType"/>
       <xsd:element name="include"  type="IncludeType"/>
+      <xsd:element name="rowbreak" type="RowbreakType"/>
       <xsd:element name="function" type="FunctionType"/>
     </xsd:choice>
     <xsd:attribute name="name"              type="xsd:string" use="optional"/>

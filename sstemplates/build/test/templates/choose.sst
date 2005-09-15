@@ -1,0 +1,29 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Choose Test">
+    <row>
+      <choose>
+        <when test="${ true }">
+          <cell>Here I Am 0</cell>
+        </when>
+        <when test="${ false }">
+          <cell>Here I Am 1</cell>
+        </when>
+        <otherwise>
+          <cell>Here I Am 2</cell>
+        </otherwise>
+      </choose>
+
+      <choose>
+        <when test="${ false }">
+          <cell>Here I Am 3</cell>
+        </when>
+        <when test="${ false }">
+          <cell>Here I Am 4</cell>
+        </when>
+        <otherwise>
+          <cell>Here I Am 5</cell>
+        </otherwise>
+      </choose>
+    </row>
+  </sheet>
+</workbook>

@@ -33,7 +33,7 @@ public class RowTagTest extends TagTestBase
     SheetTag sheetTag = (SheetTag) renderTree.getChildTags().iterator().next();
     RowTag rowTag = (RowTag) sheetTag.getChildTags().iterator().next();
     TestContextTag testTag = new TestContextTag(this);
-    rowTag.addHssfTag(testTag);
+    rowTag.addChildTag(testTag);
 
     renderTree.render(getHssfTemplateContext());
     assertTrue( "Row tag rendered children", testTag.hasTagBeenRendered());

@@ -5,7 +5,6 @@ import com.carbonfive.sstemplates.*;
 import java.util.*;
 
 /**
- * 
  * @author sivoh
  * @version $REVISION
  */
@@ -17,15 +16,6 @@ public class ForEachTag extends BaseTag
   protected String begin = "0";
   protected String end;
   protected String step = "1";
-
-  /**
-   * @deprecated
-   */
-  protected String indexVariable;
-  /**
-   * @deprecated
-   */
-  protected String map;
 
   public String getTagName()
   {
@@ -45,11 +35,8 @@ public class ForEachTag extends BaseTag
     int parsedEnd   = parsedEndValue   == null ? 0 : parsedEndValue.intValue();
     int parsedStep  = parsedStepValue  == null ? 0 : parsedStepValue.intValue();
 
-    String parsedIndexVariable = (String) parseExpression(indexVariable, String.class, context);
-
     Object oldVar = context.getPageVariable(parsedVar);
     Object oldVarStatus = context.getPageVariable(parsedVarStatus);
-    Object oldIndexVariable = context.getPageVariable(parsedIndexVariable);
 
     Collection c = ( items == null ? new InfiniteList() : findCollection(context) );
     if (end == null) parsedEnd = c.size();
@@ -63,7 +50,6 @@ public class ForEachTag extends BaseTag
       Object current = it.next();
       if (var != null) context.setPageVariable(parsedVar, current);
       if (varStatus != null) context.setPageVariable(parsedVarStatus, varStatusObj);
-      if (indexVariable != null) context.setPageVariable(parsedIndexVariable, new Integer(varStatusObj.getIndex()));
       renderChildren(context);
 
       i++;
@@ -72,7 +58,6 @@ public class ForEachTag extends BaseTag
     }
     context.unsetPageVariable(parsedVar, oldVar);
     context.unsetPageVariable(parsedVarStatus, oldVarStatus);
-    context.unsetPageVariable(parsedIndexVariable, oldIndexVariable);
   }
 
   private static class InfiniteList extends ArrayList
@@ -89,18 +74,12 @@ public class ForEachTag extends BaseTag
 
   private Collection findCollection(SsTemplateContext context) throws SsTemplateException
   {
-    Collection c = null;
-
     Object obj = parseExpression(items, Object.class, context);
     if (obj == null)
       throw new SsTemplateException("Cannot find '" + items + "' in the page context");
 
-    if (obj instanceof Collection) return (Collection) obj;
-    else if (obj instanceof Map)
-    {
-      if (map != null) return ((Map) obj).keySet(); // i don't like this -mike
-      return ((Map) obj).entrySet();
-    }
+    if (obj instanceof Collection)     return (Collection) obj;
+    else if (obj instanceof Map)       return ((Map) obj).entrySet();
     else if (obj.getClass().isArray()) return Arrays.asList((Object[]) obj);
     else
       throw new SsTemplateException( "'" + items + "' does not resolve to a collection, map or array");
@@ -112,50 +91,9 @@ public class ForEachTag extends BaseTag
     this.var = var;
   }
 
-  /**
-   * @deprecated
-   */
-  public void setVariable(String var)
-  {
-    setVar(var);
-  }
-
-  /**
-   * @deprecated
-   */
-  public void setArray(String array)
-  {
-    setItems(array);
-  }
-
   public void setItems(String items)
   {
     this.items = items;
-  }
-
-  /**
-   * @deprecated
-   */
-  public void setCollection(String col)
-  {
-    setItems(col);
-  }
-
-  /**
-   * @deprecated
-   */
-  public void setMap(String map)
-  {
-    setItems(map);
-    this.map = map;
-  }
-
-  /**
-   * @deprecated
-   */
-  public void setIndexVariable(String indexVariable)
-  {
-    this.indexVariable = indexVariable;
   }
 
   public void setVarStatus(String varStatus)

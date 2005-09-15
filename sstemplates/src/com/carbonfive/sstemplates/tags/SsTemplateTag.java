@@ -8,5 +8,9 @@ public interface SsTemplateTag
 
   void render( SsTemplateContext context ) throws SsTemplateException;
 
-  void addHssfTag( SsTemplateTag tag );
+  void addChildTag( SsTemplateTag tag );
+
+  SsTemplateTag getParentTag();
+
+  void setParentTag( SsTemplateTag tag );
 }

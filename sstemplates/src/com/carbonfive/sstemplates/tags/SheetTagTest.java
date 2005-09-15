@@ -41,7 +41,7 @@ public class SheetTagTest extends TagTestBase
 
     SheetTag sheetTag = (SheetTag) renderTree.getChildTags().iterator().next();
     TestContextTag testTag = new TestContextTag(this);
-    sheetTag.addHssfTag(testTag);
+    sheetTag.addChildTag(testTag);
 
     renderTree.render(getHssfTemplateContext());
     assertTrue( "Sheet tag rendered children", testTag.hasTagBeenRendered());

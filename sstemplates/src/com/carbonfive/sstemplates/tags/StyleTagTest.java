@@ -25,7 +25,7 @@ public class StyleTagTest extends TagTestBase
     RowTag rowTag = (RowTag) sheetTag.getChildTags().iterator().next();
     StyleTag styleTag = (StyleTag) rowTag.getChildTags().iterator().next();
     TestContextTag testTag = new TestContextTag(this);
-    styleTag.addHssfTag(testTag);
+    styleTag.addChildTag(testTag);
 
     renderTree.render(getHssfTemplateContext());
     assertTrue( "Style tag rendered children", testTag.hasTagBeenRendered());

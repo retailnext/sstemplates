@@ -15,7 +15,7 @@
       </forEach>
     </row>
     <row>
-      <forEach var="borderColor" array="${paramValues.c}">
+      <forEach var="borderColor" items="${paramValues.c}">
         <style rightBorderColor="${pageScope.borderColor}">
           <cell/>
         </style>
