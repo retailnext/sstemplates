@@ -37,7 +37,22 @@ public class Coordinates
 
   public String toString()
   {
-    return String.valueOf((char)(column + 65)) + (row + 1);
+    return columnString(column) + (row + 1);
+  }
+
+  private String columnString(short column)
+  {
+    if (column >=0 && column < 26)
+      return "" + (char) ( column + 65 );
+
+    if (column >= 26)
+    {
+      int first = (column / 26) - 1;
+      int second = column % 26;
+      return "" + ((char) (first + 65)) + ((char) (second + 65));
+    }
+
+    throw new IllegalStateException("Bad column number: " + column);
   }
 
   public int compareTo(Object o)

@@ -144,7 +144,7 @@ webapp.deploy       = ${webapp.deploy}
     <delete dir="${dist.root}" includeemptydirs="true"/>
   </target>
 
-  <target name="dist" depends="dist-binary, dist-source"/>
+  <target name="dist" depends="dist-binary, dist-source, dist-maven-source"/>
 
   <target name="dist-binary" depends="clean, deploy, javadoc">
 
@@ -187,13 +187,21 @@ See http://carbonfive.sourceforge.net/sstemplates/ for documentation.
 This is build number ${build.version} for SsTemplates Spreadsheet Templates for Excel.
 See http://carbonfive.sourceforge.net/sstemplates/ for documentation.
     </echo>
-    <property name="src-prefix" value="${ant.project.name}-${build.version}-src"/>
-
-    <zip destfile="${dist.root}/${src-prefix}.zip">
-      <zipfileset prefix="${src-prefix}" dir="${project.root}">
+    <zip destfile="${dist.root}/${ant.project.name}-${build.version}-src.zip">
+      <zipfileset prefix="${ant.project.name}-${build.version}-src" dir="${project.root}">
         <include name="**/*"/>
         <exclude name="build/work/**"/>
         <exclude name="dist/**"/>
+      </zipfileset>
+    </zip>
+
+  </target>
+
+  <target name="dist-maven-source" depends="clean, prepare">
+    <zip destfile="${dist.root}/${ant.project.name}-${build.version}-maven-src.jar">
+      <zipfileset dir="${core.src}">
+        <include name="**/*"/>
+		<exclude name="**/CVS"/>
       </zipfileset>
     </zip>
 
