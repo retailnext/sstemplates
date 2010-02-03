@@ -1,0 +1,10 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="Servlet Include Test">
+    <row>
+      <include template="include/include_incl.sst"/>
+    </row>
+    <row>
+      <include template="/templates/include/include_incl.sst"/>
+    </row>
+  </sheet>
+</workbook>

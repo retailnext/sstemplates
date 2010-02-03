@@ -1,0 +1,48 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <style name="borders" borderTop="thin" borderBottom="double" borderRight="dashed" borderLeft="dotted"/>
+  <sheet name="First HssfTemplates Spreadsheet">
+    <row>
+      <cell style="borders">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="2">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="3">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="4">x</cell>
+    </row>
+    <row><cell> </cell></row>
+    <row>
+      <cell style="borders" rowspan="2">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="2" rowspan="2">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="3" rowspan="2">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="4" rowspan="2">x</cell>
+    </row>
+    <row><cell> </cell></row>
+    <row><cell> </cell></row>
+    <row>
+      <cell style="borders" rowspan="3">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="2" rowspan="3">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="3" rowspan="3">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="4" rowspan="3">x</cell>
+    </row>
+    <row><cell> </cell></row>
+    <row><cell> </cell></row>
+    <row><cell> </cell></row>
+    <row>
+      <cell style="borders" rowspan="4">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="2" rowspan="4">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="3" rowspan="4">x</cell>
+      <cell> </cell>
+      <cell style="borders" colspan="4" rowspan="4">x</cell>
+    </row>
+
+  </sheet>
+</workbook>

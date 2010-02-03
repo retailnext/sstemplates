@@ -1,0 +1,7 @@
+<workbook xmlns="http://carbonfive.com/schema/sstemplates">
+  <sheet name="JSP Forward Example">
+    <row>
+      <cell>${attr1}</cell>
+    </row>
+  </sheet>
+</workbook>
