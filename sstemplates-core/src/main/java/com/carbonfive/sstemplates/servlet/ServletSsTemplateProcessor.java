@@ -3,7 +3,6 @@ package com.carbonfive.sstemplates.servlet;
 import com.carbonfive.sstemplates.*;
 import com.carbonfive.sstemplates.tags.*;
 import org.apache.poi.hssf.usermodel.*;
-import org.slf4j.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -13,8 +12,6 @@ import java.util.*;
 public class ServletSsTemplateProcessor
   extends SsTemplateProcessor
 {
-  private final static Logger log = LoggerFactory.getLogger(ServletSsTemplateProcessor.class);
-
   private static Map processorCache = Collections.synchronizedMap(new HashMap());
 
   public static SsTemplateProcessor getInstance(Collection customTags)

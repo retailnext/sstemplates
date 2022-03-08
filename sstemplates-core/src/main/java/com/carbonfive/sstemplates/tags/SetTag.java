@@ -1,15 +1,12 @@
 package com.carbonfive.sstemplates.tags;
 
 import com.carbonfive.sstemplates.*;
-import org.slf4j.*;
 
 import java.beans.*;
 
 public class SetTag
   extends BaseTag
 {
-  private final static Logger log = LoggerFactory.getLogger(SetTag.class);
-
   protected String var;
   protected String value;
   protected String target;

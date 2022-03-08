@@ -91,10 +91,12 @@
             <scope>compile</scope>
         </dependency>
 
-        <dependency>
+         <!-- <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-        </dependency>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency> -->
 
     </dependencies>
 

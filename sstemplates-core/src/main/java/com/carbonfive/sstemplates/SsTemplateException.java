@@ -1,12 +1,8 @@
 package com.carbonfive.sstemplates;
 
-import org.slf4j.*;
-
 public class SsTemplateException
   extends Exception
 {
-  private final static Logger log = LoggerFactory.getLogger(SsTemplateException.class);
-
   public SsTemplateException()
   {
     super();
