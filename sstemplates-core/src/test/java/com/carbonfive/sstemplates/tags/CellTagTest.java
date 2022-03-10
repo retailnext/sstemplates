@@ -104,7 +104,7 @@ public class CellTagTest extends TagTestBase
     assertRegionEquals(sheet.getMergedRegion(2), 4, 0, 4, 2);
   }
 
-  private void assertRegionEquals(CellRangeAddress region, int startRow, short startColumn, int endRow, short endColumn)
+  private void assertRegionEquals(CellRangeAddress region, int startRow, int startColumn, int endRow, int endColumn)
   {
     assertEquals( "Region should start at row " + startRow, startRow, region.getFirstRow() );
     assertEquals( "Region should start at column " + startColumn, startColumn, region.getFirstColumn() );
