@@ -5,7 +5,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import javax.servlet.jsp.el.*;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.hssf.*;
 
 public interface SsTemplateContext extends VariableResolver, FunctionMapper

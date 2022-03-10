@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.logging.*;
 import org.apache.commons.lang.builder.*;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.hssf.*;
 
 /**
