@@ -90,7 +90,7 @@ public class StyleTag extends BaseTag
         propValues = new HashMap();
         attributes.put( ATTRIBUTES[i][0], propValues);
       }
-      propValues.put( ATTRIBUTES[i][1], new Integer(ATTRIBUTES[i][2] ));
+      propValues.put( ATTRIBUTES[i][1], Integer.valueOf(ATTRIBUTES[i][2] ));
     }
 
     attributes.put( "colors", getColorAttributeValues() );
@@ -212,13 +212,13 @@ public class StyleTag extends BaseTag
       setColor(styleData, "fontColor", fontColor, (Map)attributes.get("colors"), context);
 
     if ( typeOffset != null )
-      styleData.put("typeOffset", new Integer(findShortValueForAttribute("typeOffset", "typeOffset", typeOffset, context)));
+      styleData.put("typeOffset", Integer.valueOf(findShortValueForAttribute("typeOffset", "typeOffset", typeOffset, context)));
 
     if ( fontWeight != null )
-      styleData.put("fontWeight", new Integer(findShortValueForAttribute("fontWeight", "fontWeight", fontWeight, context)));
+      styleData.put("fontWeight", Integer.valueOf(findShortValueForAttribute("fontWeight", "fontWeight", fontWeight, context)));
 
     if ( underline != null )
-      styleData.put("underline", new Integer(findShortValueForAttribute("underline", "underline", underline, context)));
+      styleData.put("underline", Integer.valueOf(findShortValueForAttribute("underline", "underline", underline, context)));
 
   }
 
@@ -226,10 +226,10 @@ public class StyleTag extends BaseTag
           throws SsTemplateException
   {
     if ( align != null )
-      styleData.put( "align", new Integer(findShortValueForAttribute("align", "align", align, context)));
+      styleData.put( "align", Integer.valueOf(findShortValueForAttribute("align", "align", align, context)));
 
     if ( valign != null )
-      styleData.put( "valign", new Integer(findShortValueForAttribute("valign", "valign", valign, context)));
+      styleData.put( "valign", Integer.valueOf(findShortValueForAttribute("valign", "valign", valign, context)));
   }
 
   private void setIndentionAndRotation(HssfStyleData styleData, SsTemplateContext context)
@@ -264,7 +264,7 @@ public class StyleTag extends BaseTag
           throws SsTemplateException
   {
     if ( fillPattern != null )
-      styleData.put( "fillPattern", new Integer(findShortValueForAttribute("fillPattern", "pattern", fillPattern, context)));
+      styleData.put( "fillPattern", Integer.valueOf(findShortValueForAttribute("fillPattern", "pattern", fillPattern, context)));
   }
 
   private void setDataFormat(HssfStyleData styleData, SsTemplateContext context)
@@ -273,7 +273,7 @@ public class StyleTag extends BaseTag
     if ( dataFormat != null )
     {
       String formatString = (String) parseExpression(dataFormat,String.class,context);
-      styleData.put( "dataFormat", new Integer( context.getWorkbook().createDataFormat().getFormat(formatString) ) );
+      styleData.put( "dataFormat", Integer.valueOf( context.getWorkbook().createDataFormat().getFormat(formatString) ) );
     }
   }
 
@@ -311,7 +311,7 @@ public class StyleTag extends BaseTag
     else if (colorMap.containsKey(parsedValue)) triplet = ((HSSFColor)colorMap.get(parsedValue)).getTriplet();
     else throw new SsTemplateException("Can't understand value '" + parsedValue + "' for color '" + name + "'");
 
-    styleData.put(name, new Integer(context.getColorIndex(triplet)));
+    styleData.put(name, Integer.valueOf(context.getColorIndex(triplet)));
   }
 
   public static short[] parseColor(String value)
@@ -340,7 +340,7 @@ public class StyleTag extends BaseTag
   {
     if ( border != null )
     {
-      styleData.put( "border", new Integer(findShortValueForAttribute("border", "border", border, context)));
+      styleData.put( "border", Integer.valueOf(findShortValueForAttribute("border", "border", border, context)));
       if ( borderColor == null && topBorderColor == null) topBorderColor = "black";
       if ( borderColor == null && bottomBorderColor == null) bottomBorderColor = "black";
       if ( borderColor == null && rightBorderColor == null) rightBorderColor = "black";
@@ -349,25 +349,25 @@ public class StyleTag extends BaseTag
 
     if ( borderTop != null )
     {
-      styleData.put( "borderTop", new Integer(findShortValueForAttribute("borderTop", "border", borderTop, context)));
+      styleData.put( "borderTop", Integer.valueOf(findShortValueForAttribute("borderTop", "border", borderTop, context)));
       if ( borderColor == null && topBorderColor == null) topBorderColor = "black";
     }
 
     if ( borderBottom != null )
     {
-      styleData.put( "borderBottom", new Integer(findShortValueForAttribute("borderBottom", "border", borderBottom, context)));
+      styleData.put( "borderBottom", Integer.valueOf(findShortValueForAttribute("borderBottom", "border", borderBottom, context)));
       if ( borderColor == null && bottomBorderColor == null) bottomBorderColor = "black";
     }
 
     if ( borderRight != null )
     {
-      styleData.put( "borderRight", new Integer(findShortValueForAttribute("borderRight", "border", borderRight, context)));
+      styleData.put( "borderRight", Integer.valueOf(findShortValueForAttribute("borderRight", "border", borderRight, context)));
       if ( borderColor == null && rightBorderColor == null) rightBorderColor = "black";
     }
 
     if ( borderLeft != null )
     {
-      styleData.put( "borderLeft", new Integer(findShortValueForAttribute("borderLeft", "border", borderLeft, context)));
+      styleData.put( "borderLeft", Integer.valueOf(findShortValueForAttribute("borderLeft", "border", borderLeft, context)));
       if ( borderColor == null && leftBorderColor == null) leftBorderColor = "black";
     }
   }
@@ -393,7 +393,7 @@ public class StyleTag extends BaseTag
       try
       {
         if ( HSSFColor.class.isAssignableFrom(colorClasses[i]))
-          //colors.put(classNameToAttributeValue(colorClasses[i]),new Integer(getStaticShortField(colorClasses[i],"index")));
+          //colors.put(classNameToAttributeValue(colorClasses[i]),Integer.valueOf(getStaticShortField(colorClasses[i],"index")));
           colors.put(classNameToAttributeValue(colorClasses[i]), colorClasses[i].getConstructor(null).newInstance(null));
       }
       catch (Exception e)

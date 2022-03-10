@@ -86,8 +86,8 @@ public class SsTemplateServletTest
     WorkbookTag workbookTag = getRenderTree(request);
     SsTemplateContextImpl context = getHssfTemplateContext(request);
 
-    request.setAttribute("var1",new Integer(14));
-    request.setAttribute("var2",new Integer(21));
+    request.setAttribute("var1",Integer.valueOf(14));
+    request.setAttribute("var2",Integer.valueOf(21));
 
     String expression = "${ var1 + var2 }";
     assertEquals( "Expression " + expression + " should be 35", 35,

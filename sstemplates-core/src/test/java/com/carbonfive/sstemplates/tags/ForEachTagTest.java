@@ -30,9 +30,9 @@ public class ForEachTagTest extends TagTestBase
   public void testCollection() throws Exception
   {
     ArrayList c = new ArrayList();
-    c.add( new Integer(3) );
-    c.add( new Integer(5) );
-    c.add( new Integer(8) );
+    c.add( Integer.valueOf(3) );
+    c.add( Integer.valueOf(5) );
+    c.add( Integer.valueOf(8) );
     Map attrs = new HashMap();
     attrs.put("columnIndexes", c);
 

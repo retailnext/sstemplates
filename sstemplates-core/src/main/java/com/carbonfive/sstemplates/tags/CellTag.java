@@ -231,23 +231,23 @@ public class CellTag extends BaseTag
                 styleData = new HssfStyleData();
                 if ( topBorder )
                 {
-                  styleData.put("borderTop",new Integer(style.getBorderTop()));
-                  styleData.put("topBorderColor",new Integer(style.getTopBorderColor()));
+                  styleData.put("borderTop",Integer.valueOf(style.getBorderTop()));
+                  styleData.put("topBorderColor",Integer.valueOf(style.getTopBorderColor()));
                 }
                 if ( bottomBorder )
                 {
-                  styleData.put("borderBottom",new Integer(style.getBorderBottom()));
-                  styleData.put("bottomBorderColor",new Integer(style.getBottomBorderColor()));
+                  styleData.put("borderBottom",Integer.valueOf(style.getBorderBottom()));
+                  styleData.put("bottomBorderColor",Integer.valueOf(style.getBottomBorderColor()));
                 }
                 if ( rightBorder )
                 {
-                  styleData.put("borderRight",new Integer(style.getBorderRight()));
-                  styleData.put("rightBorderColor",new Integer(style.getRightBorderColor()));
+                  styleData.put("borderRight",Integer.valueOf(style.getBorderRight()));
+                  styleData.put("rightBorderColor",Integer.valueOf(style.getRightBorderColor()));
                 }
                 if ( leftBorder )
                 {
-                  styleData.put("borderLeft",new Integer(style.getBorderLeft()));
-                  styleData.put("leftBorderColor",new Integer(style.getLeftBorderColor()));
+                  styleData.put("borderLeft",Integer.valueOf(style.getBorderLeft()));
+                  styleData.put("leftBorderColor",Integer.valueOf(style.getLeftBorderColor()));
                 }
 
                 context.addStyleData(styleName,styleData);

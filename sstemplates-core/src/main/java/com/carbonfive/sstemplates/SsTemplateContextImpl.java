@@ -62,11 +62,11 @@ public class SsTemplateContextImpl
   private void initStyles()
   {
     HssfStyleData noTopBorder = new HssfStyleData();
-    noTopBorder.put("borderTop", new Integer(HSSFCellStyle.BORDER_NONE));
+    noTopBorder.put("borderTop", Integer.valueOf(HSSFCellStyle.BORDER_NONE));
     addStyleData( "_noTopBorder", noTopBorder );
 
     HssfStyleData noBottomBorder = new HssfStyleData();
-    noBottomBorder.put("borderBottom", new Integer(HSSFCellStyle.BORDER_NONE));
+    noBottomBorder.put("borderBottom", Integer.valueOf(HSSFCellStyle.BORDER_NONE));
     addStyleData( "_noBottomBorder", noBottomBorder );
   }
 
