@@ -57,7 +57,7 @@ public class CellTag extends BaseTag
     // accumulator get set here because we don't want pagination to cause duplication
     if (accumulator != null)
     {
-      HSSFCell cell = context.getRow().getCell((short) columnIndex);
+      HSSFCell cell = context.getRow().getCell(columnIndex);
       setCellAccumulator(cell, context, accumulator);
     }
 
@@ -153,12 +153,12 @@ public class CellTag extends BaseTag
       if (( data.getAutoColumnWidth() ) && ( cell.getCellType() == HSSFCell.CELL_TYPE_STRING )
           && ( cell.getStringCellValue() != null ))
       {
-        int width = context.getSheet().getColumnWidth((short)context.getColumnIndex());
-        context.getSheet().setColumnWidth((short)context.getColumnIndex(),
-                                          (short) Math.min(256*100,Math.max(width,256*(cell.getStringCellValue().length()+2))));
+        int width = context.getSheet().getColumnWidth(context.getColumnIndex());
+        context.getSheet().setColumnWidth(context.getColumnIndex(),
+                                          Math.min(256*100,Math.max(width,256*(cell.getStringCellValue().length()+2))));
       }
       else if ( data.getColumnWidth() != null )
-        context.getSheet().setColumnWidth((short) context.getColumnIndex(), data.getColumnWidth().shortValue() );
+        context.getSheet().setColumnWidth(context.getColumnIndex(), data.getColumnWidth().shortValue() );
 
       if ( data.getRowHeight() != null )
         context.getRow().setHeight( data.getRowHeight().shortValue() );
@@ -256,7 +256,7 @@ public class CellTag extends BaseTag
               HSSFRow row = context.getSheet().getRow( context.getRowIndex() + j );
               if ( row == null )
                 row = context.getSheet().createRow( context.getRowIndex() + j );
-              HSSFCell newCell = row.createCell( (short) (context.getColumnIndex() + i) );
+              HSSFCell newCell = row.createCell( context.getColumnIndex() + i );
               newCell.setCellStyle( context.getNamedStyle(styleName) );
             }
           }
