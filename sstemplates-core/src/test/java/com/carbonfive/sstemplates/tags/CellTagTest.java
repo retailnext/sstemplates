@@ -99,12 +99,12 @@ public class CellTagTest extends TagTestBase
     }
 
     assertEquals( "Sheet should have 3 regions", 3, sheet.getNumMergedRegions() );
-    assertRegionEquals(sheet.getMergedRegion(0), 0, 1, 2, 1);
-    assertRegionEquals(sheet.getMergedRegion(1), 1, 3, 2, 5);
-    assertRegionEquals(sheet.getMergedRegion(2), 4, 0, 4, 2);
+    assertRegionEquals(sheet.getMergedRegion(0), 0, 2, 1, 1);
+    assertRegionEquals(sheet.getMergedRegion(1), 1, 2, 3, 5);
+    assertRegionEquals(sheet.getMergedRegion(2), 4, 4, 0, 2);
   }
 
-  private void assertRegionEquals(CellRangeAddress region, int startRow, int startColumn, int endRow, int endColumn)
+  private void assertRegionEquals(CellRangeAddress region, int startRow, int endRow, int startColumn, int endColumn)
   {
     assertEquals( "Region should start at row " + startRow, startRow, region.getFirstRow() );
     assertEquals( "Region should start at column " + startColumn, startColumn, region.getFirstColumn() );

@@ -2,7 +2,7 @@ package com.carbonfive.sstemplates.tags;
 
 import java.util.*;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.hssf.*;
 import com.carbonfive.sstemplates.*;
 
@@ -67,7 +67,7 @@ public class CellTag extends BaseTag
   private void createCell(SsTemplateContext context)
       throws SsTemplateException
   {
-    Region region = createRegion(context);
+    CellRangeAddress region = createRegion(context);
 
     if ((paginate == null) || !((Boolean) parseExpression(paginate, Boolean.class, context)).booleanValue())
     {
@@ -78,37 +78,37 @@ public class CellTag extends BaseTag
     List regions = splitRegionForPagination(context, region);
     for (Iterator i = regions.iterator(); i.hasNext();)
     {
-      Region sub = (Region)i.next();
-      createCell(context, sub, sub.getRowFrom() == region.getRowFrom(), sub.getRowTo() == region.getRowTo());
+      CellRangeAddress sub = (CellRangeAddress)i.next();
+      createCell(context, sub, sub.getFirstRow() == region.getFirstRow(), sub.getLastRow() == region.getLastRow());
     }
   }
 
-  private List splitRegionForPagination(SsTemplateContext context, Region region)
+  private List splitRegionForPagination(SsTemplateContext context, CellRangeAddress region)
   {
     List regions = new ArrayList();
-    int rowFrom = region.getRowFrom();
-    while (region.getRowTo() >= context.nextPageBreak(rowFrom))
+    int rowFrom = region.getFirstRow();
+    while (region.getLastRow() >= context.nextPageBreak(rowFrom))
     {
-      regions.add(new Region(rowFrom, region.getColumnFrom(), context.nextPageBreak(rowFrom)-1, region.getColumnTo()));
+      regions.add(new CellRangeAddress(rowFrom, context.nextPageBreak(rowFrom)-1, region.getFirstColumn(), region.getLastColumn()));
       rowFrom = context.nextPageBreak(rowFrom);
     }
-    regions.add(new Region(rowFrom, region.getColumnFrom(), region.getRowTo(), region.getColumnTo()));
+    regions.add(new CellRangeAddress(rowFrom, region.getLastRow(), region.getFirstColumn(), region.getLastColumn()));
     return regions;
   }
 
-  private void createCell(SsTemplateContext context, Region region, boolean showTopBorder, boolean showBottomBorder)
+  private void createCell(SsTemplateContext context, CellRangeAddress region, boolean showTopBorder, boolean showBottomBorder)
       throws SsTemplateException
   {
-    int rowIndex = region.getRowFrom();
-    int columnIndex = region.getColumnFrom();
+    int rowIndex = region.getFirstRow();
+    int columnIndex = region.getFirstColumn();
 
     context.setRowIndex( rowIndex );
     HSSFRow row = context.getSheet().getRow(rowIndex);
     if ( row == null ) row = context.getSheet().createRow(rowIndex);
     context.setRow(row);
 
-    HSSFCell cell = context.getRow().getCell((short) columnIndex);
-    if ( cell == null ) cell = context.getRow().createCell((short) columnIndex);
+    HSSFCell cell = context.getRow().getCell(columnIndex);
+    if ( cell == null ) cell = context.getRow().createCell(columnIndex);
 
     cell.setCellType(findCellType(context));
 
@@ -174,34 +174,34 @@ public class CellTag extends BaseTag
     return styleName;
   }
 
-  private Region createRegion(SsTemplateContext context)
+  private CellRangeAddress createRegion(SsTemplateContext context)
           throws SsTemplateException
   {
     short parsedColspan = 1;
     int parsedRowspan = 1;
-    Region region = new Region(context.getRowIndex(), (short) context.getColumnIndex(),
-                               context.getRowIndex(), (short) context.getColumnIndex());
+    CellRangeAddress region = new CellRangeAddress(context.getRowIndex(), context.getRowIndex(),
+    									context.getColumnIndex(), context.getColumnIndex());
 
     if ( colspan != null )
     {
       parsedColspan = ((Integer) parseExpression(colspan,Integer.class,context)).shortValue();
-      region.setColumnTo((short) (context.getColumnIndex() + parsedColspan - 1));
+      region.setLastColumn(context.getColumnIndex() + parsedColspan - 1);
     }
 
     if ( rowspan != null )
     {
       parsedRowspan = parseInt(rowspan, context);
-      region.setRowTo(context.getRowIndex() + parsedRowspan - 1);
+      region.setLastRow(context.getRowIndex() + parsedRowspan - 1);
     }
 
     return region;
   }
 
-  private void createRegionBorders(Region region, HSSFCell cell, SsTemplateContext context)
+  private void createRegionBorders(CellRangeAddress region, HSSFCell cell, SsTemplateContext context)
           throws SsTemplateException
   {
-    int parsedColspan = region.getColumnTo() - region.getColumnFrom() + 1;
-    int parsedRowspan = region.getRowTo() - region.getRowFrom() + 1;
+    int parsedColspan = region.getLastColumn() - region.getFirstColumn() + 1;
+    int parsedRowspan = region.getLastRow() - region.getFirstRow() + 1;
 
     HSSFCellStyle style = cell.getCellStyle();
     if (( style.getBorderTop() != HSSFCellStyle.BORDER_NONE )
