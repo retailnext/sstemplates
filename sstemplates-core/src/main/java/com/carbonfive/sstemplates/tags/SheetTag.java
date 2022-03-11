@@ -1,6 +1,7 @@
 package com.carbonfive.sstemplates.tags;
 
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.*;
 
 /**
@@ -88,8 +89,10 @@ public class SheetTag extends BaseTag
         columnTo = ((Integer) parseExpression(repeatColumnTo, Integer.class, context)).intValue();
       }
 
-      workbook.setRepeatingRowsAndColumns(workbook.getSheetIndex(parsedName),
-                                          columnFrom, columnTo, rowFrom, rowTo);
+      CellRangeAddress repeatedCellRange = new CellRangeAddress(rowFrom, rowTo, columnFrom, columnTo);
+      sheet = workbook.getSheet(parsedName);
+      sheet.setRepeatingRows(repeatedCellRange);
+      sheet.setRepeatingColumns(repeatedCellRange);
     }
 
     // not sure what this really does - seems necessary, though
