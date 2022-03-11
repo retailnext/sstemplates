@@ -67,7 +67,7 @@ public class CellTagTest extends TagTestBase
     HSSFRow row = sheet.getRow(0);
     assertEquals( "Cell content has been set", "stuff", row.getCell(0).getStringCellValue() );
     assertEquals( "Blank cell", "", row.getCell(1).getStringCellValue() );
-    assertEquals( "Blank cell", HSSFCell.CELL_TYPE_BLANK, row.getCell((short)1).getCellType());
+    assertEquals( "Blank cell", HSSFCell.CELL_TYPE_BLANK, row.getCell(1).getCellType());
   }
 
   public void testRegion() throws Exception

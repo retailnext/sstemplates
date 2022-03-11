@@ -3,12 +3,9 @@ package com.carbonfive.sstemplates;
 import com.carbonfive.sstemplates.tags.WorkbookTag;
 import junit.framework.TestCase;
 
-import javax.servlet.ServletException;
 import java.io.File;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.*;
 
 /**
  *

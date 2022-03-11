@@ -21,10 +21,10 @@ public class ForEachTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("foreach_array.sst?x=A&x=B&x=C&x=D");
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals( "Cell 0 should be A", "A", row.getCell((short) 0).getStringCellValue() );
-    assertEquals( "Cell 1 should be B", "B", row.getCell((short) 1).getStringCellValue() );
-    assertEquals( "Cell 2 should be C", "C", row.getCell((short) 2).getStringCellValue() );
-    assertEquals( "Cell 3 should be D", "D", row.getCell((short) 3).getStringCellValue() );
+    assertEquals( "Cell 0 should be A", "A", row.getCell(0).getStringCellValue() );
+    assertEquals( "Cell 1 should be B", "B", row.getCell(1).getStringCellValue() );
+    assertEquals( "Cell 2 should be C", "C", row.getCell(2).getStringCellValue() );
+    assertEquals( "Cell 3 should be D", "D", row.getCell(3).getStringCellValue() );
   }
 
   public void testCollection() throws Exception
@@ -39,9 +39,9 @@ public class ForEachTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("foreach_collection.sst", attrs);
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals( "Cell 3 should be 0", 0, (int) row.getCell((short) 3).getNumericCellValue() );
-    assertEquals( "Cell 5 should be 1", 1, (int) row.getCell((short) 5).getNumericCellValue() );
-    assertEquals( "Cell 8 should be 2", 2, (int) row.getCell((short) 8).getNumericCellValue() );
+    assertEquals( "Cell 3 should be 0", 0, (int) row.getCell(3).getNumericCellValue() );
+    assertEquals( "Cell 5 should be 1", 1, (int) row.getCell(5).getNumericCellValue() );
+    assertEquals( "Cell 8 should be 2", 2, (int) row.getCell(8).getNumericCellValue() );
   }
 
   public void testMap() throws Exception
@@ -55,12 +55,12 @@ public class ForEachTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("foreach_map.sst", attrs);
     HSSFSheet sheet = templateContext.getWorkbook().getSheetAt(0);
 
-    assertEquals("1", sheet.getRow(0).getCell((short) 0).getStringCellValue());
-    assertEquals("One", sheet.getRow(0).getCell((short) 1).getStringCellValue());
-    assertEquals("2", sheet.getRow(1).getCell((short) 0).getStringCellValue());
-    assertEquals("Two", sheet.getRow(1).getCell((short) 1).getStringCellValue());
-    assertEquals("3", sheet.getRow(2).getCell((short) 0).getStringCellValue());
-    assertEquals("Three", sheet.getRow(2).getCell((short) 1).getStringCellValue());
+    assertEquals("1", sheet.getRow(0).getCell(0).getStringCellValue());
+    assertEquals("One", sheet.getRow(0).getCell(1).getStringCellValue());
+    assertEquals("2", sheet.getRow(1).getCell(0).getStringCellValue());
+    assertEquals("Two", sheet.getRow(1).getCell(1).getStringCellValue());
+    assertEquals("3", sheet.getRow(2).getCell(0).getStringCellValue());
+    assertEquals("Three", sheet.getRow(2).getCell(1).getStringCellValue());
   }
 
   public void testAvoidIndexConflict() throws Exception
@@ -76,7 +76,7 @@ public class ForEachTagTest extends TagTestBase
       HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(i);
       for (int j=0; j < 10; j++ )
       {
-        assertEquals( "Cell "+i+","+j+" should be " + (5*i+7*j), (5*i+7*j), (int) row.getCell((short) j).getNumericCellValue() );
+        assertEquals( "Cell "+i+","+j+" should be " + (5*i+7*j), (5*i+7*j), (int) row.getCell(j).getNumericCellValue() );
       }
     }
   }
@@ -102,23 +102,23 @@ public class ForEachTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("foreach_status.sst", attrs);
     HSSFSheet sheet = templateContext.getWorkbook().getSheetAt(0);
 
-    assertEquals(2, (int) sheet.getRow(0).getCell((short) 0).getNumericCellValue());
-    assertEquals(2, (int) sheet.getRow(0).getCell((short) 1).getNumericCellValue());
-    assertEquals(1, (int) sheet.getRow(0).getCell((short) 2).getNumericCellValue());
-    assertEquals("true",  sheet.getRow(0).getCell((short) 3).getStringCellValue());
-    assertEquals("false", sheet.getRow(0).getCell((short) 4).getStringCellValue());
+    assertEquals(2, (int) sheet.getRow(0).getCell(0).getNumericCellValue());
+    assertEquals(2, (int) sheet.getRow(0).getCell(1).getNumericCellValue());
+    assertEquals(1, (int) sheet.getRow(0).getCell(2).getNumericCellValue());
+    assertEquals("true",  sheet.getRow(0).getCell(3).getStringCellValue());
+    assertEquals("false", sheet.getRow(0).getCell(4).getStringCellValue());
 
-    assertEquals(5, (int) sheet.getRow(1).getCell((short) 0).getNumericCellValue());
-    assertEquals(5, (int) sheet.getRow(1).getCell((short) 1).getNumericCellValue());
-    assertEquals(2, (int) sheet.getRow(1).getCell((short) 2).getNumericCellValue());
-    assertEquals("false", sheet.getRow(1).getCell((short) 3).getStringCellValue());
-    assertEquals("false", sheet.getRow(1).getCell((short) 4).getStringCellValue());
+    assertEquals(5, (int) sheet.getRow(1).getCell(0).getNumericCellValue());
+    assertEquals(5, (int) sheet.getRow(1).getCell(1).getNumericCellValue());
+    assertEquals(2, (int) sheet.getRow(1).getCell(2).getNumericCellValue());
+    assertEquals("false", sheet.getRow(1).getCell(3).getStringCellValue());
+    assertEquals("false", sheet.getRow(1).getCell(4).getStringCellValue());
 
-    assertEquals(8, (int) sheet.getRow(2).getCell((short) 0).getNumericCellValue());
-    assertEquals(8, (int) sheet.getRow(2).getCell((short) 1).getNumericCellValue());
-    assertEquals(3, (int) sheet.getRow(2).getCell((short) 2).getNumericCellValue());
-    assertEquals("false", sheet.getRow(2).getCell((short) 3).getStringCellValue());
-    assertEquals("true",  sheet.getRow(2).getCell((short) 4).getStringCellValue());
+    assertEquals(8, (int) sheet.getRow(2).getCell(0).getNumericCellValue());
+    assertEquals(8, (int) sheet.getRow(2).getCell(1).getNumericCellValue());
+    assertEquals(3, (int) sheet.getRow(2).getCell(2).getNumericCellValue());
+    assertEquals("false", sheet.getRow(2).getCell(3).getStringCellValue());
+    assertEquals("true",  sheet.getRow(2).getCell(4).getStringCellValue());
   }
 
   public void childRenderTest( SsTemplateContext context )

@@ -42,7 +42,7 @@ public class RowTagTest extends TagTestBase
   public void testDefinesStyle() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("row_test2.sst?style=fred");
-    HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell((short)0).getCellStyle();
+    HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(0).getCellStyle();
 
     assertNotNull( "Style defined in row is not null", cellStyle );
     assertEquals( "Style should have thin top border", HSSFCellStyle.BORDER_THIN, cellStyle.getBorderTop() );

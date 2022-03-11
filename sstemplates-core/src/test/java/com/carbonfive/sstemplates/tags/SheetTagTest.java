@@ -31,8 +31,8 @@ public class SheetTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("sheet_test4.sst");
 
     HSSFWorkbook workbook = templateContext.getWorkbook();
-    assertEquals( "Sheet 1 should have cell", "value", workbook.getSheetAt(0).getRow(0).getCell((short)0).getStringCellValue());
-    assertEquals( "Sheet 2 should have cell", "value", workbook.getSheetAt(1).getRow(0).getCell((short)0).getStringCellValue());
+    assertEquals( "Sheet 1 should have cell", "value", workbook.getSheetAt(0).getRow(0).getCell(0).getStringCellValue());
+    assertEquals( "Sheet 2 should have cell", "value", workbook.getSheetAt(1).getRow(0).getCell(0).getStringCellValue());
   }
 
   public void testSheetContext() throws Exception
@@ -50,7 +50,7 @@ public class SheetTagTest extends TagTestBase
   public void testDefinesStyle() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("sheet_test3.sst?style=fred");
-    HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell((short)0).getCellStyle();
+    HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(0).getCellStyle();
 
     assertNotNull( "Style defined in sheet is not null", cellStyle );
     assertEquals( "Style should have thin top border", HSSFCellStyle.BORDER_THIN, cellStyle.getBorderTop() );

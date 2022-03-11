@@ -2,7 +2,6 @@ package com.carbonfive.sstemplates.servlet;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import com.carbonfive.sstemplates.*;
@@ -15,8 +14,6 @@ import com.carbonfive.sstemplates.*;
 public class SsTemplateServletContext
     extends SsTemplateContextImpl
 {
-  private static final Logger log = Logger.getLogger(SsTemplateServletContext.class.getName());
-
   private HttpServletRequest    request         = null;
   private ServletContext        servletContext  = null;
   private Map                   implicitObjects = new HashMap();

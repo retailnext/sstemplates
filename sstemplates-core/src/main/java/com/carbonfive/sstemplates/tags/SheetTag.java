@@ -127,7 +127,7 @@ public class SheetTag extends BaseTag
 
     if (context.getBackgroundColor() != null)
     {
-      HSSFCellStyle cellStyle = sheet.createRow(0).createCell((short)0).getCellStyle();
+      HSSFCellStyle cellStyle = sheet.createRow(0).createCell(0).getCellStyle();
       cellStyle.setFillForegroundColor(context.getColorIndex(context.getBackgroundColor()));
       cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
     }

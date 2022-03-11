@@ -20,7 +20,7 @@ public class IncludeTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("include.sst");
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals( "Cell should exist", "Here I Am", row.getCell((short) 0).getStringCellValue() );
+    assertEquals( "Cell should exist", "Here I Am", row.getCell(0).getStringCellValue() );
   }
 
   public void childRenderTest( SsTemplateContext context )

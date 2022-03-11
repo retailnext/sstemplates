@@ -15,10 +15,10 @@ public class ChooseTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("choose.sst");
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertNotNull(row.getCell((short) 0));
-    assertEquals("Here I Am 0", row.getCell((short) 0).getStringCellValue());
-    assertNotNull(row.getCell((short) 1));
-    assertEquals("Here I Am 5", row.getCell((short) 1).getStringCellValue());
+    assertNotNull(row.getCell(0));
+    assertEquals("Here I Am 0", row.getCell(0).getStringCellValue());
+    assertNotNull(row.getCell(1));
+    assertEquals("Here I Am 5", row.getCell(1).getStringCellValue());
   }
 
   public void childRenderTest( SsTemplateContext context )

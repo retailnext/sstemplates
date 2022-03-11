@@ -523,13 +523,6 @@ public class StyleTagTest extends TagTestBase
     return colorClasses;
   }
 
-  private short getStaticShort(Class clazz, String field)
-          throws IllegalAccessException, NoSuchFieldException
-  {
-    short x = clazz.getDeclaredField(field).getShort(null);
-    return x;
-  }
-
   public void childRenderTest( SsTemplateContext context )
     throws SsTemplateException
   {
