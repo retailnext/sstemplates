@@ -126,7 +126,7 @@ public class SheetTag extends BaseTag
       sheet.getFooter().setRight((String) parseExpression(footerRight, String.class, context));
 
     if (zoom != null)
-      sheet.setZoom(((Integer) parseExpression(zoom, Integer.class, context)).intValue(), 100);
+      sheet.setZoom(((Integer) parseExpression(zoom, Integer.class, context)).intValue());
 
     if (context.getBackgroundColor() != null)
     {
