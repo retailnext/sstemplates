@@ -414,18 +414,6 @@ public class StyleTag extends BaseTag
     return className.replace('_','-');
   }
 
-  private static short getStaticShortField(Class clazz, String field)
-  {
-    try
-    {
-      return clazz.getDeclaredField(field).getShort(null);
-    }
-    catch (Exception e)
-    {
-      throw new IllegalArgumentException("Unknown static field '" + field + "' for class " + clazz.getName());
-    }
-  }
-
   public String getAlign()
   {
     return align;

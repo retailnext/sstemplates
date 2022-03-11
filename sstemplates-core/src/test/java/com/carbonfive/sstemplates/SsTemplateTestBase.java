@@ -50,7 +50,7 @@ public abstract class SsTemplateTestBase extends TestCase
     return renderWorkbook(path, null);
   }
 
-  private static void setParamMaps(String query, SsTemplateContext templateContext)
+  private static void setParamMaps(String query, SsTemplateContext templateContext) throws UnsupportedEncodingException
   {
     if (query == null) return;
 
@@ -63,7 +63,7 @@ public abstract class SsTemplateTestBase extends TestCase
       String tok = st.nextToken();
       int eq = tok.indexOf("=");
       String key = tok.substring(0, eq);
-      String value = URLDecoder.decode(tok.substring(eq + 1));
+      String value = URLDecoder.decode(tok.substring(eq + 1), "UTF-8");
 
       if (paramValues.containsKey(key))
       {

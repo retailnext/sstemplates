@@ -2,10 +2,7 @@ package com.carbonfive.sstemplates;
 
 import junit.framework.TestCase;
 
-import java.io.Serializable;
-
 public class CoordinatesTest extends TestCase
-  implements Serializable
 {
   public void testToString() throws Exception
   {

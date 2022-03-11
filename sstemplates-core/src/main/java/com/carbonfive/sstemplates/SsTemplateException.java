@@ -3,6 +3,8 @@ package com.carbonfive.sstemplates;
 public class SsTemplateException
   extends Exception
 {
+  private static final long serialVersionUID = 1L;
+
   public SsTemplateException()
   {
     super();

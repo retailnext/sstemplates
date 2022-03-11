@@ -14,7 +14,6 @@ public class SsTemplateContextTest
 {
 
   private MockHttpServletRequest request;
-  private MockHttpServletResponse response;
 
   public void setUp() throws Exception
   {
@@ -22,7 +21,6 @@ public class SsTemplateContextTest
 
     request = new MockHttpServletRequest(getServletContext());
     request.setMethod("POST");
-    response = new MockHttpServletResponse();
   }
 
   public void testFontCaching() throws Exception

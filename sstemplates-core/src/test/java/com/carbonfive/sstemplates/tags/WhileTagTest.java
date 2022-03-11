@@ -20,10 +20,10 @@ public class WhileTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("while.sst");
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals( "No a's, 3 b's 0", "b", row.getCell((short) 0).getStringCellValue() );
-    assertEquals( "No a's, 3 b's 1", "b", row.getCell((short) 1).getStringCellValue() );
-    assertEquals( "No a's, 3 b's 2", "b", row.getCell((short) 2).getStringCellValue() );
-    assertNull( "Cell should not exist", row.getCell((short) 3) );
+    assertEquals( "No a's, 3 b's 0", "b", row.getCell(0).getStringCellValue() );
+    assertEquals( "No a's, 3 b's 1", "b", row.getCell(1).getStringCellValue() );
+    assertEquals( "No a's, 3 b's 2", "b", row.getCell(2).getStringCellValue() );
+    assertNull( "Cell should not exist", row.getCell(3) );
   }
 
   public void childRenderTest( SsTemplateContext context )

@@ -62,7 +62,9 @@ public class ForEachTag extends BaseTag
 
   private static class InfiniteList extends ArrayList
   {
-    public Iterator iterator() { return new InfiniteIterator(); }
+	private static final long serialVersionUID = 1L;
+
+	public Iterator iterator() { return new InfiniteIterator(); }
   }
 
   private static class InfiniteIterator implements Iterator

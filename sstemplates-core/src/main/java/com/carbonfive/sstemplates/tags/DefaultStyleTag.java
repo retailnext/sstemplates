@@ -25,7 +25,7 @@ public class DefaultStyleTag extends StyleTag
       throw new SsTemplateException("Must define defaultstyle before creating sheets");
 
     HSSFSheet sheet = context.getWorkbook().createSheet();
-    styleData.setStyleAttributes(sheet.createRow(0).createCell((short)0).getCellStyle(), context);
+    styleData.setStyleAttributes(sheet.createRow(0).createCell(0).getCellStyle(), context);
     context.getWorkbook().removeSheetAt(0);
 
     super.renderChildren(context);

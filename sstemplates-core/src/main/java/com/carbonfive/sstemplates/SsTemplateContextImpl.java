@@ -3,7 +3,6 @@ package com.carbonfive.sstemplates;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.logging.*;
 import org.apache.commons.lang.builder.*;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -17,8 +16,6 @@ import com.carbonfive.sstemplates.hssf.*;
 public class SsTemplateContextImpl
     implements SsTemplateContext
 {
-  private static final Logger log = Logger.getLogger(SsTemplateContextImpl.class.getName());
-
   private static final String UNNAMED_STYLE_PREFIX = "!!!UNNAMED";
 
   private Map                   pageScope       = new HashMap();
@@ -349,7 +346,7 @@ public class SsTemplateContextImpl
       if (palette == null) palette = workbook.getCustomPalette();
 
       palette.setColorAtIndex(currentColorIndex, (byte)triplet[0], (byte)triplet[1], (byte)triplet[2]);
-      index = new Short(currentColorIndex);
+      index = Short.valueOf(currentColorIndex);
       colorMap.put(color, index);
       currentColorIndex++;
     }

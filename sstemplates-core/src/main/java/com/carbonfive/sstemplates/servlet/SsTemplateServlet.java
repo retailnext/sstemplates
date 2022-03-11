@@ -16,12 +16,12 @@ import com.carbonfive.sstemplates.tags.*;
  */
 public class SsTemplateServlet extends HttpServlet
 {
+  private static final long serialVersionUID = 1L;
+
   private static final Logger log = Logger.getLogger(SsTemplateServlet.class.getName());
 
-  private static final String HSSF_DIRECTORY_PARAM_KEY = "templatesDirectory";
   private static final String CUSTOM_TAGS_PARAM_KEY = "customTags";
 
-  private String          templateDirectory = "/";
   private ServletContext  context = null;
   private ServletSsTemplateProcessor processor;
 
@@ -104,7 +104,7 @@ public class SsTemplateServlet extends HttpServlet
 
   public File getTemplateFile( HttpServletRequest request )
   {
-    String path = request.getRealPath(request.getServletPath());
+    String path = request.getServletContext().getRealPath(request.getServletPath());
     if ( path == null )
       path = request.getServletPath();
     return new File(path);

@@ -23,9 +23,9 @@ public class SetTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("set.sst", attrs);
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals("0", row.getCell((short) 0).getStringCellValue());
-    assertEquals("1", row.getCell((short) 1).getStringCellValue());
-    assertEquals("2", row.getCell((short) 2).getStringCellValue());
+    assertEquals("0", row.getCell(0).getStringCellValue());
+    assertEquals("1", row.getCell(1).getStringCellValue());
+    assertEquals("2", row.getCell(2).getStringCellValue());
   }
 
   public void childRenderTest( SsTemplateContext context )

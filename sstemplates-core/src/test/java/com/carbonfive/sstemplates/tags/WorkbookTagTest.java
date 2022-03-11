@@ -23,7 +23,7 @@ public class WorkbookTagTest
 
     assertNotNull( "Workbook should not be null", workbook );
     assertEquals( "first value of workbook should be 'test'", "test",
-                  workbook.getSheetAt(0).getRow(0).getCell((short) 0).getStringCellValue());
+                  workbook.getSheetAt(0).getRow(0).getCell(0).getStringCellValue());
   }
 
   public void testCreateEmptyWorkbook() throws Exception
