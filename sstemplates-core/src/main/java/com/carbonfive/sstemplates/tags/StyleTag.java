@@ -66,8 +66,10 @@ public class StyleTag extends BaseTag
     {"pattern",   "thin-horz-bands",      Integer.toString(FillPatternType.THIN_HORZ_BANDS.getCode())},
     {"pattern",   "thin-vert-bands",      Integer.toString(FillPatternType.THIN_VERT_BANDS.getCode())},
 
-    {"fontWeight",  "normal",             Integer.toString(HSSFFont.BOLDWEIGHT_NORMAL)},
-    {"fontWeight",  "bold",               Integer.toString(HSSFFont.BOLDWEIGHT_BOLD)},
+    // keep for backward compatibility
+    // use "bold = true/false" instead
+    {"fontWeight",  "normal",             Integer.toString(0)},
+    {"fontWeight",  "bold",               Integer.toString(1)},
 
     {"typeOffset",  "none",               Integer.toString(HSSFFont.SS_NONE)},
     {"typeOffset",  "super",              Integer.toString(HSSFFont.SS_SUPER)},
@@ -129,6 +131,7 @@ public class StyleTag extends BaseTag
   private String fontWeight = null;
   private String fontColor = null;
   private String underline = null;
+  private String bold = null;
   private String italic = null;
   private String strikeout = null;
 
@@ -218,8 +221,12 @@ public class StyleTag extends BaseTag
     if ( typeOffset != null )
       styleData.put("typeOffset", Integer.valueOf(findShortValueForAttribute("typeOffset", "typeOffset", typeOffset, context)));
 
+    // keep "fontWeight = normal/bold" for backward compatibility
     if ( fontWeight != null )
-      styleData.put("fontWeight", Integer.valueOf(findShortValueForAttribute("fontWeight", "fontWeight", fontWeight, context)));
+      styleData.put("bold", Boolean.valueOf(findShortValueForAttribute("fontWeight", "fontWeight", fontWeight, context) != 0));
+
+    if ( bold != null )
+      styleData.put("bold",parseExpression(bold,Boolean.class,context));
 
     if ( underline != null )
       styleData.put("underline", Integer.valueOf(findShortValueForAttribute("underline", "underline", underline, context)));
@@ -666,6 +673,16 @@ public class StyleTag extends BaseTag
   public void setFontName(String fontName)
   {
     this.fontName = fontName;
+  }
+
+  public String getBold()
+  {
+    return bold;
+  }
+
+  public void setBold(String bold)
+  {
+    this.bold = bold;
   }
 
   public String getItalic()

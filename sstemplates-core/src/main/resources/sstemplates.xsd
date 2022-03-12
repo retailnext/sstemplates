@@ -250,6 +250,7 @@
     <xsd:attribute name="fontWeight"        type="xsd:string" use="optional"/>
     <xsd:attribute name="fontColor"         type="xsd:string" use="optional"/>
     <xsd:attribute name="underline"         type="xsd:string" use="optional"/>
+    <xsd:attribute name="bold"              type="xsd:string" use="optional"/>
     <xsd:attribute name="italic"            type="xsd:string" use="optional"/>
     <xsd:attribute name="strikeout"         type="xsd:string" use="optional"/>
     <xsd:attribute name="columnWidth"       type="xsd:string" use="optional"/>

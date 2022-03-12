@@ -118,15 +118,15 @@ public class HssfStyleData
 
     HSSFFont oldFont = context.getWorkbook().getFontAt(style.getFontIndex());
     String parsedFontName = stringFromStyleData("fontName", oldFont.getFontName());
+    boolean parsedBold = booleanFromStyleData("bold", oldFont.getBold());
     boolean parsedItalic = booleanFromStyleData("italic",oldFont.getItalic());
     boolean parsedStrikeout = booleanFromStyleData("strikeout",oldFont.getStrikeout());
     short parsedFontHeight = shortFromStyleData("fontHeight", oldFont.getFontHeight());
     short parsedFontColor = shortFromStyleData("fontColor", oldFont.getColor());
-    short parsedFontWeight = shortFromStyleData("fontWeight", oldFont.getBoldweight());
     short parsedTypeOffset = shortFromStyleData("typeOffset", oldFont.getTypeOffset());
     byte parsedUnderline = (byte) shortFromStyleData("underline", oldFont.getUnderline());
 
-    HSSFFont font = context.createFont(parsedFontName,parsedFontHeight,parsedFontColor,parsedFontWeight,
+    HSSFFont font = context.createFont(parsedFontName,parsedFontHeight,parsedFontColor,parsedBold,
                                        parsedItalic,parsedStrikeout,parsedUnderline,parsedTypeOffset);
     style.setFont(font);
   }

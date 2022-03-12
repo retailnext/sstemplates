@@ -33,17 +33,17 @@ public class SsTemplateContextTest
     String fontName = "Arial";
     short fontHeight = 240;
     short color = HSSFFont.COLOR_RED;
-    short boldWeight = HSSFFont.BOLDWEIGHT_BOLD;
+    boolean bold = true;
     boolean italic = true;
     boolean strikeout = true;
     byte underline = HSSFFont.U_DOUBLE;
     short typeOffset = 3;
 
     short initialFontCount = context.getWorkbook().getNumberOfFonts();
-    context.createFont(fontName,fontHeight,color,boldWeight,italic,strikeout,underline,typeOffset);
-    context.createFont(fontName,fontHeight,color,boldWeight,italic,strikeout,underline,typeOffset);
-    context.createFont(fontName,fontHeight,color,boldWeight,italic,strikeout,underline,typeOffset);
-    HSSFFont font = context.createFont(fontName,fontHeight,color,boldWeight,italic,strikeout,underline,typeOffset);
+    context.createFont(fontName,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
+    context.createFont(fontName,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
+    context.createFont(fontName,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
+    HSSFFont font = context.createFont(fontName,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
     assertNotNull( "context should have created a font", font );
     assertEquals( "Only one font should have been added to the workbook", initialFontCount+1,
                   context.getWorkbook().getNumberOfFonts() );

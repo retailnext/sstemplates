@@ -118,10 +118,10 @@ public class SsTemplateContextImpl
     return null;
   }
 
-  public HSSFFont createFont( String name, short fontHeight, short color, short boldWeight, boolean italic,
+  public HSSFFont createFont( String name, short fontHeight, short color, boolean bold, boolean italic,
                               boolean strikeout, byte underline, short typeOffset )
   {
-    FontKey fontKey = new FontKey(name,fontHeight,color,boldWeight,italic,strikeout,underline,typeOffset);
+    FontKey fontKey = new FontKey(name,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
     HSSFFont font = (HSSFFont) fontCache.get( fontKey );
     if ( font == null )
     {
@@ -405,16 +405,16 @@ public class SsTemplateContextImpl
   private class FontKey
   {
     String name = null;
-    short fontHeight, color, boldWeight, typeOffset;
-    boolean italic, strikeout;
+    short fontHeight, color, typeOffset;
+    boolean bold, italic, strikeout;
     byte underline;
-    public FontKey( String name, short fontHeight, short color, short boldWeight, boolean italic,
+    public FontKey( String name, short fontHeight, short color, boolean bold, boolean italic,
                     boolean strikeout, byte underline, short typeOffset )
     {
       this.name = name;
       this.fontHeight = fontHeight;
       this.color = color;
-      this.boldWeight = boldWeight;
+      this.bold = bold;
       this.italic = italic;
       this.strikeout = strikeout;
       this.underline = underline;
@@ -426,13 +426,13 @@ public class SsTemplateContextImpl
       if (( other == null ) || ( ! (other instanceof FontKey) )) return false;
       FontKey font = (FontKey) other;
       return (new EqualsBuilder()).append(name,font.name).append(fontHeight,font.fontHeight).append(color,font.color)
-              .append(boldWeight,font.boldWeight).append(italic,font.italic).append(strikeout,font.strikeout)
+              .append(bold,font.bold).append(italic,font.italic).append(strikeout,font.strikeout)
               .append(underline,font.underline).append(typeOffset,font.typeOffset).isEquals();
     }
 
     public int hashCode()
     {
-      return (new HashCodeBuilder()).append(name).append(fontHeight).append(color).append(boldWeight)
+      return (new HashCodeBuilder()).append(name).append(fontHeight).append(color).append(bold)
               .append(italic).append(strikeout).append(underline).append(typeOffset).toHashCode();
     }
 
@@ -441,7 +441,7 @@ public class SsTemplateContextImpl
       font.setFontName(name);
       font.setFontHeight(fontHeight);
       font.setColor(color);
-      font.setBoldweight(boldWeight);
+      font.setBold(bold);
       font.setItalic(italic);
       font.setStrikeout(strikeout);
       font.setUnderline(underline);

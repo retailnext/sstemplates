@@ -18,7 +18,7 @@ public interface SsTemplateContext extends VariableResolver, FunctionMapper
 
   Object resolveVariable( String name );
 
-  HSSFFont createFont( String name, short fontHeight, short color, short boldWeight, boolean italic,
+  HSSFFont createFont( String name, short fontHeight, short color, boolean bold, boolean italic,
                        boolean strikeout, byte underline, short typeOffset );
 
   void incrementCellIndex();

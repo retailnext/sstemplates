@@ -305,19 +305,21 @@ public class StyleTagTest extends TagTestBase
     assertEquals( "font name", "NONExistantFont", findFont(row, 2, templateContext).getFontName() );
   }
 
-  public void testFontHeightItalicAndStrikeout() throws Exception
+  public void testFontHeightBoldItalicAndStrikeout() throws Exception
   {
-    SsTemplateContext templateContext = renderWorkbook("style_font_style.sst?fontHeight=240&italic=true&strikeout=true");
+    SsTemplateContext templateContext = renderWorkbook("style_font_style.sst?fontHeight=240&italic=true&strikeout=true&bold=true");
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
     assertEquals( "fontHeight", 240, findFont(row, 0, templateContext).getFontHeight() );
+    assertTrue( "bold is true", findFont(row, 0, templateContext).getBold() );
     assertTrue( "italic is true", findFont(row, 0, templateContext).getItalic() );
     assertTrue( "strikeout is true", findFont(row, 0, templateContext).getStrikeout() );
 
-    templateContext = renderWorkbook("style_font_style.sst?fontHeight=180&italic=false&strikeout=false");
+    templateContext = renderWorkbook("style_font_style.sst?fontHeight=180&italic=false&strikeout=false&bold=false");
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
     assertEquals( "fontHeight", 180, findFont(row, 0, templateContext).getFontHeight() );
+    assertFalse( "bold is false", findFont(row, 0, templateContext).getBold() );
     assertFalse( "italic is false", findFont(row, 0, templateContext).getItalic() );
     assertFalse( "strikeout is false", findFont(row, 0, templateContext).getStrikeout() );
   }
@@ -326,7 +328,7 @@ public class StyleTagTest extends TagTestBase
   {
     short[] typeOffsets = new short[] { HSSFFont.SS_NONE, HSSFFont.SS_SUB, HSSFFont.SS_SUPER };
     String[] toNames = new String[] { "none", "sub", "super" };
-    short[] fontWeights = new short[] { HSSFFont.BOLDWEIGHT_BOLD, HSSFFont.BOLDWEIGHT_NORMAL };
+    boolean[] isBold = new boolean[] { true, false };
     String[] fwNames = new String[] { "bold", "normal" };
     short[] fontColors  = new short[] { HSSFFont.COLOR_RED };
     String[] fcNames = new String[] { "red" };
@@ -348,10 +350,10 @@ public class StyleTagTest extends TagTestBase
     }
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(1);
-    for ( short i=0; i < fontWeights.length; i++ )
+    for ( short i=0; i < isBold.length; i++ )
     {
-      assertEquals( "cell 1," + i + " should have correct fontWeight.", fontWeights[i],
-                    findFont(row, i, templateContext).getBoldweight() );
+      assertEquals( "cell 1," + i + " should have correct fontWeight.", isBold[i],
+                    findFont(row, i, templateContext).getBold() );
     }
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(2);
@@ -385,7 +387,7 @@ public class StyleTagTest extends TagTestBase
 
     HSSFFont font = templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex());
     assertEquals( "font height should be inherited from parent", 145, font.getFontHeight() );
-    assertEquals( "font weight should overide that of parent", HSSFFont.BOLDWEIGHT_BOLD, font.getBoldweight() );
+    assertEquals( "font weight should overide that of parent", true, font.getBold() );
   }
 
   public void testStyleCaching() throws Exception
@@ -420,8 +422,8 @@ public class StyleTagTest extends TagTestBase
     assertEquals( "style's fillPattern should be diamonds", FillPatternType.BRICKS, cellStyle.getFillPatternEnum() );
     assertEquals( "style's fontHeight should be 240", 222,
                   templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getFontHeight() );
-    assertEquals( "style's fontHeight should be 240", HSSFFont.BOLDWEIGHT_BOLD,
-                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getBoldweight() );
+    assertEquals( "style's fontHeight should be 240", true,
+                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getBold() );
     assertEquals( "style's alignment should be right", HorizontalAlignment.RIGHT, cellStyle.getAlignmentEnum());
   }
 
