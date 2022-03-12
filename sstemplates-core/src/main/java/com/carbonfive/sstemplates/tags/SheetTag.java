@@ -1,6 +1,7 @@
 package com.carbonfive.sstemplates.tags;
 
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.*;
 
@@ -132,7 +133,7 @@ public class SheetTag extends BaseTag
     {
       HSSFCellStyle cellStyle = sheet.createRow(0).createCell(0).getCellStyle();
       cellStyle.setFillForegroundColor(context.getColorIndex(context.getBackgroundColor()));
-      cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+      cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
     }
 
     if ((firstPageBreak != null) && (nextPageBreak != null))

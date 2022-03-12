@@ -1,6 +1,7 @@
 package com.carbonfive.sstemplates.tags;
 
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import com.carbonfive.sstemplates.*;
 
 /**
@@ -45,7 +46,7 @@ public class RowTagTest extends TagTestBase
     HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(0).getCellStyle();
 
     assertNotNull( "Style defined in row is not null", cellStyle );
-    assertEquals( "Style should have thin top border", HSSFCellStyle.BORDER_THIN, cellStyle.getBorderTop() );
+    assertEquals( "Style should have thin top border", BorderStyle.THIN, cellStyle.getBorderTopEnum() );
   }
 
   public void childRenderTest( SsTemplateContext context )

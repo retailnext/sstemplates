@@ -3,6 +3,7 @@ package com.carbonfive.sstemplates.hssf;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.FillPatternType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,7 +96,7 @@ public class HssfStyleData
     if (!styleData.containsKey("foreground") && (context.getBackgroundColor() != null))
     {
       style.setFillForegroundColor(context.getColorIndex(context.getBackgroundColor()) );
-      style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+      style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
     }
 
     style.setDataFormat( shortFromStyleData("dataFormat",style.getDataFormat()));

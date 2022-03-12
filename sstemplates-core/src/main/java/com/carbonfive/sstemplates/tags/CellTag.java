@@ -2,6 +2,8 @@ package com.carbonfive.sstemplates.tags;
 
 import java.util.*;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.hssf.*;
 import com.carbonfive.sstemplates.*;
@@ -150,7 +152,7 @@ public class CellTag extends BaseTag
 
       // set special parameters not contained in style
       HssfStyleData data = context.getNamedStyleData(styleName);
-      if (( data.getAutoColumnWidth() ) && ( cell.getCellType() == HSSFCell.CELL_TYPE_STRING )
+      if (( data.getAutoColumnWidth() ) && ( cell.getCellTypeEnum() == CellType.STRING )
           && ( cell.getStringCellValue() != null ))
       {
         int width = context.getSheet().getColumnWidth(context.getColumnIndex());
@@ -204,10 +206,10 @@ public class CellTag extends BaseTag
     int parsedRowspan = region.getLastRow() - region.getFirstRow() + 1;
 
     HSSFCellStyle style = cell.getCellStyle();
-    if (( style.getBorderTop() != HSSFCellStyle.BORDER_NONE )
-            || ( style.getBorderBottom() != HSSFCellStyle.BORDER_NONE )
-            || ( style.getBorderRight() != HSSFCellStyle.BORDER_NONE )
-            || ( style.getBorderLeft() != HSSFCellStyle.BORDER_NONE ))
+    if (( style.getBorderTopEnum() != BorderStyle.NONE )
+            || ( style.getBorderBottomEnum() != BorderStyle.NONE )
+            || ( style.getBorderRightEnum() != BorderStyle.NONE )
+            || ( style.getBorderLeftEnum() != BorderStyle.NONE ))
     {
       for (short i=0; i < parsedColspan; i++ )
       {
@@ -215,38 +217,38 @@ public class CellTag extends BaseTag
         {
           if (( i > 0 ) || ( j > 0 ))
           {
-            boolean leftBorder = ( i == 0 ) && ( style.getBorderLeft() != HSSFCellStyle.BORDER_NONE );
-            boolean rightBorder = ( i == parsedColspan-1 ) && ( style.getBorderRight() != HSSFCellStyle.BORDER_NONE );
-            boolean topBorder = ( j == 0 ) && ( style.getBorderTop() != HSSFCellStyle.BORDER_NONE );
-            boolean bottomBorder = ( j == parsedRowspan-1 ) && ( style.getBorderBottom() != HSSFCellStyle.BORDER_NONE );
+            boolean leftBorder = ( i == 0 ) && ( style.getBorderLeftEnum() != BorderStyle.NONE );
+            boolean rightBorder = ( i == parsedColspan-1 ) && ( style.getBorderRightEnum() != BorderStyle.NONE );
+            boolean topBorder = ( j == 0 ) && ( style.getBorderTopEnum() != BorderStyle.NONE );
+            boolean bottomBorder = ( j == parsedRowspan-1 ) && ( style.getBorderBottomEnum() != BorderStyle.NONE );
 
             if ( leftBorder || rightBorder || topBorder || bottomBorder )
             {
-              String styleName = "!!!regionBorder-" + (leftBorder ? "L" + style.getBorderLeft() : "")
-                  + ( rightBorder ? "R" + style.getBorderRight() : "") + ( topBorder ? "T" + style.getBorderTop() : "")
-                  + ( bottomBorder ? "B" + style.getBorderBottom() : "");
+              String styleName = "!!!regionBorder-" + (leftBorder ? "L" + style.getBorderLeftEnum().getCode() : "")
+                  + ( rightBorder ? "R" + style.getBorderRightEnum().getCode() : "") + ( topBorder ? "T" + style.getBorderTopEnum().getCode() : "")
+                  + ( bottomBorder ? "B" + style.getBorderBottomEnum().getCode() : "");
               HssfStyleData styleData = null;
               if ( ! context.hasCachedStyleData(styleName) )
               {
                 styleData = new HssfStyleData();
                 if ( topBorder )
                 {
-                  styleData.put("borderTop",Integer.valueOf(style.getBorderTop()));
+                  styleData.put("borderTop",Integer.valueOf(style.getBorderTopEnum().getCode()));
                   styleData.put("topBorderColor",Integer.valueOf(style.getTopBorderColor()));
                 }
                 if ( bottomBorder )
                 {
-                  styleData.put("borderBottom",Integer.valueOf(style.getBorderBottom()));
+                  styleData.put("borderBottom",Integer.valueOf(style.getBorderBottomEnum().getCode()));
                   styleData.put("bottomBorderColor",Integer.valueOf(style.getBottomBorderColor()));
                 }
                 if ( rightBorder )
                 {
-                  styleData.put("borderRight",Integer.valueOf(style.getBorderRight()));
+                  styleData.put("borderRight",Integer.valueOf(style.getBorderRightEnum().getCode()));
                   styleData.put("rightBorderColor",Integer.valueOf(style.getRightBorderColor()));
                 }
                 if ( leftBorder )
                 {
-                  styleData.put("borderLeft",Integer.valueOf(style.getBorderLeft()));
+                  styleData.put("borderLeft",Integer.valueOf(style.getBorderLeftEnum().getCode()));
                   styleData.put("leftBorderColor",Integer.valueOf(style.getLeftBorderColor()));
                 }
 
@@ -269,48 +271,48 @@ public class CellTag extends BaseTag
   {
     if (( contents != null  ) && ( contents.length() != 0 ))
     {
-      if ( cell.getCellType() == HSSFCell.CELL_TYPE_STRING )
+      if ( cell.getCellTypeEnum() == CellType.STRING )
         cell.setCellValue( new HSSFRichTextString( (String) parseExpression(contents, String.class, context) ) );
-      else if ( cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC )
+      else if ( cell.getCellTypeEnum() == CellType.NUMERIC )
       {
         if ((parsedType != null) && parsedType.equals("date"))
           cell.setCellValue( (Date) parseExpression(contents, Date.class, context));
         else
           cell.setCellValue( ((Double) parseExpression(contents, Double.class, context)).doubleValue() );
       }
-      else if ( cell.getCellType() == HSSFCell.CELL_TYPE_BOOLEAN )
+      else if ( cell.getCellTypeEnum() == CellType.BOOLEAN )
         cell.setCellValue( ((Boolean) parseExpression(contents, Boolean.class, context)).booleanValue() );
-      else if ( cell.getCellType() == HSSFCell.CELL_TYPE_FORMULA )
+      else if ( cell.getCellTypeEnum() == CellType.FORMULA )
         cell.setCellFormula( (String) parseExpression(contents, String.class, context) );
-      else if ( cell.getCellType() == HSSFCell.CELL_TYPE_BLANK )
+      else if ( cell.getCellTypeEnum() == CellType.BLANK )
         cell.setCellFormula(null);
     }
   }
 
-  private int findCellType(SsTemplateContext context) throws SsTemplateException
+  private CellType findCellType(SsTemplateContext context) throws SsTemplateException
   {
-    int cellType = HSSFCell.CELL_TYPE_STRING;
+	CellType cellType = CellType.STRING;
     if (( type != null ) && ( type.length() > 0 ))
     {
       parsedType = ((String) parseExpression( type, String.class, context )).toLowerCase();
       if ( "blank".equals( parsedType ) )
-        cellType = HSSFCell.CELL_TYPE_BLANK;
+        cellType = CellType.BLANK;
       else if ( "boolean".equals( parsedType ))
-        cellType = HSSFCell.CELL_TYPE_BOOLEAN;
+        cellType = CellType.BOOLEAN;
       else if ( "error".equals( parsedType ))
-        cellType = HSSFCell.CELL_TYPE_ERROR;
+        cellType = CellType.ERROR;
       else if ( "formula".equals( parsedType ))
-        cellType = HSSFCell.CELL_TYPE_FORMULA;
+        cellType = CellType.FORMULA;
       else if ( "numeric".equals( parsedType ) || "date".equals( parsedType) )
-        cellType = HSSFCell.CELL_TYPE_NUMERIC;
+        cellType = CellType.NUMERIC;
       else if ( "string".equals( parsedType ))
-        cellType = HSSFCell.CELL_TYPE_STRING;
+        cellType = CellType.STRING;
       else
         throw new SsTemplateException( "Invalid cell type: " + parsedType );
     }
     else if ((contents == null) || (contents.length() == 0))
     {
-      cellType = HSSFCell.CELL_TYPE_BLANK;
+      cellType = CellType.BLANK;
     }
     return cellType;
   }
