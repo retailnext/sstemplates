@@ -5,6 +5,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import org.apache.commons.lang.builder.*;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.hssf.*;
 
@@ -59,11 +60,11 @@ public class SsTemplateContextImpl
   private void initStyles()
   {
     HssfStyleData noTopBorder = new HssfStyleData();
-    noTopBorder.put("borderTop", Integer.valueOf(HSSFCellStyle.BORDER_NONE));
+    noTopBorder.put("borderTop", Integer.valueOf(BorderStyle.NONE.getCode()));
     addStyleData( "_noTopBorder", noTopBorder );
 
     HssfStyleData noBottomBorder = new HssfStyleData();
-    noBottomBorder.put("borderBottom", Integer.valueOf(HSSFCellStyle.BORDER_NONE));
+    noBottomBorder.put("borderBottom", Integer.valueOf(BorderStyle.NONE.getCode()));
     addStyleData( "_noBottomBorder", noBottomBorder );
   }
 
