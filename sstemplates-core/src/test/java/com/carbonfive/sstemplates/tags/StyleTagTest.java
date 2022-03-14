@@ -3,6 +3,7 @@ package com.carbonfive.sstemplates.tags;
 import java.util.*;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.*;
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -382,7 +383,7 @@ public class StyleTagTest extends TagTestBase
                   cellStyle.getAlignmentEnum());
     assertEquals( "border should be overide parent style", BorderStyle.THICK,
                   cellStyle.getBorderLeftEnum());
-    assertColorEquals( "background should not be inherited", templateContext.getWorkbook(), HSSFColor.AQUA.class,
+    assertColorEquals( "background should not be inherited", templateContext.getWorkbook(), HSSFColorPredefined.AQUA.getIndex(),
                        cellStyle.getFillBackgroundColor() );
 
     HSSFFont font = templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex());

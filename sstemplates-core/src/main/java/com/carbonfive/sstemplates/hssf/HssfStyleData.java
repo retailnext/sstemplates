@@ -2,7 +2,7 @@ package com.carbonfive.sstemplates.hssf;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -88,10 +88,10 @@ public class HssfStyleData
     // work around strange handling of default colors by setting foreground to black if background is set but foreground isn't
     short foreground = shortFromStyleData("foreground", style.getFillForegroundColor());
     short background = shortFromStyleData("background", style.getFillBackgroundColor());
-    if (( foreground == HSSFColor.AUTOMATIC.index )
-        && ( background != HSSFColor.AUTOMATIC.index )
-        && (background != HSSFColor.AUTOMATIC.index+1))
-      foreground = HSSFColor.BLACK.index;
+    if (( foreground == HSSFColorPredefined.AUTOMATIC.getIndex() )
+        && ( background != HSSFColorPredefined.AUTOMATIC.getIndex() )
+        && (background != HSSFColorPredefined.AUTOMATIC.getIndex()+1))
+      foreground = HSSFColorPredefined.BLACK.getIndex();
 
     style.setFillForegroundColor(foreground);
     style.setFillBackgroundColor(background);
