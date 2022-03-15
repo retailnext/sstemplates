@@ -385,7 +385,7 @@ public class StyleTagTest extends TagTestBase
     assertColorEquals( "background should not be inherited", templateContext.getWorkbook(), HSSFColorPredefined.AQUA.getIndex(),
                        cellStyle.getFillBackgroundColor() );
 
-    HSSFFont font = templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex());
+    HSSFFont font = templateContext.getWorkbook().getFontAt(cellStyle.getFontIndexAsInt());
     assertEquals( "font height should be inherited from parent", 145, font.getFontHeight() );
     assertEquals( "font weight should overide that of parent", true, font.getBold() );
   }
@@ -413,7 +413,7 @@ public class StyleTagTest extends TagTestBase
     assertEquals( "style's border should be thin", BorderStyle.THIN, cellStyle.getBorderTopEnum());
     assertEquals( "style's fillPattern should be diamonds", FillPatternType.DIAMONDS, cellStyle.getFillPatternEnum() );
     assertEquals( "style's fontHeight should be 240", 240,
-                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getFontHeight() );
+                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndexAsInt()).getFontHeight() );
 
 
     cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(1).getCellStyle();
@@ -421,9 +421,9 @@ public class StyleTagTest extends TagTestBase
     assertEquals( "style's border should be thin", BorderStyle.THIN, cellStyle.getBorderTopEnum());
     assertEquals( "style's fillPattern should be diamonds", FillPatternType.BRICKS, cellStyle.getFillPatternEnum() );
     assertEquals( "style's fontHeight should be 240", 222,
-                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getFontHeight() );
+                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndexAsInt()).getFontHeight() );
     assertEquals( "style's fontHeight should be 240", true,
-                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getBold() );
+                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndexAsInt()).getBold() );
     assertEquals( "style's alignment should be right", HorizontalAlignment.RIGHT, cellStyle.getAlignmentEnum());
   }
 
@@ -470,7 +470,7 @@ public class StyleTagTest extends TagTestBase
 
   private HSSFFont findFont(HSSFRow row, int index, SsTemplateContext templateContext)
   {
-    return templateContext.getWorkbook().getFontAt(row.getCell(index).getCellStyle().getFontIndex());
+    return templateContext.getWorkbook().getFontAt(row.getCell(index).getCellStyle().getFontIndexAsInt());
   }
 
   private String mapToParams( Map map )

@@ -39,13 +39,13 @@ public class SsTemplateContextTest
     byte underline = HSSFFont.U_DOUBLE;
     short typeOffset = 3;
 
-    short initialFontCount = context.getWorkbook().getNumberOfFonts();
+    int initialFontCount = context.getWorkbook().getNumberOfFontsAsInt();
     context.createFont(fontName,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
     context.createFont(fontName,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
     context.createFont(fontName,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
     HSSFFont font = context.createFont(fontName,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
     assertNotNull( "context should have created a font", font );
     assertEquals( "Only one font should have been added to the workbook", initialFontCount+1,
-                  context.getWorkbook().getNumberOfFonts() );
+                  context.getWorkbook().getNumberOfFontsAsInt() );
   }
 }

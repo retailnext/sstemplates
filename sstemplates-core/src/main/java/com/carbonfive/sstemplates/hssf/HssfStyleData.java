@@ -116,7 +116,7 @@ public class HssfStyleData
     style.setAlignment(HorizontalAlignment.forInt(shortFromStyleData("align", style.getAlignmentEnum().getCode())));
     style.setVerticalAlignment(VerticalAlignment.forInt(shortFromStyleData("valign", style.getVerticalAlignmentEnum().getCode())));
 
-    HSSFFont oldFont = context.getWorkbook().getFontAt(style.getFontIndex());
+    HSSFFont oldFont = context.getWorkbook().getFontAt(style.getFontIndexAsInt());
     String parsedFontName = stringFromStyleData("fontName", oldFont.getFontName());
     boolean parsedBold = booleanFromStyleData("bold", oldFont.getBold());
     boolean parsedItalic = booleanFromStyleData("italic",oldFont.getItalic());

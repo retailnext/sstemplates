@@ -152,7 +152,7 @@ public class CellTag extends BaseTag
 
       // set special parameters not contained in style
       HssfStyleData data = context.getNamedStyleData(styleName);
-      if (( data.getAutoColumnWidth() ) && ( cell.getCellTypeEnum() == CellType.STRING )
+      if (( data.getAutoColumnWidth() ) && ( cell.getCellType() == CellType.STRING )
           && ( cell.getStringCellValue() != null ))
       {
         int width = context.getSheet().getColumnWidth(context.getColumnIndex());
@@ -271,20 +271,20 @@ public class CellTag extends BaseTag
   {
     if (( contents != null  ) && ( contents.length() != 0 ))
     {
-      if ( cell.getCellTypeEnum() == CellType.STRING )
+      if ( cell.getCellType() == CellType.STRING )
         cell.setCellValue( new HSSFRichTextString( (String) parseExpression(contents, String.class, context) ) );
-      else if ( cell.getCellTypeEnum() == CellType.NUMERIC )
+      else if ( cell.getCellType() == CellType.NUMERIC )
       {
         if ((parsedType != null) && parsedType.equals("date"))
           cell.setCellValue( (Date) parseExpression(contents, Date.class, context));
         else
           cell.setCellValue( ((Double) parseExpression(contents, Double.class, context)).doubleValue() );
       }
-      else if ( cell.getCellTypeEnum() == CellType.BOOLEAN )
+      else if ( cell.getCellType() == CellType.BOOLEAN )
         cell.setCellValue( ((Boolean) parseExpression(contents, Boolean.class, context)).booleanValue() );
-      else if ( cell.getCellTypeEnum() == CellType.FORMULA )
+      else if ( cell.getCellType() == CellType.FORMULA )
         cell.setCellFormula( (String) parseExpression(contents, String.class, context) );
-      else if ( cell.getCellTypeEnum() == CellType.BLANK )
+      else if ( cell.getCellType() == CellType.BLANK )
         cell.setCellFormula(null);
     }
   }

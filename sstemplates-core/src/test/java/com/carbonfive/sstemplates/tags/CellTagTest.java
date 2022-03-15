@@ -44,19 +44,19 @@ public class CellTagTest extends TagTestBase
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
 
-    assertEquals( "Cell type has been set to blank", CellType.BLANK, row.getCell(0).getCellTypeEnum() );
+    assertEquals( "Cell type has been set to blank", CellType.BLANK, row.getCell(0).getCellType() );
 
-    assertEquals( "Cell type has been set to boolean", CellType.BOOLEAN, row.getCell(1).getCellTypeEnum() );
+    assertEquals( "Cell type has been set to boolean", CellType.BOOLEAN, row.getCell(1).getCellType() );
     assertTrue( "Boolean cell is set to true", row.getCell(1).getBooleanCellValue() );
 
-    assertEquals( "Cell type has been set to error", CellType.ERROR, row.getCell(2).getCellTypeEnum() );
+    assertEquals( "Cell type has been set to error", CellType.ERROR, row.getCell(2).getCellType() );
 
-    assertEquals( "Cell type has been set to formula", CellType.FORMULA, row.getCell(3).getCellTypeEnum() );
+    assertEquals( "Cell type has been set to formula", CellType.FORMULA, row.getCell(3).getCellType() );
 
-    assertEquals( "Cell type has been set to numeric", CellType.NUMERIC, row.getCell(4).getCellTypeEnum() );
+    assertEquals( "Cell type has been set to numeric", CellType.NUMERIC, row.getCell(4).getCellType() );
     assertTrue( "Numeric cell is set to test value", 2342.32 == row.getCell(4).getNumericCellValue() );
 
-    assertEquals( "Cell type has been set to string", CellType.STRING, row.getCell(5).getCellTypeEnum() );
+    assertEquals( "Cell type has been set to string", CellType.STRING, row.getCell(5).getCellType() );
     assertEquals( "String cell is set to test value", "test string", row.getCell(5).getStringCellValue() );
   }
 
@@ -68,7 +68,7 @@ public class CellTagTest extends TagTestBase
     HSSFRow row = sheet.getRow(0);
     assertEquals( "Cell content has been set", "stuff", row.getCell(0).getStringCellValue() );
     assertEquals( "Blank cell", "", row.getCell(1).getStringCellValue() );
-    assertEquals( "Blank cell", CellType.BLANK, row.getCell(1).getCellTypeEnum());
+    assertEquals( "Blank cell", CellType.BLANK, row.getCell(1).getCellType());
   }
 
   public void testRegion() throws Exception
