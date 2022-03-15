@@ -112,8 +112,6 @@ public class CellTag extends BaseTag
     HSSFCell cell = context.getRow().getCell(columnIndex);
     if ( cell == null ) cell = context.getRow().createCell(columnIndex);
 
-    cell.setCellType(findCellType(context));
-
     setCellContents(cell, context);
 
     setCellStyle(cell, context, showTopBorder, showBottomBorder);
@@ -269,24 +267,34 @@ public class CellTag extends BaseTag
 
   private void setCellContents(HSSFCell cell, SsTemplateContext context) throws SsTemplateException
   {
+	//     cell.setCellType(cellType);
+	CellType cellType = findCellType(context);
     if (( contents != null  ) && ( contents.length() != 0 ))
     {
-      if ( cell.getCellType() == CellType.STRING )
-        cell.setCellValue( new HSSFRichTextString( (String) parseExpression(contents, String.class, context) ) );
-      else if ( cell.getCellType() == CellType.NUMERIC )
+      if ( cellType == CellType.STRING )
       {
+    	cell.setCellType(cellType);
+        cell.setCellValue( new HSSFRichTextString( (String) parseExpression(contents, String.class, context) ) );
+      }
+      else if ( cellType == CellType.NUMERIC )
+      {
+    	cell.setCellType(cellType);
         if ((parsedType != null) && parsedType.equals("date"))
           cell.setCellValue( (Date) parseExpression(contents, Date.class, context));
         else
           cell.setCellValue( ((Double) parseExpression(contents, Double.class, context)).doubleValue() );
       }
-      else if ( cell.getCellType() == CellType.BOOLEAN )
+      else if ( cellType == CellType.BOOLEAN )
         cell.setCellValue( ((Boolean) parseExpression(contents, Boolean.class, context)).booleanValue() );
-      else if ( cell.getCellType() == CellType.FORMULA )
+      else if ( cellType == CellType.FORMULA )
         cell.setCellFormula( (String) parseExpression(contents, String.class, context) );
-      else if ( cell.getCellType() == CellType.BLANK )
-        cell.setCellFormula(null);
+      else if ( cellType == CellType.BLANK )
+    	cell.setBlank();
+      else
+    	cell.setCellType(cellType);
     }
+    else
+    	cell.setCellType(cellType);
   }
 
   private CellType findCellType(SsTemplateContext context) throws SsTemplateException
