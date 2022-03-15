@@ -111,49 +111,48 @@ public class StyleTagTest extends TagTestBase
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
     for ( int i = 0; i < colorClasses.size(); i++ )
       assertColorEquals( "cell 0," + i + " should have correct top border color",
-                         templateContext.getWorkbook(), (Class) colorClasses.get(i),
+                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
                          row.getCell(i).getCellStyle().getTopBorderColor());
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(1);
     for ( int i = 0; i < colorClasses.size(); i++ )
       assertColorEquals( "cell 1," + i + " should have correct bottom border color",
-                         templateContext.getWorkbook(), (Class) colorClasses.get(i),
+                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
                          row.getCell(i).getCellStyle().getBottomBorderColor() );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(2);
     for ( int i = 0; i < colorClasses.size(); i++ )
       assertColorEquals( "cell 2," + i + " should have correct right border color",
-                         templateContext.getWorkbook(), (Class) colorClasses.get(i),
+                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
                          row.getCell(i).getCellStyle().getRightBorderColor() );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(3);
     for ( int i = 0; i < colorClasses.size(); i++ )
       assertColorEquals( "cell 3," + i + " should have correct left border color",
-                         templateContext.getWorkbook(), (Class) colorClasses.get(i),
+                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
                          row.getCell(i).getCellStyle().getLeftBorderColor() );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(4);
     for ( int i = 0; i < colorClasses.size(); i++ )
     {
       assertColorEquals( "cell 4," + i + " should have correct top border color",
-                         templateContext.getWorkbook(), (Class) colorClasses.get(i),
+                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
                          row.getCell(i).getCellStyle().getTopBorderColor() );
       assertColorEquals( "cell 4," + i + " should have correct bottom border color",
-                         templateContext.getWorkbook(), (Class) colorClasses.get(i),
+                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
                          row.getCell(i).getCellStyle().getBottomBorderColor() );
       assertColorEquals( "cell 4," + i + " should have correct right border color",
-                         templateContext.getWorkbook(), (Class) colorClasses.get(i),
+                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
                          row.getCell(i).getCellStyle().getRightBorderColor() );
       assertColorEquals( "cell 4," + i + " should have correct left border color",
-                         templateContext.getWorkbook(), (Class) colorClasses.get(i),
+                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
                          row.getCell(i).getCellStyle().getLeftBorderColor() );
     }
   }
 
-  private void assertColorEquals(String message, HSSFWorkbook workbook, Class colorClass, short colorIndex)
+  private void assertColorEquals(String message, HSSFWorkbook workbook, HSSFColorPredefined intendedColor, short colorIndex)
     throws Exception
   {
-    HSSFColor intendedColor = (HSSFColor) colorClass.getConstructor(null).newInstance(null);
     HSSFPalette palette = workbook.getCustomPalette();
     HSSFColor actualColor = palette.getColor(colorIndex);
     assertTrue(message + " Intended: " + intendedColor.getTriplet() + " Actual: " + actualColor.getTriplet(),
@@ -213,13 +212,13 @@ public class StyleTagTest extends TagTestBase
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
     for ( int i = 0; i < colorClasses.size(); i++ )
       assertColorEquals( "cell 0," + i + " should have correct foreground color",
-                         templateContext.getWorkbook(), (Class) colorClasses.get(i),
+                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
                          row.getCell(i).getCellStyle().getFillForegroundColor() );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(1);
     for ( int i = 0; i < colorClasses.size(); i++ )
       assertColorEquals( "cell 1," + i + " should have correct background color",
-                         templateContext.getWorkbook(), (Class) colorClasses.get(i),
+                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
                          row.getCell(i).getCellStyle().getFillBackgroundColor() );
   }
 
@@ -506,13 +505,8 @@ public class StyleTagTest extends TagTestBase
     StringBuffer params = new StringBuffer();
     for (Iterator it = colorClasses.iterator(); it.hasNext();)
     {
-      Class colorClass = (Class) it.next();
-      String className = colorClass.getName();
-      int dollarIndex = className.lastIndexOf("$");
-      if ( dollarIndex >= 0 ) className = className.substring(dollarIndex+1);
-      className = className.toLowerCase();
-      className = className.replace('_','-');
-      params.append("c="+className);
+      HSSFColorPredefined color = (HSSFColorPredefined) it.next();
+      params.append("c="+color.name().toLowerCase().replace('_','-'));
       if ( it.hasNext() ) params.append('&');
     }
     return params.toString();
@@ -520,14 +514,7 @@ public class StyleTagTest extends TagTestBase
 
   private ArrayList getColorClasses()
   {
-    ArrayList colorClasses = new ArrayList();
-    Class[] colorClassesArray = HSSFColor.class.getClasses();
-    for ( int i=0; i < colorClassesArray.length; i++ )
-    {
-      if ( HSSFColor.class.isAssignableFrom(colorClassesArray[i]))
-        colorClasses.add(colorClassesArray[i]);
-    }
-    return colorClasses;
+    return new ArrayList(Arrays.asList(HSSFColorPredefined.values()));
   }
 
   public void childRenderTest( SsTemplateContext context )

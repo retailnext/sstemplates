@@ -4,6 +4,7 @@ import com.carbonfive.sstemplates.hssf.*;
 import com.carbonfive.sstemplates.*;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.*;
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -398,31 +399,11 @@ public class StyleTag extends BaseTag
   private static HashMap getColorAttributeValues()
   {
     HashMap colors = new HashMap();
-    Class[] colorClasses = HSSFColor.class.getClasses();
-    for ( int i=0; i < colorClasses.length; i++ )
-    {
-      try
-      {
-        if ( HSSFColor.class.isAssignableFrom(colorClasses[i]))
-          //colors.put(classNameToAttributeValue(colorClasses[i]),Integer.valueOf(getStaticShortField(colorClasses[i],"index")));
-          colors.put(classNameToAttributeValue(colorClasses[i]), colorClasses[i].getConstructor(null).newInstance(null));
-      }
-      catch (Exception e)
-      {
-        // should never happen
-        log.fine(e.getMessage());
-      }
-    }
-    return colors;
-  }
+    HSSFColorPredefined[] predefinedColors = HSSFColorPredefined.values();
+    for ( int i=0; i < predefinedColors.length; i++ )
+      colors.put(predefinedColors[i].name().toLowerCase().replace('_','-'), predefinedColors[i].getColor());
 
-  private static String classNameToAttributeValue(Class clazz)
-  {
-    String className = clazz.getName();
-    int dollarIndex = className.lastIndexOf("$");
-    if ( dollarIndex >= 0 ) className = className.substring(dollarIndex+1);
-    className = className.toLowerCase();
-    return className.replace('_','-');
+    return colors;
   }
 
   public String getAlign()
