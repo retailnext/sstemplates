@@ -20,8 +20,8 @@
     </licenses>
 
     <properties>
-        <java.source>1.4</java.source>
-        <java.target>1.4</java.target>
+        <java.source>1.8</java.source>
+        <java.target>1.8</java.target>
 
         <spring.version>2.5.6</spring.version>
     </properties>

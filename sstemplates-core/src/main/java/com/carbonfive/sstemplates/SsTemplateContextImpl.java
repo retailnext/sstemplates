@@ -8,6 +8,7 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.hssf.*;
+import com.carbonfive.sstemplates.tags.SsTemplateTag;
 
 /**
  * This class acts as an EL VariableResolver, but does not support the pageContext implicit object.
@@ -19,15 +20,14 @@ public class SsTemplateContextImpl
 {
   private static final String UNNAMED_STYLE_PREFIX = "!!!UNNAMED";
 
-  private Map                   pageScope       = new HashMap();
-  private Map                   fontCache       = new HashMap();
-  private Map                   styleDataCache  = new HashMap();
-  private Map                   styleDataInverseCache  = new HashMap();
-  private Map                   styleCache      = new HashMap();
-  private Map                   accumulatorCache = new HashMap();
-  private Map                   resetAccumulatorCache = new RemoveOnGetMap(accumulatorCache);
-  private Map                   functions       = new HashMap();
-  private Map                   customValues    = new HashMap();
+  private Map<String, Object>  pageScope       = new HashMap<String, Object>();
+  private Map<FontKey, HSSFFont> fontCache       = new HashMap<FontKey, HSSFFont>();
+  private Map<String, HssfStyleData> styleDataCache  = new HashMap<String, HssfStyleData>();
+  private Map<HssfStyleData, String> styleDataInverseCache  = new HashMap<HssfStyleData, String>();
+  private Map<String, CachedStyle> styleCache   = new HashMap<String, CachedStyle>();
+  private Map<String, HssfCellAccumulator> accumulatorCache = new HashMap<String, HssfCellAccumulator>();
+  private Map<String, Method>   functions       = new HashMap<String, Method>();
+  private Map<Object, Object>   customValues    = new HashMap<Object, Object>();
   private HSSFWorkbook          workbook        = null;
   private HSSFSheet             sheet           = null;
   private HSSFRow               row             = null;
@@ -51,10 +51,10 @@ public class SsTemplateContextImpl
     initStyles();
   }
 
-  public SsTemplateContextImpl(SsTemplateProcessor processor, File templateDir, Map context)
+  public SsTemplateContextImpl(SsTemplateProcessor processor, File templateDir, Map<String, Object> context)
   {
     this(processor, templateDir);
-    pageScope = new HashMap(context);
+    pageScope = new HashMap<String, Object>(context);
   }
 
   private void initStyles()
@@ -68,7 +68,7 @@ public class SsTemplateContextImpl
     addStyleData( "_noBottomBorder", noBottomBorder );
   }
 
-  public Collection parseIncludeFile(String path)
+  public Collection<SsTemplateTag> parseIncludeFile(String path)
     throws SsTemplateException
   {
     return processor.parseIncludeFile(findFileInTemplateDirectory(path));
@@ -108,9 +108,6 @@ public class SsTemplateContextImpl
     if ( "accumulator".equals( name ) )
       return accumulatorCache;
 
-    if ( "resetAccumulator".equals( name ) )
-      return resetAccumulatorCache;
-
     // otherwise, try to find the name in page, request, session, then application scope
     if ( pageScope.containsKey( name ) )
       return pageScope.get(name);
@@ -122,7 +119,7 @@ public class SsTemplateContextImpl
                               boolean strikeout, byte underline, short typeOffset )
   {
     FontKey fontKey = new FontKey(name,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
-    HSSFFont font = (HSSFFont) fontCache.get( fontKey );
+    HSSFFont font = fontCache.get( fontKey );
     if ( font == null )
     {
       font = workbook.createFont();
@@ -199,7 +196,7 @@ public class SsTemplateContextImpl
   private CachedStyle getCachedStyleFromName(String name)
           throws SsTemplateException
   {
-    CachedStyle cachedStyle = (CachedStyle) styleCache.get( name );
+    CachedStyle cachedStyle = styleCache.get( name );
     if ( cachedStyle == null )
     {
       StringTokenizer st = new StringTokenizer(name, " ", false);
@@ -207,7 +204,7 @@ public class SsTemplateContextImpl
       for (int i=0; i < datas.length; i++ )
       {
         String token = st.nextToken();
-        datas[i] = (HssfStyleData) styleDataCache.get( token );
+        datas[i] = styleDataCache.get( token );
         if ( datas[i] == null )
           throw new SsTemplateException( "Error retrieving undefined style " + token );
       }
@@ -294,13 +291,12 @@ public class SsTemplateContextImpl
 
   public HssfCellAccumulator getNamedAccumulator(String name)
   {
-    HssfCellAccumulator acc = (HssfCellAccumulator)accumulatorCache.get(name);
+    HssfCellAccumulator acc = accumulatorCache.get(name);
 
     if (acc == null)
     {
       acc = new HssfCellAccumulator();
       accumulatorCache.put(name, acc);
-      //resetAccumulatorCache.put(name, acc);
     }
 
     return acc;
@@ -314,7 +310,7 @@ public class SsTemplateContextImpl
   // no prefix support
   public Method resolveFunction(String prefix, String name)
   {
-    return (Method)functions.get(name);
+    return functions.get(name);
   }
 
   public Object getCustomValue(Object key)
@@ -330,14 +326,14 @@ public class SsTemplateContextImpl
   public static final short firstColorIndex = 0xa;
   public static final short lastColorIndex = 0x40;
   private short currentColorIndex = firstColorIndex;
-  private Map colorMap = new HashMap();
+  private Map<Color, Short> colorMap = new HashMap<Color, Short>();
   private HSSFPalette palette;
 
   public short getColorIndex(short[] triplet)
     throws SsTemplateException
   {
     Color color = new Color(triplet);
-    Short index = (Short)colorMap.get(color);
+    Short index = colorMap.get(color);
 
     if (index == null)
     {
@@ -459,28 +455,4 @@ public class SsTemplateContextImpl
       this.style = style;
     }
   }
-
-  public static class RemoveOnGetMap implements Map
-  {
-    private Map map;
-
-    public RemoveOnGetMap(Map map)
-    {
-      this.map = map;
-    }
-
-    public int size() { return map.size(); }
-    public void clear() { map.clear(); }
-    public boolean isEmpty() { return map.isEmpty(); }
-    public boolean containsKey(Object key) { return map.containsKey(key); }
-    public boolean containsValue(Object value) { return map.containsValue(value); }
-    public Collection values() { return map.values(); }
-    public void putAll(Map t) { map.putAll(t); }
-    public Set entrySet() { return map.entrySet(); }
-    public Set keySet() { return map.keySet(); }
-    public Object get(Object key) { return map.remove(key); }
-    public Object remove(Object key) { return map.remove(key); }
-    public Object put(Object key, Object value) { return map.put(key, value); }
-  }
-
 }

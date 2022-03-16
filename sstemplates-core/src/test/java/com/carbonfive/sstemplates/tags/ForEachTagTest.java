@@ -29,11 +29,11 @@ public class ForEachTagTest extends TagTestBase
 
   public void testCollection() throws Exception
   {
-    ArrayList c = new ArrayList();
+    List<Integer> c = new ArrayList<Integer>();
     c.add( Integer.valueOf(3) );
     c.add( Integer.valueOf(5) );
     c.add( Integer.valueOf(8) );
-    Map attrs = new HashMap();
+    Map<String, List<Integer>> attrs = new HashMap<String, List<Integer>>();
     attrs.put("columnIndexes", c);
 
     SsTemplateContext templateContext = renderWorkbook("foreach_collection.sst", attrs);
@@ -46,11 +46,11 @@ public class ForEachTagTest extends TagTestBase
 
   public void testMap() throws Exception
   {
-    Map map = new LinkedHashMap();
+    Map<String, String> map = new LinkedHashMap<String, String>();
     map.put("1", "One");
     map.put("2", "Two");
     map.put("3", "Three");
-    Map attrs = new HashMap();
+    Map<String, Map<String, String>> attrs = new HashMap<String, Map<String, String>>();
     attrs.put("items", map);
     SsTemplateContext templateContext = renderWorkbook("foreach_map.sst", attrs);
     HSSFSheet sheet = templateContext.getWorkbook().getSheetAt(0);
@@ -66,7 +66,7 @@ public class ForEachTagTest extends TagTestBase
   public void testAvoidIndexConflict() throws Exception
   {
     Object[] o = new Object[10];
-    Map attrs = new HashMap();
+    Map<String, Object[]> attrs = new HashMap<String, Object[]>();
     attrs.put("emptyArray", o);
 
     SsTemplateContext templateContext = renderWorkbook("foreach_indexes.sst", attrs);
@@ -97,7 +97,7 @@ public class ForEachTagTest extends TagTestBase
   public void testForEachArray() throws Exception
   {
     Object[] arr = new Object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
-    Map attrs = new HashMap();
+    Map<String, Object[]> attrs = new HashMap<String, Object[]>();
     attrs.put("items", arr);
     SsTemplateContext templateContext = renderWorkbook("foreach_status.sst", attrs);
     HSSFSheet sheet = templateContext.getWorkbook().getSheetAt(0);

@@ -24,7 +24,7 @@ public class IncludeTag extends BaseTag
       throw new SsTemplateException( "Include tag must have a template attribute" );
     String parsedTemplate = (String) parseExpression(template, String.class, context);
 
-    Collection templateChildren = context.parseIncludeFile(parsedTemplate);
+    Collection<SsTemplateTag> templateChildren = context.parseIncludeFile(parsedTemplate);
     renderChildren(context, templateChildren);
   }
 

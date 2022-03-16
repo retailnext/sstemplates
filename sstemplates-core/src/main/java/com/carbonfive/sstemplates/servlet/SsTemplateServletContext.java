@@ -16,7 +16,7 @@ public class SsTemplateServletContext
 {
   private HttpServletRequest    request         = null;
   private ServletContext        servletContext  = null;
-  private Map                   implicitObjects = new HashMap();
+  private Map<String, Map<String, Object>> implicitObjects = new HashMap<String, Map<String, Object>>();
 
   public SsTemplateServletContext(HttpServletRequest request, ServletContext context,
                                   SsTemplateProcessor processor, File templateDir)
@@ -77,15 +77,15 @@ public class SsTemplateServletContext
     return super.resolveVariable(name);
   }
 
-  private Map getRequestScope()
+  private Map<String, Object> getRequestScope()
   {
-    Map map = (Map) implicitObjects.get("requestScope");
+	Map<String, Object> map = implicitObjects.get("requestScope");
     if ( map == null )
     {
-      map = new HashMap();
-      for (Enumeration e = getRequest().getAttributeNames(); e.hasMoreElements();)
+      map = new HashMap<String, Object>();
+      for (Enumeration<String> e = getRequest().getAttributeNames(); e.hasMoreElements();)
       {
-        String s = (String) e.nextElement();
+        String s = e.nextElement();
         map.put( s, getRequest().getAttribute(s) );
       }
       implicitObjects.put( "requestScope", map );
@@ -93,17 +93,17 @@ public class SsTemplateServletContext
     return map;
   }
 
-  private Map getSessionScope()
+  private Map<String, Object> getSessionScope()
   {
-    Map map = (Map) implicitObjects.get("sessionScope");
+	Map<String, Object> map = implicitObjects.get("sessionScope");
     if ( map == null )
     {
-      map = new HashMap();
+      map = new HashMap<String, Object>();
       if ( getRequest().getSession(false) != null )
       {
-        for (Enumeration e = getRequest().getSession().getAttributeNames(); e.hasMoreElements();)
+        for (Enumeration<String> e = getRequest().getSession().getAttributeNames(); e.hasMoreElements();)
         {
-          String s = (String) e.nextElement();
+          String s = e.nextElement();
           map.put( s, getRequest().getSession().getAttribute(s) );
         }
       }
@@ -112,15 +112,15 @@ public class SsTemplateServletContext
     return map;
   }
 
-  private Map getApplicationScope()
+  private Map<String, Object> getApplicationScope()
   {
-    Map map = (Map) implicitObjects.get("applicationScope");
+	Map<String, Object> map = implicitObjects.get("applicationScope");
     if ( map == null )
     {
-      map = new HashMap();
-      for (Enumeration e = getServletContext().getAttributeNames(); e.hasMoreElements();)
+      map = new HashMap<String, Object>();
+      for (Enumeration<String> e = getServletContext().getAttributeNames(); e.hasMoreElements();)
       {
-        String s = (String) e.nextElement();
+        String s = e.nextElement();
         map.put( s, getServletContext().getAttribute(s) );
       }
       implicitObjects.put( "applicationScope", map );
@@ -128,15 +128,15 @@ public class SsTemplateServletContext
     return map;
   }
 
-  private Map getParam()
+  private Map<String, Object> getParam()
   {
-    Map map = (Map) implicitObjects.get("param");
+	Map<String, Object> map = implicitObjects.get("param");
     if ( map == null )
     {
-      map = new HashMap();
-      for (Enumeration e = getRequest().getParameterNames(); e.hasMoreElements();)
+      map = new HashMap<String, Object>();
+      for (Enumeration<String> e = getRequest().getParameterNames(); e.hasMoreElements();)
       {
-        String s = (String) e.nextElement();
+        String s = e.nextElement();
         map.put( s, getRequest().getParameter(s) );
       }
       implicitObjects.put( "param", map );
@@ -144,15 +144,15 @@ public class SsTemplateServletContext
     return map;
   }
 
-  private Map getParamValues()
+  private Map<String, Object> getParamValues()
   {
-    Map map = (Map) implicitObjects.get("paramValues");
+	Map<String, Object> map = implicitObjects.get("paramValues");
     if ( map == null )
     {
-      map = new HashMap();
-      for (Enumeration e = getRequest().getParameterNames(); e.hasMoreElements();)
+      map = new HashMap<String, Object>();
+      for (Enumeration<String> e = getRequest().getParameterNames(); e.hasMoreElements();)
       {
-        String s = (String) e.nextElement();
+        String s = e.nextElement();
         map.put( s, getRequest().getParameterValues(s) );
       }
       implicitObjects.put( "paramValues", map );
@@ -160,15 +160,15 @@ public class SsTemplateServletContext
     return map;
   }
 
-  private Map getHeader()
+  private Map<String, Object> getHeader()
   {
-    Map map = (Map) implicitObjects.get("header");
+    Map<String, Object> map = implicitObjects.get("header");
     if ( map == null )
     {
-      map = new HashMap();
-      for (Enumeration e = getRequest().getHeaderNames(); e.hasMoreElements();)
+      map = new HashMap<String, Object>();
+      for (Enumeration<String> e = getRequest().getHeaderNames(); e.hasMoreElements();)
       {
-        String s = (String) e.nextElement();
+        String s = e.nextElement();
         map.put( s, getRequest().getHeader(s) );
       }
       implicitObjects.put( "header", map );
@@ -176,15 +176,15 @@ public class SsTemplateServletContext
     return map;
   }
 
-  private Map getHeaderValues()
+  private Map<String, Object> getHeaderValues()
   {
-    Map map = (Map) implicitObjects.get("headerValues");
+    Map<String, Object> map = implicitObjects.get("headerValues");
     if ( map == null )
     {
-      map = new HashMap();
-      for (Enumeration e = getRequest().getHeaderNames(); e.hasMoreElements();)
+      map = new HashMap<String, Object>();
+      for (Enumeration<String> e = getRequest().getHeaderNames(); e.hasMoreElements();)
       {
-        String s = (String) e.nextElement();
+        String s = e.nextElement();
         map.put( s, getRequest().getHeaders(s) );
       }
       implicitObjects.put( "headerValues", map );
@@ -192,12 +192,12 @@ public class SsTemplateServletContext
     return map;
   }
 
-  private Map getCookie()
+  private Map<String, Object> getCookie()
   {
-    Map map = (Map) implicitObjects.get("cookies");
+    Map<String, Object> map = implicitObjects.get("cookies");
     if ( map == null )
     {
-      map = new HashMap();
+      map = new HashMap<String, Object>();
       Cookie[] cookies = getRequest().getCookies();
       for ( int i=0; i < cookies.length; i++ )
       {
@@ -209,15 +209,15 @@ public class SsTemplateServletContext
     return map;
   }
 
-  private Map getInitParam()
+  private Map<String, Object> getInitParam()
   {
-    Map map = (Map) implicitObjects.get("initParam");
+    Map<String, Object> map = implicitObjects.get("initParam");
     if ( map == null )
     {
-      map = new HashMap();
-      for (Enumeration e = getServletContext().getInitParameterNames(); e.hasMoreElements();)
+      map = new HashMap<String, Object>();
+      for (Enumeration<String> e = getServletContext().getInitParameterNames(); e.hasMoreElements();)
       {
-        String s = (String) e.nextElement();
+        String s = e.nextElement();
         map.put( s, getServletContext().getInitParameter(s) );
       }
       implicitObjects.put( "initParam", map );

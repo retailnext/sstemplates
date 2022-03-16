@@ -28,12 +28,12 @@ public class SsTemplateServletTest
 
   public void testFindDefaultHssfTemplateTags() throws Exception
   {
-    List tags = getServlet().getProcessor().getTags();
+    List<Class<SsTemplateTag>> tags = getServlet().getProcessor().getTags();
     assertTrue( "Finds at least one template tag", ! tags.isEmpty() );
 
-    for (Iterator it = tags.iterator(); it.hasNext();)
+    for (Iterator<Class<SsTemplateTag>> it = tags.iterator(); it.hasNext();)
     {
-      Class o = (Class) it.next();
+      Class<?> o = it.next();
       assertTrue( "all tags extend SsTemplateTag", SsTemplateTag.class.isAssignableFrom(o) );
     }
   }

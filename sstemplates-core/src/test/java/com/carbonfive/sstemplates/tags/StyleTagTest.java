@@ -102,7 +102,7 @@ public class StyleTagTest extends TagTestBase
 
   public void testBorderColor() throws Exception
   {
-    ArrayList colorClasses = getColorClasses();
+    ArrayList<HSSFColorPredefined> colorClasses = getColorClasses();
 
     String params = createParamListFromColorClasses(colorClasses);
 
@@ -171,8 +171,8 @@ public class StyleTagTest extends TagTestBase
 
   public void testDataFormat() throws Exception
   {
-    List formats = createTestFormats();
-    Map attributes = new HashMap();
+    List<String> formats = createTestFormats();
+    Map<String, List<String>> attributes = new HashMap<String, List<String>>();
     attributes.put( "formats", formats );
     SsTemplateContext templateContext = renderWorkbook("style_data_format.sst", attributes);
 
@@ -186,25 +186,9 @@ public class StyleTagTest extends TagTestBase
     }
   }
 
-/*
-  public void testColors()
-    throws Exception
-  {
-    ArrayList colorClasses = getColorClasses();
-    String params = createParamListFromColorClasses(colorClasses);
-
-    InvocationContext context = getTestInvocation("colors.sst?" + params);
-    SsTemplateContext templateContext = renderWorkbook(context);
-
-    HSSFWorkbook workbook = templateContext.getWorkbook();
-    workbook.write(new FileOutputStream("colors.xls"));
-
-  }
-*/
-
   public void testBackgroundAndForegroundColors() throws Exception
   {
-    ArrayList colorClasses = getColorClasses();
+    ArrayList<HSSFColorPredefined> colorClasses = getColorClasses();
     String params = createParamListFromColorClasses(colorClasses);
 
     SsTemplateContext templateContext = renderWorkbook("style_colors.sst?" + params);
@@ -392,7 +376,7 @@ public class StyleTagTest extends TagTestBase
 
   public void testStyleCaching() throws Exception
   {
-    HashMap params = new HashMap();
+    Map<String, String> params = new HashMap<String, String>();
     params.put( "style1", "bob");
     params.put( "style2", "jeff");
     params.put( "style3", "harry");
@@ -473,10 +457,10 @@ public class StyleTagTest extends TagTestBase
     return templateContext.getWorkbook().getFontAt(row.getCell(index).getCellStyle().getFontIndex());
   }
 
-  private String mapToParams( Map map )
+  private String mapToParams( Map<String, String> map )
   {
     String params = "";
-    for (Iterator it = map.keySet().iterator(); it.hasNext();)
+    for (Iterator<String> it = map.keySet().iterator(); it.hasNext();)
     {
       Object key = it.next();
       params += key.toString() + "=" + map.get(key).toString();
@@ -485,13 +469,13 @@ public class StyleTagTest extends TagTestBase
     return params;
   }
 
-  private List createTestFormats()
+  private List<String> createTestFormats()
   {
-    List formats = new ArrayList(HSSFDataFormat.getBuiltinFormats());
+    List<String> formats = new ArrayList<String>(HSSFDataFormat.getBuiltinFormats());
     // remove reserved formats
-    for (Iterator it = formats.iterator(); it.hasNext();)
+    for (Iterator<String> it = formats.iterator(); it.hasNext();)
     {
-      String format = (String) it.next();
+      String format = it.next();
       if ( format.startsWith("0x") )
         it.remove();
     }
@@ -500,21 +484,21 @@ public class StyleTagTest extends TagTestBase
     return formats;
   }
 
-  private String createParamListFromColorClasses(ArrayList colorClasses)
+  private String createParamListFromColorClasses(ArrayList<HSSFColorPredefined> colorClasses)
   {
     StringBuffer params = new StringBuffer();
-    for (Iterator it = colorClasses.iterator(); it.hasNext();)
+    for (Iterator<HSSFColorPredefined> it = colorClasses.iterator(); it.hasNext();)
     {
-      HSSFColorPredefined color = (HSSFColorPredefined) it.next();
+      HSSFColorPredefined color = it.next();
       params.append("c="+color.name().toLowerCase().replace('_','-'));
       if ( it.hasNext() ) params.append('&');
     }
     return params.toString();
   }
 
-  private ArrayList getColorClasses()
+  private ArrayList<HSSFColorPredefined> getColorClasses()
   {
-    return new ArrayList(Arrays.asList(HSSFColorPredefined.values()));
+    return new ArrayList<HSSFColorPredefined>(Arrays.asList(HSSFColorPredefined.values()));
   }
 
   public void childRenderTest( SsTemplateContext context )

@@ -11,7 +11,7 @@ public class StandAlone
   {
     File template = new File(System.getProperty("project.root"), "examples/test.templates/standalone.sst");
 
-    Map context = new HashMap();
+    Map<String, Object> context = new HashMap<String, Object>();
     context.put("stringValue", "Ralph");
     context.put("listValue", new String[] { "Sue", "Amy", "Donna" });
 

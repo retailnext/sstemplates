@@ -27,7 +27,7 @@ public class SsTemplateServlet extends HttpServlet
 
   public void init( ServletConfig config ) throws ServletException
   {
-    Collection customTags = null;
+    Collection<Class<SsTemplateTag>> customTags = null;
     if ( config.getInitParameter(CUSTOM_TAGS_PARAM_KEY) != null )
       customTags = getCustomTags(config.getInitParameter(CUSTOM_TAGS_PARAM_KEY));
 
@@ -38,17 +38,18 @@ public class SsTemplateServlet extends HttpServlet
     log.info("Spreadsheet Templates servlet initialized.");
   }
 
-  private Collection getCustomTags(String names)
+  private Collection<Class<SsTemplateTag>> getCustomTags(String names)
     throws ServletException
   {
-    List tags = new ArrayList();
+    List<Class<SsTemplateTag>> tags = new ArrayList<Class<SsTemplateTag>>();
 
     for (StringTokenizer tok = new StringTokenizer(names, ", "); tok.hasMoreTokens();)
     {
       String name = tok.nextToken();
       try
       {
-        Class clazz = Class.forName(name);
+        @SuppressWarnings("unchecked")
+		Class<SsTemplateTag> clazz = (Class<SsTemplateTag>) Class.forName(name);
 
         if (!SsTemplateTag.class.isAssignableFrom(clazz))
           throw new ServletException("Custom tags must implement SsTemplateTag");

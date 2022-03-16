@@ -61,14 +61,14 @@ public abstract class SsTemplateServletTestBase extends TestCase
     return renderWorkbook(request, null);
   }
 
-  protected SsTemplateContext renderWorkbook(HttpServletRequest request, Map attributes)
+  protected SsTemplateContext renderWorkbook(HttpServletRequest request, Map<String, Object> attributes)
           throws Exception
   {
     WorkbookTag renderTree = getRenderTree(request);
     SsTemplateServletContext templateContext = getHssfTemplateContext(request);
     if ( attributes != null )
     {
-      for (Iterator it = attributes.keySet().iterator(); it.hasNext();)
+      for (Iterator<String> it = attributes.keySet().iterator(); it.hasNext();)
       {
         String key = (String) it.next();
         templateContext.getRequest().setAttribute(key,attributes.get(key));

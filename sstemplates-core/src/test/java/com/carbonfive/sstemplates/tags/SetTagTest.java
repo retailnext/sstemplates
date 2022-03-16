@@ -18,7 +18,7 @@ public class SetTagTest extends TagTestBase
 
   public void testSetters() throws Exception
   {
-    Map attrs = new HashMap();
+    Map<String, Object> attrs = new HashMap<String, Object>();
     attrs.put("fooAttr", new FooBean());
     SsTemplateContext templateContext = renderWorkbook("set.sst", attrs);
 

@@ -54,8 +54,8 @@ public abstract class SsTemplateTestBase extends TestCase
   {
     if (query == null) return;
 
-    Map param = new HashMap();
-    Map paramValues = new HashMap();
+    Map<String, String> param = new HashMap<String, String>();
+    Map<String, String[]> paramValues = new HashMap<String, String[]>();
 
     StringTokenizer st = new StringTokenizer(query, "&");
     while (st.hasMoreTokens())
@@ -68,7 +68,7 @@ public abstract class SsTemplateTestBase extends TestCase
       if (paramValues.containsKey(key))
       {
         String[] arr = (String[]) paramValues.get(key);
-        List list = new ArrayList(Arrays.asList(arr));
+        List<String> list = new ArrayList<String>(Arrays.asList(arr));
         list.add(value);
         paramValues.put(key, (String[]) list.toArray(arr));
       }
@@ -87,10 +87,10 @@ public abstract class SsTemplateTestBase extends TestCase
     templateContext.setPageVariable("paramValues", paramValues);
   }
 
-  protected SsTemplateContext renderWorkbook(String pathPlusQuery, Map attributes)
+  protected SsTemplateContext renderWorkbook(String pathPlusQuery, Map<String, ?> attributes)
     throws Exception
   {
-    if (attributes == null) attributes = new HashMap();
+    if (attributes == null) attributes = new HashMap<String, Object>();
 
     URI uri = new URI(pathPlusQuery);
 
@@ -99,16 +99,13 @@ public abstract class SsTemplateTestBase extends TestCase
 
     setParamMaps(uri.getQuery(), templateContext);
 
-    for (Iterator it = attributes.keySet().iterator(); it.hasNext();)
+    for (Iterator<String> it = attributes.keySet().iterator(); it.hasNext();)
     {
-      String key = (String) it.next();
+      String key = it.next();
       templateContext.setPageVariable(key, attributes.get(key));
-      //templateContext.getRequest().setAttribute(key,attributes.get(key));
     }
 
     renderTree.render(templateContext);
     return templateContext;
   }
-
-
 }

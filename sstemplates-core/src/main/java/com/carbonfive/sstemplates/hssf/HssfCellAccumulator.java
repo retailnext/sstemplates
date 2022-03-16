@@ -7,11 +7,11 @@ import com.carbonfive.sstemplates.*;
 
 public class HssfCellAccumulator
 {
-  private SortedMap cells;
+  private SortedMap<Coordinates, HSSFCell> cells;
 
   public HssfCellAccumulator()
   {
-    cells = new TreeMap();
+    cells = new TreeMap<Coordinates, HSSFCell>();
   }
 
   public void addCell(HSSFCell cell, int row, int column)
@@ -47,15 +47,15 @@ public class HssfCellAccumulator
     }
     else
     {
-      return nestedCommaList(function, new ArrayList(cells.keySet()), max);
+      return nestedCommaList(function, new ArrayList<Coordinates>(cells.keySet()), max);
     }
   }
 
-  private static String nestedCommaList(String function, List values, int max)
+  private static String nestedCommaList(String function, List<?> values, int max)
   {
     if (values.size() <= max) return function + "(" + StringUtils.join(values.iterator(), ",") + ")";
 
-    List list = new ArrayList();
+    List<String> list = new ArrayList<String>();
     for (int i = 0; i < values.size(); i += max)
     {
       list.add(nestedCommaList(function, values.subList(i, Math.min(i + max, values.size())), max));
@@ -64,16 +64,16 @@ public class HssfCellAccumulator
     return nestedCommaList(function, list, max);
   }
 
-  private boolean isContiguous(Set coordinates)
+  private boolean isContiguous(Set<Coordinates> coordinates)
   {
     int top = Integer.MAX_VALUE;
     int bottom = Integer.MIN_VALUE;
     short left = Short.MAX_VALUE;
     short right = Short.MIN_VALUE;
 
-    for (Iterator i = coordinates.iterator(); i.hasNext();)
+    for (Iterator<Coordinates> i = coordinates.iterator(); i.hasNext();)
     {
-      Coordinates c = (Coordinates) i.next();
+      Coordinates c = i.next();
       if (c.getRow() < top) top = c.getRow();
       if (c.getRow() > bottom) bottom = c.getRow();
       if (c.getColumn() < left) left = c.getColumn();

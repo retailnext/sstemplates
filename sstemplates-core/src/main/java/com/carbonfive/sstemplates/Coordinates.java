@@ -1,7 +1,7 @@
 package com.carbonfive.sstemplates;
 
 public class Coordinates
-    implements Comparable
+    implements Comparable<Coordinates>
 {
   private int row;
   private short column;
@@ -22,12 +22,11 @@ public class Coordinates
     this.column = column;
   }
 
-  public boolean equals(Object o)
+  public boolean equals(Coordinates o)
   {
     if (o == null) return false;
-    Coordinates p = (Coordinates)o;
-    return ((row == p.getRow()) &&
-        (column == p.getColumn()));
+    return ((row == o.getRow()) &&
+        (column == o.getColumn()));
   }
 
   public int hashCode()
@@ -55,7 +54,7 @@ public class Coordinates
     throw new IllegalStateException("Bad column number: " + column);
   }
 
-  public int compareTo(Object o)
+  public int compareTo(Coordinates o)
   {
     Coordinates c = (Coordinates)o;
     if (getRow() < c.getRow()) return -1;

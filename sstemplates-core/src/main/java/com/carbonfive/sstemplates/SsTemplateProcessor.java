@@ -17,7 +17,8 @@ public class SsTemplateProcessor
 {
   private static final Logger log = Logger.getLogger(SsTemplateProcessor.class.getName());
 
-  private static final Class[] DEFAULT_TAGS = new Class[]
+  @SuppressWarnings("unchecked")
+  private static final Class<SsTemplateTag>[] DEFAULT_TAGS = new Class[]
     { SheetTag.class, RowTag.class, CellTag.class, ForEachTag.class, IfTag.class,
       IncludeTag.class, StyleTag.class, FunctionTag.class,
       WhileTag.class, RowBreakTag.class, DefaultStyleTag.class, SetTag.class,
@@ -26,10 +27,10 @@ public class SsTemplateProcessor
 
   private Digester   digester = null;
   private Exception  parseException = null;
-  private Map        renderTreeCache = null;
-  private Collection customTags = null;
+  private Map<String, RenderTreeEntry> renderTreeCache = null;
+  private Collection<Class<SsTemplateTag>> customTags = null;
 
-  private static Map processorCache = Collections.synchronizedMap(new HashMap());
+  private static Map<Collection<Class<SsTemplateTag>>, SsTemplateProcessor> processorCache = Collections.synchronizedMap(new HashMap<Collection<Class<SsTemplateTag>>, SsTemplateProcessor>());
 
   public static SsTemplateProcessor getInstance()
     throws SsTemplateException
@@ -43,13 +44,13 @@ public class SsTemplateProcessor
     return getInstance(null, cacheTemplates);
   }
 
-  public static SsTemplateProcessor getInstance(Collection customTags)
+  public static SsTemplateProcessor getInstance(Collection<Class<SsTemplateTag>> customTags)
     throws SsTemplateException
   {
     return getInstance( customTags, true );
   }
 
-  public static SsTemplateProcessor getInstance(Collection customTags, boolean cacheTemplates)
+  public static SsTemplateProcessor getInstance(Collection<Class<SsTemplateTag>> customTags, boolean cacheTemplates)
     throws SsTemplateException
   {
     if ( ! cacheTemplates )
@@ -66,22 +67,22 @@ public class SsTemplateProcessor
     return processor;
   }
 
-  protected SsTemplateProcessor(Collection customTags, boolean cacheTemplates)
+  protected SsTemplateProcessor(Collection<Class<SsTemplateTag>> customTags, boolean cacheTemplates)
       throws SsTemplateException
   {
     this.customTags = customTags;
     if ( cacheTemplates )
-      this.renderTreeCache = new HashMap();
+      this.renderTreeCache = new HashMap<String, RenderTreeEntry>();
     configureDigester(getTags());
   }
 
-  public HSSFWorkbook process(File templateFile, Map context)
+  public HSSFWorkbook process(File templateFile, Map<String, Object> context)
     throws SsTemplateException
   {
     return process(templateFile.getParentFile(), templateFile, context);
   }
 
-  public HSSFWorkbook process(File templateDir, File templateFile, Map context)
+  public HSSFWorkbook process(File templateDir, File templateFile, Map<String, Object> context)
     throws SsTemplateException
   {
     WorkbookTag renderTree = retrieveRenderTree(templateFile.getAbsolutePath());
@@ -96,7 +97,7 @@ public class SsTemplateProcessor
     return new SsTemplateContextImpl(this, templateDir);
   }
 
-  protected Collection parseIncludeFile(File templateFile)
+  protected Collection<SsTemplateTag> parseIncludeFile(File templateFile)
       throws SsTemplateException
   {
     if ( ! templateFile.exists() )
@@ -108,12 +109,12 @@ public class SsTemplateProcessor
     return tag.getChildTags();
   }
 
-  private SsTemplateTag instantiateTag(Class tagClass) throws SsTemplateException
+  private SsTemplateTag instantiateTag(Class<SsTemplateTag> tagClass) throws SsTemplateException
   {
     SsTemplateTag tag = null;
     try
     {
-      tag = (SsTemplateTag) tagClass.newInstance();
+      tag = tagClass.newInstance();
     }
     catch ( Exception e )
     {
@@ -123,15 +124,15 @@ public class SsTemplateProcessor
     return tag;
   }
 
-  private void configureDigester(List tags) throws SsTemplateException
+  private void configureDigester(List<Class<SsTemplateTag>> tags) throws SsTemplateException
   {
     digester = new Digester();
     digester.setValidating(false);
     digester.addSetProperties("workbook");
 
-    for (Iterator it = tags.iterator(); it.hasNext();)
+    for (Iterator<Class<SsTemplateTag>> it = tags.iterator(); it.hasNext();)
     {
-      SsTemplateTag tag = instantiateTag((Class) it.next());
+      SsTemplateTag tag = instantiateTag((Class<SsTemplateTag>) it.next());
 
       digester.addObjectCreate("*/" + tag.getTagName(), tag.getClass() );
       digester.addSetProperties("*/" + tag.getTagName());
@@ -142,9 +143,9 @@ public class SsTemplateProcessor
     digester.addCallMethod("*/cell","setContents",0);
   }
 
-  public List getTags()
+  public List<Class<SsTemplateTag>> getTags()
   {
-    List tags = new ArrayList();
+    List<Class<SsTemplateTag>> tags = new ArrayList<Class<SsTemplateTag>>();
 
     for (int i = 0; i < DEFAULT_TAGS.length; i++)
     {

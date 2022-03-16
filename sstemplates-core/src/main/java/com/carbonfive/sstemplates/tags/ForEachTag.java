@@ -38,11 +38,11 @@ public class ForEachTag extends BaseTag
     Object oldVar = context.getPageVariable(parsedVar);
     Object oldVarStatus = context.getPageVariable(parsedVarStatus);
 
-    Collection c = ( items == null ? new InfiniteList() : findCollection(context) );
+    Collection<Object> c = ( items == null ? new InfiniteList() : findCollection(context) );
     if (end == null) parsedEnd = c.size();
     VarStatus varStatusObj = new VarStatus(c.size(), parsedStep, parsedBegin, parsedEnd);
     int i = 1;
-    Iterator it = c.iterator();
+    Iterator<Object> it = c.iterator();
 
     while (i <= parsedBegin && it.hasNext()) { it.next(); i++; }
     while (i <= parsedEnd && it.hasNext())
@@ -60,27 +60,28 @@ public class ForEachTag extends BaseTag
     context.unsetPageVariable(parsedVarStatus, oldVarStatus);
   }
 
-  private static class InfiniteList extends ArrayList
+  private static class InfiniteList extends ArrayList<Object>
   {
 	private static final long serialVersionUID = 1L;
 
-	public Iterator iterator() { return new InfiniteIterator(); }
+	public Iterator<Object> iterator() { return new InfiniteIterator(); }
   }
 
-  private static class InfiniteIterator implements Iterator
+  private static class InfiniteIterator implements Iterator<Object>
   {
     public boolean hasNext() { return true; }
     public void remove() { return; }
     public Object next() { return null; }
   }
 
-  private Collection findCollection(SsTemplateContext context) throws SsTemplateException
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  private Collection<Object> findCollection(SsTemplateContext context) throws SsTemplateException
   {
     Object obj = parseExpression(items, Object.class, context);
     if (obj == null)
       throw new SsTemplateException("Cannot find '" + items + "' in the page context");
 
-    if (obj instanceof Collection)     return (Collection) obj;
+    if (obj instanceof Collection)     return (Collection<Object>) obj;
     else if (obj instanceof Map)       return ((Map) obj).entrySet();
     else if (obj.getClass().isArray()) return Arrays.asList((Object[]) obj);
     else

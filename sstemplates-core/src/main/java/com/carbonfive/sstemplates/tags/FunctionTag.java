@@ -42,13 +42,13 @@ public class FunctionTag extends BaseTag
 
     try
     {
-      Class c = classForName(parsedClazz);
-      List parameters = new ArrayList();
+      Class<?> c = classForName(parsedClazz);
+      List<Class<?>> parameters = new ArrayList<Class<?>>();
       if (parsedParameterTypes != null)
       {
         for (StringTokenizer tok = new StringTokenizer(parsedParameterTypes, " "); tok.hasMoreTokens();)
         {
-          Class p = classForName(tok.nextToken());
+          Class<?> p = classForName(tok.nextToken());
           parameters.add(p);
         }
       }
@@ -64,7 +64,7 @@ public class FunctionTag extends BaseTag
     renderChildren(context);
   }
 
-  private Class classForName(String clazz)
+  private Class<?> classForName(String clazz)
     throws ClassNotFoundException
   {
     if (clazz.equals("boolean")) return boolean.class;

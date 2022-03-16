@@ -7,6 +7,7 @@ import javax.servlet.jsp.el.*;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.hssf.*;
+import com.carbonfive.sstemplates.tags.SsTemplateTag;
 
 public interface SsTemplateContext extends VariableResolver, FunctionMapper
 {
@@ -68,7 +69,7 @@ public interface SsTemplateContext extends VariableResolver, FunctionMapper
   // no prefix support
   Method resolveFunction(String prefix, String name);
 
-  Collection parseIncludeFile(String parsedTemplate) throws SsTemplateException;
+  Collection<SsTemplateTag> parseIncludeFile(String parsedTemplate) throws SsTemplateException;
 
   public File findFileInTemplateDirectory(String path);
 

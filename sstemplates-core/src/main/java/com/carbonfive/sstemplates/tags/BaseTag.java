@@ -16,7 +16,7 @@ public abstract class BaseTag implements SsTemplateTag
 {
   protected static final Logger log = Logger.getLogger(BaseTag.class.getName());
 
-  List childTags = new ArrayList();
+  List<SsTemplateTag> childTags = new ArrayList<SsTemplateTag>();
   SsTemplateTag parentTag = null;
   ExpressionEvaluatorImpl evaluator = new ExpressionEvaluatorImpl();
 
@@ -26,12 +26,12 @@ public abstract class BaseTag implements SsTemplateTag
     renderChildren(context, childTags);
   }
 
-  protected void renderChildren(SsTemplateContext context, Collection children)
+  protected void renderChildren(SsTemplateContext context, Collection<SsTemplateTag> children)
     throws SsTemplateException
   {
-    for (Iterator it = children.iterator(); it.hasNext();)
+    for (Iterator<SsTemplateTag> it = children.iterator(); it.hasNext();)
     {
-      SsTemplateTag tag = (SsTemplateTag) it.next();
+      SsTemplateTag tag = it.next();
       tag.render(context);
     }
   }
@@ -52,12 +52,12 @@ public abstract class BaseTag implements SsTemplateTag
     parentTag = tag;
   }
 
-  public List getChildTags()
+  public List<SsTemplateTag> getChildTags()
   {
     return childTags;
   }
 
-  public Object parseExpression( String expression, Class expectedType, SsTemplateContext context )
+  public Object parseExpression( String expression, Class<?> expectedType, SsTemplateContext context )
     throws SsTemplateException
   {
     if (expression == null) return null;

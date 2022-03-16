@@ -12,9 +12,9 @@ import java.util.*;
 public class ServletSsTemplateProcessor
   extends SsTemplateProcessor
 {
-  private static Map processorCache = Collections.synchronizedMap(new HashMap());
+  private static Map<Collection<Class<SsTemplateTag>>, ServletSsTemplateProcessor> processorCache = Collections.synchronizedMap(new HashMap<Collection<Class<SsTemplateTag>>, ServletSsTemplateProcessor>());
 
-  public static SsTemplateProcessor getInstance(Collection customTags)
+  public static SsTemplateProcessor getInstance(Collection<Class<SsTemplateTag>> customTags)
     throws SsTemplateException
   {
     ServletSsTemplateProcessor processor = (ServletSsTemplateProcessor) processorCache.get(customTags);
@@ -28,7 +28,7 @@ public class ServletSsTemplateProcessor
     return processor;
   }
 
-  protected ServletSsTemplateProcessor(Collection customTags)
+  protected ServletSsTemplateProcessor(Collection<Class<SsTemplateTag>>  customTags)
     throws SsTemplateException
   {
     super(customTags, true);

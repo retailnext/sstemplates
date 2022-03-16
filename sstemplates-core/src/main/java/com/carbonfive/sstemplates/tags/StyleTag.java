@@ -86,15 +86,16 @@ public class StyleTag extends BaseTag
     {"fontColor",   "red",                Integer.toString(HSSFFont.COLOR_RED)},
   };
 
-  private static HashMap attributes = new HashMap();
+  private static Map<String, Object> attributes = new HashMap<String, Object>();
   static
   {
     for (int i=0; i < ATTRIBUTES.length; i++ )
     {
-      HashMap propValues = (HashMap) attributes.get( ATTRIBUTES[i][0] );
+      @SuppressWarnings("unchecked")
+	  Map<String, Integer> propValues = (HashMap<String, Integer>) attributes.get( ATTRIBUTES[i][0] );
       if ( propValues == null )
       {
-        propValues = new HashMap();
+        propValues = new HashMap<String, Integer>();
         attributes.put( ATTRIBUTES[i][0], propValues);
       }
       propValues.put( ATTRIBUTES[i][1], Integer.valueOf(ATTRIBUTES[i][2] ));
@@ -200,6 +201,7 @@ public class StyleTag extends BaseTag
     return parsedName;
   }
 
+  @SuppressWarnings("unchecked")
   private void setFontInformation(HssfStyleData styleData, SsTemplateContext context)
           throws SsTemplateException
   {
@@ -217,7 +219,7 @@ public class StyleTag extends BaseTag
       styleData.put("strikeout",parseExpression(strikeout,Boolean.class,context));
 
     if ( fontColor != null )
-      setColor(styleData, "fontColor", fontColor, (Map)attributes.get("colors"), context);
+      setColor(styleData, "fontColor", fontColor, (Map<String, HSSFColor>)attributes.get("colors"), context);
 
     if ( typeOffset != null )
       styleData.put("typeOffset", Integer.valueOf(findShortValueForAttribute("typeOffset", "typeOffset", typeOffset, context)));
@@ -289,32 +291,33 @@ public class StyleTag extends BaseTag
     }
   }
 
+  @SuppressWarnings("unchecked")
   private void setColors(HssfStyleData styleData, SsTemplateContext context)
           throws SsTemplateException
   {
     if ( borderColor != null )
-      setColor(styleData, "borderColor", borderColor, (Map)attributes.get("colors"), context);
+      setColor(styleData, "borderColor", borderColor, (Map<String, HSSFColor>)attributes.get("colors"), context);
 
     if ( topBorderColor != null )
-      setColor(styleData, "topBorderColor", topBorderColor, (Map)attributes.get("colors"), context);
+      setColor(styleData, "topBorderColor", topBorderColor, (Map<String, HSSFColor>)attributes.get("colors"), context);
 
     if ( bottomBorderColor != null )
-      setColor(styleData, "bottomBorderColor", bottomBorderColor, (Map)attributes.get("colors"), context);
+      setColor(styleData, "bottomBorderColor", bottomBorderColor, (Map<String, HSSFColor>)attributes.get("colors"), context);
 
     if ( rightBorderColor != null )
-      setColor(styleData, "rightBorderColor", rightBorderColor, (Map)attributes.get("colors"), context);
+      setColor(styleData, "rightBorderColor", rightBorderColor, (Map<String, HSSFColor>)attributes.get("colors"), context);
 
     if ( leftBorderColor != null )
-      setColor(styleData, "leftBorderColor", leftBorderColor, (Map)attributes.get("colors"), context);
+      setColor(styleData, "leftBorderColor", leftBorderColor, (Map<String, HSSFColor>)attributes.get("colors"), context);
 
     if ( foreground != null )
-      setColor(styleData, "foreground", foreground, (Map)attributes.get("colors"), context);
+      setColor(styleData, "foreground", foreground, (Map<String, HSSFColor>)attributes.get("colors"), context);
 
     if ( background != null )
-      setColor(styleData, "background", background, (Map)attributes.get("colors"), context);
+      setColor(styleData, "background", background, (Map<String, HSSFColor>)attributes.get("colors"), context);
   }
 
-  private void setColor(HssfStyleData styleData, String name, String value, Map colorMap, SsTemplateContext context)
+  private void setColor(HssfStyleData styleData, String name, String value, Map<String, HSSFColor> colorMap, SsTemplateContext context)
     throws SsTemplateException
   {
     short triplet[];
@@ -389,16 +392,17 @@ public class StyleTag extends BaseTag
           throws SsTemplateException
   {
     String parsedAttribute = (String) parseExpression(attributeValue, String.class, context);
-    Integer value = (Integer) ((HashMap) attributes.get(attributeName)).get(parsedAttribute);
+    @SuppressWarnings("unchecked")
+	Integer value = ((Map<String, Integer>) attributes.get(attributeName)).get(parsedAttribute);
     if ( value == null )
       throw new SsTemplateException( "Unknown value '"+parsedAttribute+"' for " + errorName + " attribute of style tag");
     short result = value.shortValue();
     return result;
   }
 
-  private static HashMap getColorAttributeValues()
+  private static Map<String, HSSFColor> getColorAttributeValues()
   {
-    HashMap colors = new HashMap();
+    Map<String, HSSFColor> colors = new HashMap<String, HSSFColor>();
     HSSFColorPredefined[] predefinedColors = HSSFColorPredefined.values();
     for ( int i=0; i < predefinedColors.length; i++ )
       colors.put(predefinedColors[i].name().toLowerCase().replace('_','-'), predefinedColors[i].getColor());

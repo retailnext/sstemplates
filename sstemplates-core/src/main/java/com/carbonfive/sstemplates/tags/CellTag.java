@@ -77,17 +77,17 @@ public class CellTag extends BaseTag
       return;
     }
 
-    List regions = splitRegionForPagination(context, region);
-    for (Iterator i = regions.iterator(); i.hasNext();)
+    List<CellRangeAddress> regions = splitRegionForPagination(context, region);
+    for (Iterator<CellRangeAddress> i = regions.iterator(); i.hasNext();)
     {
-      CellRangeAddress sub = (CellRangeAddress)i.next();
+      CellRangeAddress sub = i.next();
       createCell(context, sub, sub.getFirstRow() == region.getFirstRow(), sub.getLastRow() == region.getLastRow());
     }
   }
 
-  private List splitRegionForPagination(SsTemplateContext context, CellRangeAddress region)
+  private List<CellRangeAddress> splitRegionForPagination(SsTemplateContext context, CellRangeAddress region)
   {
-    List regions = new ArrayList();
+    List<CellRangeAddress> regions = new ArrayList<CellRangeAddress>();
     int rowFrom = region.getFirstRow();
     while (region.getLastRow() >= context.nextPageBreak(rowFrom))
     {

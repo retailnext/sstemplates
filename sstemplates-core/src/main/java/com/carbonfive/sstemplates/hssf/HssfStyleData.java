@@ -22,7 +22,7 @@ public class HssfStyleData
   public static final String ROW_HEIGHT_ATTRIBUTE = "rowHeight";
   public static final String AUTO_COLUMN_WIDTH_ATTRIBUTE = "autoColumnWidth";
 
-  private HashMap styleData = new HashMap();
+  private HashMap<String, Object> styleData = new HashMap<String, Object>();
 
   public HssfStyleData()
   {
@@ -50,7 +50,7 @@ public class HssfStyleData
     return styleData.containsKey(attribute);
   }
 
-  public void overideAttributes( Map originalStyle )
+  public void overideAttributes( Map<String, Object> originalStyle )
   {
     originalStyle.putAll( styleData );
   }
