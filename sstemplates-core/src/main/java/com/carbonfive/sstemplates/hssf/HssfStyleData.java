@@ -66,10 +66,10 @@ public class HssfStyleData
       style.setBorderRight(borderStyle);
       style.setBorderLeft(borderStyle);
     }
-    style.setBorderTop( BorderStyle.valueOf(shortFromStyleData("borderTop",style.getBorderTopEnum().getCode())));
-    style.setBorderBottom( BorderStyle.valueOf(shortFromStyleData("borderBottom",style.getBorderBottomEnum().getCode())));
-    style.setBorderRight( BorderStyle.valueOf(shortFromStyleData("borderRight",style.getBorderRightEnum().getCode())));
-    style.setBorderLeft( BorderStyle.valueOf(shortFromStyleData("borderLeft",style.getBorderLeftEnum().getCode())));
+    style.setBorderTop( BorderStyle.valueOf(shortFromStyleData("borderTop",style.getBorderTop().getCode())));
+    style.setBorderBottom( BorderStyle.valueOf(shortFromStyleData("borderBottom",style.getBorderBottom().getCode())));
+    style.setBorderRight( BorderStyle.valueOf(shortFromStyleData("borderRight",style.getBorderRight().getCode())));
+    style.setBorderLeft( BorderStyle.valueOf(shortFromStyleData("borderLeft",style.getBorderLeft().getCode())));
 
     if ( styleData.containsKey("borderColor") )
     {
@@ -104,7 +104,7 @@ public class HssfStyleData
 
     style.setDataFormat( shortFromStyleData("dataFormat",style.getDataFormat()));
 
-    style.setFillPattern( FillPatternType.forInt(shortFromStyleData("fillPattern",style.getFillPatternEnum().getCode())));
+    style.setFillPattern( FillPatternType.forInt(shortFromStyleData("fillPattern",style.getFillPattern().getCode())));
 
     style.setHidden( booleanFromStyleData("hidden",style.getHidden()));
     style.setLocked( booleanFromStyleData("locked",style.getLocked()));
@@ -113,10 +113,10 @@ public class HssfStyleData
     style.setIndention(shortFromStyleData("indention", style.getIndention()));
     style.setRotation(shortFromStyleData("rotation", style.getRotation()));
 
-    style.setAlignment(HorizontalAlignment.forInt(shortFromStyleData("align", style.getAlignmentEnum().getCode())));
-    style.setVerticalAlignment(VerticalAlignment.forInt(shortFromStyleData("valign", style.getVerticalAlignmentEnum().getCode())));
+    style.setAlignment(HorizontalAlignment.forInt(shortFromStyleData("align", style.getAlignment().getCode())));
+    style.setVerticalAlignment(VerticalAlignment.forInt(shortFromStyleData("valign", style.getVerticalAlignment().getCode())));
 
-    HSSFFont oldFont = context.getWorkbook().getFontAt(style.getFontIndexAsInt());
+    HSSFFont oldFont = context.getWorkbook().getFontAt(style.getFontIndex());
     String parsedFontName = stringFromStyleData("fontName", oldFont.getFontName());
     boolean parsedBold = booleanFromStyleData("bold", oldFont.getBold());
     boolean parsedItalic = booleanFromStyleData("italic",oldFont.getItalic());

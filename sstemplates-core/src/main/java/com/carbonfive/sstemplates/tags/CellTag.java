@@ -204,10 +204,10 @@ public class CellTag extends BaseTag
     int parsedRowspan = region.getLastRow() - region.getFirstRow() + 1;
 
     HSSFCellStyle style = cell.getCellStyle();
-    if (( style.getBorderTopEnum() != BorderStyle.NONE )
-            || ( style.getBorderBottomEnum() != BorderStyle.NONE )
-            || ( style.getBorderRightEnum() != BorderStyle.NONE )
-            || ( style.getBorderLeftEnum() != BorderStyle.NONE ))
+    if (( style.getBorderTop() != BorderStyle.NONE )
+            || ( style.getBorderBottom() != BorderStyle.NONE )
+            || ( style.getBorderRight() != BorderStyle.NONE )
+            || ( style.getBorderLeft() != BorderStyle.NONE ))
     {
       for (short i=0; i < parsedColspan; i++ )
       {
@@ -215,38 +215,38 @@ public class CellTag extends BaseTag
         {
           if (( i > 0 ) || ( j > 0 ))
           {
-            boolean leftBorder = ( i == 0 ) && ( style.getBorderLeftEnum() != BorderStyle.NONE );
-            boolean rightBorder = ( i == parsedColspan-1 ) && ( style.getBorderRightEnum() != BorderStyle.NONE );
-            boolean topBorder = ( j == 0 ) && ( style.getBorderTopEnum() != BorderStyle.NONE );
-            boolean bottomBorder = ( j == parsedRowspan-1 ) && ( style.getBorderBottomEnum() != BorderStyle.NONE );
+            boolean leftBorder = ( i == 0 ) && ( style.getBorderLeft() != BorderStyle.NONE );
+            boolean rightBorder = ( i == parsedColspan-1 ) && ( style.getBorderRight() != BorderStyle.NONE );
+            boolean topBorder = ( j == 0 ) && ( style.getBorderTop() != BorderStyle.NONE );
+            boolean bottomBorder = ( j == parsedRowspan-1 ) && ( style.getBorderBottom() != BorderStyle.NONE );
 
             if ( leftBorder || rightBorder || topBorder || bottomBorder )
             {
-              String styleName = "!!!regionBorder-" + (leftBorder ? "L" + style.getBorderLeftEnum().getCode() : "")
-                  + ( rightBorder ? "R" + style.getBorderRightEnum().getCode() : "") + ( topBorder ? "T" + style.getBorderTopEnum().getCode() : "")
-                  + ( bottomBorder ? "B" + style.getBorderBottomEnum().getCode() : "");
+              String styleName = "!!!regionBorder-" + (leftBorder ? "L" + style.getBorderLeft().getCode() : "")
+                  + ( rightBorder ? "R" + style.getBorderRight().getCode() : "") + ( topBorder ? "T" + style.getBorderTop().getCode() : "")
+                  + ( bottomBorder ? "B" + style.getBorderBottom().getCode() : "");
               HssfStyleData styleData = null;
               if ( ! context.hasCachedStyleData(styleName) )
               {
                 styleData = new HssfStyleData();
                 if ( topBorder )
                 {
-                  styleData.put("borderTop",Integer.valueOf(style.getBorderTopEnum().getCode()));
+                  styleData.put("borderTop",Integer.valueOf(style.getBorderTop().getCode()));
                   styleData.put("topBorderColor",Integer.valueOf(style.getTopBorderColor()));
                 }
                 if ( bottomBorder )
                 {
-                  styleData.put("borderBottom",Integer.valueOf(style.getBorderBottomEnum().getCode()));
+                  styleData.put("borderBottom",Integer.valueOf(style.getBorderBottom().getCode()));
                   styleData.put("bottomBorderColor",Integer.valueOf(style.getBottomBorderColor()));
                 }
                 if ( rightBorder )
                 {
-                  styleData.put("borderRight",Integer.valueOf(style.getBorderRightEnum().getCode()));
+                  styleData.put("borderRight",Integer.valueOf(style.getBorderRight().getCode()));
                   styleData.put("rightBorderColor",Integer.valueOf(style.getRightBorderColor()));
                 }
                 if ( leftBorder )
                 {
-                  styleData.put("borderLeft",Integer.valueOf(style.getBorderLeftEnum().getCode()));
+                  styleData.put("borderLeft",Integer.valueOf(style.getBorderLeft().getCode()));
                   styleData.put("leftBorderColor",Integer.valueOf(style.getLeftBorderColor()));
                 }
 

@@ -54,7 +54,7 @@ public class SheetTagTest extends TagTestBase
     HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(0).getCellStyle();
 
     assertNotNull( "Style defined in sheet is not null", cellStyle );
-    assertEquals( "Style should have thin top border", BorderStyle.THIN, cellStyle.getBorderTopEnum() );
+    assertEquals( "Style should have thin top border", BorderStyle.THIN, cellStyle.getBorderTop() );
   }
 
   public void childRenderTest( SsTemplateContext context )

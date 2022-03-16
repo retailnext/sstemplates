@@ -42,12 +42,12 @@ public class StyleTagTest extends TagTestBase
       renderWorkbook("style_align.sst");
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals( HorizontalAlignment.CENTER, row.getCell(0).getCellStyle().getAlignmentEnum() );
-    assertEquals( HorizontalAlignment.CENTER_SELECTION, row.getCell(1).getCellStyle().getAlignmentEnum() );
-    assertEquals( HorizontalAlignment.FILL, row.getCell(2).getCellStyle().getAlignmentEnum() );
-    assertEquals( HorizontalAlignment.GENERAL, row.getCell(3).getCellStyle().getAlignmentEnum() );
-    assertEquals( HorizontalAlignment.LEFT, row.getCell(4).getCellStyle().getAlignmentEnum() );
-    assertEquals( HorizontalAlignment.RIGHT, row.getCell(5).getCellStyle().getAlignmentEnum() );
+    assertEquals( HorizontalAlignment.CENTER, row.getCell(0).getCellStyle().getAlignment() );
+    assertEquals( HorizontalAlignment.CENTER_SELECTION, row.getCell(1).getCellStyle().getAlignment() );
+    assertEquals( HorizontalAlignment.FILL, row.getCell(2).getCellStyle().getAlignment() );
+    assertEquals( HorizontalAlignment.GENERAL, row.getCell(3).getCellStyle().getAlignment() );
+    assertEquals( HorizontalAlignment.LEFT, row.getCell(4).getCellStyle().getAlignment() );
+    assertEquals( HorizontalAlignment.RIGHT, row.getCell(5).getCellStyle().getAlignment() );
   }
 
   public void testBorderStyle() throws Exception
@@ -69,34 +69,34 @@ public class StyleTagTest extends TagTestBase
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
     for ( int i=0; i < borderStyles.length; i++ )
       assertEquals( "cell 0," + i + " should have correct top border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderTopEnum() );
+                    row.getCell(i).getCellStyle().getBorderTop() );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(1);
     for ( int i=0; i < borderStyles.length; i++ )
       assertEquals( "cell 1," + i + " should have correct bottom border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderBottomEnum() );
+                    row.getCell(i).getCellStyle().getBorderBottom() );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(2);
     for ( int i=0; i < borderStyles.length; i++ )
       assertEquals( "cell 2," + i + " should have correct right border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderRightEnum() );
+                    row.getCell(i).getCellStyle().getBorderRight() );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(3);
     for ( int i=0; i < borderStyles.length; i++ )
       assertEquals( "cell 3," + i + " should have correct left border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderLeftEnum() );
+                    row.getCell(i).getCellStyle().getBorderLeft() );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(4);
     for ( int i=0; i < borderStyles.length; i++ )
     {
       assertEquals( "cell 4," + i + " should have correct top border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderTopEnum() );
+                    row.getCell(i).getCellStyle().getBorderTop() );
       assertEquals( "cell 4," + i + " should have correct bottom border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderBottomEnum() );
+                    row.getCell(i).getCellStyle().getBorderBottom() );
       assertEquals( "cell 4," + i + " should have correct right border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderRightEnum() );
+                    row.getCell(i).getCellStyle().getBorderRight() );
       assertEquals( "cell 4," + i + " should have correct left border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderLeftEnum() );
+                    row.getCell(i).getCellStyle().getBorderLeft() );
     }
   }
 
@@ -250,7 +250,7 @@ public class StyleTagTest extends TagTestBase
     for ( int i=0; i < fillPatterns.length; i++ )
     {
       assertEquals( "column " + i + " should have " + params[i] + " pattern.", fillPatterns[i],
-                    row.getCell(i).getCellStyle().getFillPatternEnum() );
+                    row.getCell(i).getCellStyle().getFillPattern() );
     }
   }
 
@@ -288,10 +288,10 @@ public class StyleTagTest extends TagTestBase
                                                   "&valign3=justify&valign4=top");
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals( VerticalAlignment.BOTTOM, row.getCell(0).getCellStyle().getVerticalAlignmentEnum() );
-    assertEquals( VerticalAlignment.CENTER, row.getCell(1).getCellStyle().getVerticalAlignmentEnum() );
-    assertEquals( VerticalAlignment.JUSTIFY, row.getCell(2).getCellStyle().getVerticalAlignmentEnum() );
-    assertEquals( VerticalAlignment.TOP, row.getCell(3).getCellStyle().getVerticalAlignmentEnum() );
+    assertEquals( VerticalAlignment.BOTTOM, row.getCell(0).getCellStyle().getVerticalAlignment() );
+    assertEquals( VerticalAlignment.CENTER, row.getCell(1).getCellStyle().getVerticalAlignment() );
+    assertEquals( VerticalAlignment.JUSTIFY, row.getCell(2).getCellStyle().getVerticalAlignment() );
+    assertEquals( VerticalAlignment.TOP, row.getCell(3).getCellStyle().getVerticalAlignment() );
   }
 
   public void testFontName() throws Exception
@@ -379,13 +379,13 @@ public class StyleTagTest extends TagTestBase
 
     HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(0).getCellStyle();
     assertEquals( "alignment should be inherited from parent style", HorizontalAlignment.RIGHT,
-                  cellStyle.getAlignmentEnum());
+                  cellStyle.getAlignment());
     assertEquals( "border should be overide parent style", BorderStyle.THICK,
-                  cellStyle.getBorderLeftEnum());
+                  cellStyle.getBorderLeft());
     assertColorEquals( "background should not be inherited", templateContext.getWorkbook(), HSSFColorPredefined.AQUA.getIndex(),
                        cellStyle.getFillBackgroundColor() );
 
-    HSSFFont font = templateContext.getWorkbook().getFontAt(cellStyle.getFontIndexAsInt());
+    HSSFFont font = templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex());
     assertEquals( "font height should be inherited from parent", 145, font.getFontHeight() );
     assertEquals( "font weight should overide that of parent", true, font.getBold() );
   }
@@ -410,21 +410,21 @@ public class StyleTagTest extends TagTestBase
 
     HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(0).getCellStyle();
     assertNotNull("Style named bob should not be null", cellStyle );
-    assertEquals( "style's border should be thin", BorderStyle.THIN, cellStyle.getBorderTopEnum());
-    assertEquals( "style's fillPattern should be diamonds", FillPatternType.DIAMONDS, cellStyle.getFillPatternEnum() );
+    assertEquals( "style's border should be thin", BorderStyle.THIN, cellStyle.getBorderTop());
+    assertEquals( "style's fillPattern should be diamonds", FillPatternType.DIAMONDS, cellStyle.getFillPattern() );
     assertEquals( "style's fontHeight should be 240", 240,
-                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndexAsInt()).getFontHeight() );
+                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getFontHeight() );
 
 
     cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(1).getCellStyle();
     assertNotNull("Style named 'bob jeff harry' should not be null", cellStyle );
-    assertEquals( "style's border should be thin", BorderStyle.THIN, cellStyle.getBorderTopEnum());
-    assertEquals( "style's fillPattern should be diamonds", FillPatternType.BRICKS, cellStyle.getFillPatternEnum() );
+    assertEquals( "style's border should be thin", BorderStyle.THIN, cellStyle.getBorderTop());
+    assertEquals( "style's fillPattern should be diamonds", FillPatternType.BRICKS, cellStyle.getFillPattern() );
     assertEquals( "style's fontHeight should be 240", 222,
-                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndexAsInt()).getFontHeight() );
+                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getFontHeight() );
     assertEquals( "style's fontHeight should be 240", true,
-                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndexAsInt()).getBold() );
-    assertEquals( "style's alignment should be right", HorizontalAlignment.RIGHT, cellStyle.getAlignmentEnum());
+                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getBold() );
+    assertEquals( "style's alignment should be right", HorizontalAlignment.RIGHT, cellStyle.getAlignment());
   }
 
   public void testRowHeightAndColumnWidth() throws Exception
@@ -470,7 +470,7 @@ public class StyleTagTest extends TagTestBase
 
   private HSSFFont findFont(HSSFRow row, int index, SsTemplateContext templateContext)
   {
-    return templateContext.getWorkbook().getFontAt(row.getCell(index).getCellStyle().getFontIndexAsInt());
+    return templateContext.getWorkbook().getFontAt(row.getCell(index).getCellStyle().getFontIndex());
   }
 
   private String mapToParams( Map map )
