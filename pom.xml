@@ -81,10 +81,9 @@
             </dependency>
 
             <dependency>
-                <groupId>commons-digester</groupId>
-                <artifactId>commons-digester</artifactId>
-                <version>1.8</version>
-                <scope>compile</scope>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-digester3</artifactId>
+                <version>3.2</version>
             </dependency>
 
             <dependency>

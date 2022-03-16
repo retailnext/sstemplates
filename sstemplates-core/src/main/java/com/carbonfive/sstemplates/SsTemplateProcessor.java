@@ -1,7 +1,7 @@
 package com.carbonfive.sstemplates;
 
 import com.carbonfive.sstemplates.tags.*;
-import org.apache.commons.digester.*;
+import org.apache.commons.digester3.Digester;
 import org.apache.poi.hssf.usermodel.*;
 import org.xml.sax.*;
 
