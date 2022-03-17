@@ -1,9 +1,12 @@
 package com.carbonfive.sstemplates;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CoordinatesTest extends TestCase
+import org.junit.jupiter.api.Test;
+
+public class CoordinatesTest
 {
+  @Test
   public void testToString() throws Exception
   {
     Coordinates c = new Coordinates(0, (short) 0);

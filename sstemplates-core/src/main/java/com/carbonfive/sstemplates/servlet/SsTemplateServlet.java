@@ -49,7 +49,7 @@ public class SsTemplateServlet extends HttpServlet
       try
       {
         @SuppressWarnings("unchecked")
-		Class<SsTemplateTag> clazz = (Class<SsTemplateTag>) Class.forName(name);
+        Class<SsTemplateTag> clazz = (Class<SsTemplateTag>) Class.forName(name);
 
         if (!SsTemplateTag.class.isAssignableFrom(clazz))
           throw new ServletException("Custom tags must implement SsTemplateTag");

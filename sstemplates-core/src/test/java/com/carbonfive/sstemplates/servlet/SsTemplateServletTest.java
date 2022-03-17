@@ -1,10 +1,19 @@
 package com.carbonfive.sstemplates.servlet;
 
-import java.util.*;
 import javax.servlet.http.*;
 import org.springframework.mock.web.*;
 import com.carbonfive.sstemplates.*;
 import com.carbonfive.sstemplates.tags.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Iterator;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * 
@@ -17,6 +26,7 @@ public class SsTemplateServletTest
   private MockHttpServletRequest request;
   private MockHttpServletResponse response;
 
+  @BeforeEach
   public void setUp() throws Exception
   {
     super.setUp();
@@ -26,18 +36,19 @@ public class SsTemplateServletTest
     response = new MockHttpServletResponse();
   }
 
+  @Test
   public void testFindDefaultHssfTemplateTags() throws Exception
   {
     List<Class<SsTemplateTag>> tags = getServlet().getProcessor().getTags();
-    assertTrue( "Finds at least one template tag", ! tags.isEmpty() );
-
+    assertTrue( ! tags.isEmpty(), "Finds at least one template tag" );
     for (Iterator<Class<SsTemplateTag>> it = tags.iterator(); it.hasNext();)
     {
       Class<?> o = it.next();
-      assertTrue( "all tags extend SsTemplateTag", SsTemplateTag.class.isAssignableFrom(o) );
+      assertTrue( SsTemplateTag.class.isAssignableFrom(o), "all tags extend SsTemplateTag" );
     }
   }
 
+  @Test
   public void test200() throws Exception
   {
     request.setServletPath("/templates/servlet_basic.sst");
@@ -47,6 +58,7 @@ public class SsTemplateServletTest
     assertEquals( HttpServletResponse.SC_OK, response.getStatus() );
   }
 
+  @Test
   public void test404() throws Exception
   {
 
@@ -57,6 +69,7 @@ public class SsTemplateServletTest
     assertEquals( HttpServletResponse.SC_NOT_FOUND, response.getStatus() );
   }
 
+  @Test
   public void testInclude() throws Exception
   {
     request.setServletPath("/templates/servlet_include.sst");
@@ -65,20 +78,21 @@ public class SsTemplateServletTest
     assertEquals( HttpServletResponse.SC_OK, response.getStatus() );
   }
 
+  @Test
   public void testParseSimpleTemplate() throws Exception
   {
     request.setServletPath("/templates/servlet_basic.sst");
 
     WorkbookTag workbookTag = getRenderTree(request);
-    assertNotNull( "Should have parsed render tree from /test.templates/servlet_basic.sst", workbookTag );
-    assertTrue( "workbook should have at least one child tag", workbookTag.getChildTags().size() > 0 );
-    assertTrue( "child of workbook " + workbookTag.getChildTags().get(0).getClass().getName() + " should be sheet",
-                workbookTag.getChildTags().get(0) instanceof SheetTag );
+    assertNotNull( workbookTag, "Should have parsed render tree from /test.templates/servlet_basic.sst" );
+    assertTrue( workbookTag.getChildTags().size() > 0, "workbook should have at least one child tag" );
+    assertTrue( workbookTag.getChildTags().get(0) instanceof SheetTag,
+           "child of workbook " + workbookTag.getChildTags().get(0).getClass().getName() + " should be sheet" );
 
-    assertEquals("sheet name should be 'testSheet'", "testSheet",
-                 ((SheetTag) workbookTag.getChildTags().get(0)).getName() );
+    assertEquals( "testSheet", ((SheetTag) workbookTag.getChildTags().get(0)).getName(), "sheet name should be 'testSheet'" );
   }
 
+  @Test
   public void testEvaluateEL() throws Exception
   {
     request.setServletPath("/templates/servlet_basic.sst");
@@ -90,17 +104,17 @@ public class SsTemplateServletTest
     request.setAttribute("var2",Integer.valueOf(21));
 
     String expression = "${ var1 + var2 }";
-    assertEquals( "Expression " + expression + " should be 35", 35,
-                  ((Integer) workbookTag.parseExpression(expression,Integer.class,context)).intValue());
+    assertEquals( 35, ((Integer) workbookTag.parseExpression(expression,Integer.class,context)).intValue(),
+          "Expression " + expression + " should be 35");
   }
 
+  @Test
   public void testRenderTreeCache() throws Exception
   {
     request.setServletPath("/templates/servlet_basic.sst");
 
     WorkbookTag workbookTag1 = getRenderTree(request);
     WorkbookTag workbookTag2 = getRenderTree(request);
-    assertTrue( "Retrieving render tree from same path twice should return same instance",
-                workbookTag1 == workbookTag2 );
+    assertTrue( workbookTag1 == workbookTag2, "Retrieving render tree from same path twice should return same instance" );
   }
 }

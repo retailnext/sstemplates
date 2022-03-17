@@ -1,27 +1,28 @@
 package com.carbonfive.sstemplates;
 
 import com.carbonfive.sstemplates.tags.WorkbookTag;
-import junit.framework.TestCase;
 
 import java.io.File;
 import java.net.URL;
 import java.net.URLDecoder;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author sivoh
  * @version $REVISION
  */
-public class SsTemplateCachelessTest extends TestCase
+public class SsTemplateCachelessTest
 {
   private SsTemplateProcessor processor;
   private File templateDir;
 
-  public SsTemplateCachelessTest(String s)
-  {
-    super(s);
-  }
-
+  @BeforeEach
   protected void setUp() throws Exception
   {
     processor = SsTemplateProcessor.getInstance(false);
@@ -29,10 +30,7 @@ public class SsTemplateCachelessTest extends TestCase
     templateDir = new File(URLDecoder.decode(url.getFile(), "UTF8"));
   }
 
-  protected void tearDown() throws Exception
-  {
-  }
-
+  @Test
   public void testRenderWorkbooksWithCahchingOff() throws Exception
   {
     String[] workbooks = new String[]{"cell_blank.sst","cell_column.sst","cell_content.sst","cell_region.sst","cell_type.sst"};

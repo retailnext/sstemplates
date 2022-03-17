@@ -92,7 +92,7 @@ public class StyleTag extends BaseTag
     for (int i=0; i < ATTRIBUTES.length; i++ )
     {
       @SuppressWarnings("unchecked")
-	  Map<String, Integer> propValues = (HashMap<String, Integer>) attributes.get( ATTRIBUTES[i][0] );
+      Map<String, Integer> propValues = (HashMap<String, Integer>) attributes.get( ATTRIBUTES[i][0] );
       if ( propValues == null )
       {
         propValues = new HashMap<String, Integer>();
@@ -393,7 +393,7 @@ public class StyleTag extends BaseTag
   {
     String parsedAttribute = (String) parseExpression(attributeValue, String.class, context);
     @SuppressWarnings("unchecked")
-	Integer value = ((Map<String, Integer>) attributes.get(attributeName)).get(parsedAttribute);
+    Integer value = ((Map<String, Integer>) attributes.get(attributeName)).get(parsedAttribute);
     if ( value == null )
       throw new SsTemplateException( "Unknown value '"+parsedAttribute+"' for " + errorName + " attribute of style tag");
     short result = value.shortValue();

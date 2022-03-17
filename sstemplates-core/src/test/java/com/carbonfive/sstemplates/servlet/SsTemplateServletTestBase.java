@@ -6,18 +6,19 @@ import javax.servlet.http.*;
 import org.springframework.mock.web.*;
 import com.carbonfive.sstemplates.*;
 import com.carbonfive.sstemplates.tags.*;
-import junit.framework.*;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * 
  * @author sivoh
  * @version $REVISION
  */
-public abstract class SsTemplateServletTestBase extends TestCase
+public abstract class SsTemplateServletTestBase
 {
   private SsTemplateServlet servlet;
   private ServletContext servletContext;
 
+  @BeforeEach
   protected void setUp() throws Exception
   {
     servletContext = new MockServletContext("/test");
@@ -25,10 +26,6 @@ public abstract class SsTemplateServletTestBase extends TestCase
 
     servlet = new SsTemplateServlet();
     servlet.init(config);
-  }
-
-  protected void tearDown() throws Exception
-  {
   }
 
   public SsTemplateServlet getServlet()

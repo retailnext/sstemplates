@@ -4,6 +4,12 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import com.carbonfive.sstemplates.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 /**
  * 
  * @author sivoh
@@ -11,22 +17,19 @@ import com.carbonfive.sstemplates.*;
  */
 public class RowTagTest extends TagTestBase
 {
-  public RowTagTest( String name )
-  {
-    super(name);
-  }
-
+  @Test
   public void testCreateRow() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("row_test1.sst?row1=1&row2=4&row3=8");
 
     HSSFSheet sheet = templateContext.getWorkbook().getSheetAt(0);
-    assertNotNull( "Row should exist at explicit index 1", sheet.getRow(1));
-    assertNotNull( "Row should exist at explicit index 4", sheet.getRow(4));
-    assertNotNull( "Row should exist at explicit index 8", sheet.getRow(8));
-    assertNotNull( "Row should exist at contextual index 9", sheet.getRow(9));
+    assertNotNull(sheet.getRow(1), "Row should exist at explicit index 1");
+    assertNotNull(sheet.getRow(4), "Row should exist at explicit index 4");
+    assertNotNull(sheet.getRow(8), "Row should exist at explicit index 8");
+    assertNotNull(sheet.getRow(9), "Row should exist at contextual index 9");
   }
 
+  @Test
   public void testSheetContext() throws Exception
   {
     WorkbookTag renderTree = getRenderTree("row_test1.sst");
@@ -37,16 +40,17 @@ public class RowTagTest extends TagTestBase
     rowTag.addChildTag(testTag);
 
     renderTree.render(getHssfTemplateContext());
-    assertTrue( "Row tag rendered children", testTag.hasTagBeenRendered());
+    assertTrue(testTag.hasTagBeenRendered(), "Row tag rendered children");
   }
 
+  @Test
   public void testDefinesStyle() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("row_test2.sst?style=fred");
     HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(0).getCellStyle();
 
-    assertNotNull( "Style defined in row is not null", cellStyle );
-    assertEquals( "Style should have thin top border", BorderStyle.THIN, cellStyle.getBorderTop() );
+    assertNotNull(cellStyle, "Style defined in row is not null");
+    assertEquals(BorderStyle.THIN, cellStyle.getBorderTop(), "Style should have thin top border");
   }
 
   public void childRenderTest( SsTemplateContext context )

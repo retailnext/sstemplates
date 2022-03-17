@@ -3,6 +3,10 @@ package com.carbonfive.sstemplates.tags;
 import org.apache.poi.hssf.usermodel.*;
 import com.carbonfive.sstemplates.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 /**
  * 
  * @author sivoh
@@ -10,18 +14,15 @@ import com.carbonfive.sstemplates.*;
  */
 public class FunctionTagTest extends TagTestBase
 {
-  public FunctionTagTest( String name )
-  {
-    super(name);
-  }
 
+  @Test
   public void testFunction() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("function.sst");
     HSSFWorkbook workbook = templateContext.getWorkbook();
-    assertEquals( "Function invocation", "I heart nothingness", workbook.getSheetName(0));
-    assertEquals( "Function invocation", "I heart functions", workbook.getSheetName(1));
-    assertEquals( "Function invocation", "I heart apples and oranges", workbook.getSheetName(2));
+    assertEquals( "I heart nothingness", workbook.getSheetName(0), "Function invocation" );
+    assertEquals( "I heart functions", workbook.getSheetName(1), "Function invocation" );
+    assertEquals( "I heart apples and oranges", workbook.getSheetName(2), "Function invocation" );
   }
 
   public static String test()

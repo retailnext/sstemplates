@@ -3,6 +3,12 @@ package com.carbonfive.sstemplates.tags;
 import org.apache.poi.hssf.usermodel.*;
 import com.carbonfive.sstemplates.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 /**
  * 
  * @author sivoh
@@ -11,27 +17,25 @@ import com.carbonfive.sstemplates.*;
 public class WorkbookTagTest
     extends TagTestBase
 {
-  public WorkbookTagTest( String name )
-  {
-    super(name);
-  }
-
+  @Test
   public void testReadWorkbookTemplate() throws Exception
   {
     WorkbookTag tag = getRenderTree("workbook_test1.sst");
     HSSFWorkbook workbook = tag.loadTemplateWorkbook(getHssfTemplateContext());
 
-    assertNotNull( "Workbook should not be null", workbook );
-    assertEquals( "first value of workbook should be 'test'", "test",
-                  workbook.getSheetAt(0).getRow(0).getCell(0).getStringCellValue());
+    assertNotNull( workbook, "Workbook should not be null" );
+    assertEquals( "test", workbook.getSheetAt(0).getRow(0).getCell(0).getStringCellValue(),
+            "first value of workbook should be 'test'" );
   }
 
+  @Test
   public void testCreateEmptyWorkbook() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("workbook_test2.sst");
-    assertNotNull( "Workbook tag with no template should create empty workbook", templateContext.getWorkbook() );
+    assertNotNull( templateContext.getWorkbook(), "Workbook tag with no template should create empty workbook" );
   }
 
+  @Test
   public void testWorkbookContext() throws Exception
   {
     WorkbookTag workbookTag = getRenderTree("workbook_test2.sst");
@@ -40,7 +44,7 @@ public class WorkbookTagTest
     workbookTag.addChildTag(testTag);
 
     workbookTag.render(getHssfTemplateContext());
-    assertTrue( "Workbook tag rendered children", testTag.hasTagBeenRendered());
+    assertTrue( testTag.hasTagBeenRendered(), "Workbook tag rendered children" );
   }
 
   public void childRenderTest( SsTemplateContext context )

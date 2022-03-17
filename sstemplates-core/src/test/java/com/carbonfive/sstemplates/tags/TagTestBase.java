@@ -13,10 +13,6 @@ public abstract class TagTestBase extends SsTemplateTestBase
 {
   protected static final Logger log = Logger.getLogger(SsTemplateServlet.class.getName());
 
-  public TagTestBase(String s)
-  {
-    super(s);
-  }
 
   public abstract void childRenderTest( SsTemplateContext context )
     throws SsTemplateException;

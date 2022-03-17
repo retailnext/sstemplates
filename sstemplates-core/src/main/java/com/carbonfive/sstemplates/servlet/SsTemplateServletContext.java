@@ -79,7 +79,7 @@ public class SsTemplateServletContext
 
   private Map<String, Object> getRequestScope()
   {
-	Map<String, Object> map = implicitObjects.get("requestScope");
+    Map<String, Object> map = implicitObjects.get("requestScope");
     if ( map == null )
     {
       map = new HashMap<String, Object>();
@@ -95,7 +95,7 @@ public class SsTemplateServletContext
 
   private Map<String, Object> getSessionScope()
   {
-	Map<String, Object> map = implicitObjects.get("sessionScope");
+    Map<String, Object> map = implicitObjects.get("sessionScope");
     if ( map == null )
     {
       map = new HashMap<String, Object>();
@@ -114,7 +114,7 @@ public class SsTemplateServletContext
 
   private Map<String, Object> getApplicationScope()
   {
-	Map<String, Object> map = implicitObjects.get("applicationScope");
+    Map<String, Object> map = implicitObjects.get("applicationScope");
     if ( map == null )
     {
       map = new HashMap<String, Object>();
@@ -130,7 +130,7 @@ public class SsTemplateServletContext
 
   private Map<String, Object> getParam()
   {
-	Map<String, Object> map = implicitObjects.get("param");
+    Map<String, Object> map = implicitObjects.get("param");
     if ( map == null )
     {
       map = new HashMap<String, Object>();
@@ -146,7 +146,7 @@ public class SsTemplateServletContext
 
   private Map<String, Object> getParamValues()
   {
-	Map<String, Object> map = implicitObjects.get("paramValues");
+    Map<String, Object> map = implicitObjects.get("paramValues");
     if ( map == null )
     {
       map = new HashMap<String, Object>();

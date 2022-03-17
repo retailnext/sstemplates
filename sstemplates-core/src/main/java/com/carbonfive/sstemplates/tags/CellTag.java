@@ -180,7 +180,7 @@ public class CellTag extends BaseTag
     short parsedColspan = 1;
     int parsedRowspan = 1;
     CellRangeAddress region = new CellRangeAddress(context.getRowIndex(), context.getRowIndex(),
-    									context.getColumnIndex(), context.getColumnIndex());
+                                  context.getColumnIndex(), context.getColumnIndex());
 
     if ( colspan != null )
     {
@@ -267,18 +267,17 @@ public class CellTag extends BaseTag
 
   private void setCellContents(HSSFCell cell, SsTemplateContext context) throws SsTemplateException
   {
-	//     cell.setCellType(cellType);
-	CellType cellType = findCellType(context);
+    CellType cellType = findCellType(context);
     if (( contents != null  ) && ( contents.length() != 0 ))
     {
       if ( cellType == CellType.STRING )
       {
-    	cell.setCellType(cellType);
+        cell.setCellType(cellType);
         cell.setCellValue( new HSSFRichTextString( (String) parseExpression(contents, String.class, context) ) );
       }
       else if ( cellType == CellType.NUMERIC )
       {
-    	cell.setCellType(cellType);
+        cell.setCellType(cellType);
         if ((parsedType != null) && parsedType.equals("date"))
           cell.setCellValue( (Date) parseExpression(contents, Date.class, context));
         else
@@ -289,17 +288,17 @@ public class CellTag extends BaseTag
       else if ( cellType == CellType.FORMULA )
         cell.setCellFormula( (String) parseExpression(contents, String.class, context) );
       else if ( cellType == CellType.BLANK )
-    	cell.setBlank();
+        cell.setBlank();
       else
-    	cell.setCellType(cellType);
+        cell.setCellType(cellType);
     }
     else
-    	cell.setCellType(cellType);
+      cell.setCellType(cellType);
   }
 
   private CellType findCellType(SsTemplateContext context) throws SsTemplateException
   {
-	CellType cellType = CellType.STRING;
+    CellType cellType = CellType.STRING;
     if (( type != null ) && ( type.length() > 0 ))
     {
       parsedType = ((String) parseExpression( type, String.class, context )).toLowerCase();

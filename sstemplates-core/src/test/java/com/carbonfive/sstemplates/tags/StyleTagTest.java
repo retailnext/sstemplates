@@ -10,6 +10,13 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import com.carbonfive.sstemplates.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 /**
  * 
  * @author sivoh
@@ -17,11 +24,7 @@ import com.carbonfive.sstemplates.*;
  */
 public class StyleTagTest extends TagTestBase
 {
-  public StyleTagTest( String name )
-  {
-    super(name);
-  }
-
+  @Test
   public void testSheetContext() throws Exception
   {
     WorkbookTag renderTree = getRenderTree("style_tag.sst");
@@ -33,9 +36,10 @@ public class StyleTagTest extends TagTestBase
     styleTag.addChildTag(testTag);
 
     renderTree.render(getHssfTemplateContext());
-    assertTrue( "Style tag rendered children", testTag.hasTagBeenRendered());
+    assertTrue( testTag.hasTagBeenRendered(), "Style tag rendered children" );
   }
 
+  @Test
   public void testAlignStyle() throws Exception
   {
     SsTemplateContext templateContext =
@@ -50,6 +54,7 @@ public class StyleTagTest extends TagTestBase
     assertEquals( HorizontalAlignment.RIGHT, row.getCell(5).getCellStyle().getAlignment() );
   }
 
+  @Test
   public void testBorderStyle() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("style_border.sst?bs=dash-dot&bs=dash-dot-dot&bs=dashed" +
@@ -68,38 +73,39 @@ public class StyleTagTest extends TagTestBase
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
     for ( int i=0; i < borderStyles.length; i++ )
-      assertEquals( "cell 0," + i + " should have correct top border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderTop() );
+      assertEquals( borderStyles[i], row.getCell(i).getCellStyle().getBorderTop(),
+              "cell 0," + i + " should have correct top border" );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(1);
     for ( int i=0; i < borderStyles.length; i++ )
-      assertEquals( "cell 1," + i + " should have correct bottom border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderBottom() );
+      assertEquals( borderStyles[i], row.getCell(i).getCellStyle().getBorderBottom(),
+              "cell 1," + i + " should have correct bottom border" );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(2);
     for ( int i=0; i < borderStyles.length; i++ )
-      assertEquals( "cell 2," + i + " should have correct right border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderRight() );
+      assertEquals( borderStyles[i], row.getCell(i).getCellStyle().getBorderRight(),
+              "cell 2," + i + " should have correct right border" );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(3);
     for ( int i=0; i < borderStyles.length; i++ )
-      assertEquals( "cell 3," + i + " should have correct left border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderLeft() );
+      assertEquals( borderStyles[i], row.getCell(i).getCellStyle().getBorderLeft(),
+              "cell 3," + i + " should have correct left border" );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(4);
     for ( int i=0; i < borderStyles.length; i++ )
     {
-      assertEquals( "cell 4," + i + " should have correct top border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderTop() );
-      assertEquals( "cell 4," + i + " should have correct bottom border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderBottom() );
-      assertEquals( "cell 4," + i + " should have correct right border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderRight() );
-      assertEquals( "cell 4," + i + " should have correct left border", borderStyles[i],
-                    row.getCell(i).getCellStyle().getBorderLeft() );
+      assertEquals( borderStyles[i], row.getCell(i).getCellStyle().getBorderTop(),
+              "cell 4," + i + " should have correct top border" );
+      assertEquals( borderStyles[i], row.getCell(i).getCellStyle().getBorderBottom(),
+              "cell 4," + i + " should have correct bottom border" );
+      assertEquals( borderStyles[i], row.getCell(i).getCellStyle().getBorderRight(),
+              "cell 4," + i + " should have correct right border" );
+      assertEquals( borderStyles[i], row.getCell(i).getCellStyle().getBorderLeft(),
+              "cell 4," + i + " should have correct left border" );
     }
   }
 
+  @Test
   public void testBorderColor() throws Exception
   {
     ArrayList<HSSFColorPredefined> colorClasses = getColorClasses();
@@ -110,65 +116,66 @@ public class StyleTagTest extends TagTestBase
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
     for ( int i = 0; i < colorClasses.size(); i++ )
-      assertColorEquals( "cell 0," + i + " should have correct top border color",
-                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
-                         row.getCell(i).getCellStyle().getTopBorderColor());
+      assertColorEquals( templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
+                         row.getCell(i).getCellStyle().getTopBorderColor(),
+                         "cell 0," + i + " should have correct top border color" );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(1);
     for ( int i = 0; i < colorClasses.size(); i++ )
-      assertColorEquals( "cell 1," + i + " should have correct bottom border color",
-                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
-                         row.getCell(i).getCellStyle().getBottomBorderColor() );
+      assertColorEquals( templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
+                         row.getCell(i).getCellStyle().getBottomBorderColor(),
+                         "cell 1," + i + " should have correct bottom border color" );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(2);
     for ( int i = 0; i < colorClasses.size(); i++ )
-      assertColorEquals( "cell 2," + i + " should have correct right border color",
-                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
-                         row.getCell(i).getCellStyle().getRightBorderColor() );
+      assertColorEquals( templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
+                         row.getCell(i).getCellStyle().getRightBorderColor(),
+                         "cell 2," + i + " should have correct right border color" );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(3);
     for ( int i = 0; i < colorClasses.size(); i++ )
-      assertColorEquals( "cell 3," + i + " should have correct left border color",
-                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
-                         row.getCell(i).getCellStyle().getLeftBorderColor() );
+      assertColorEquals( templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
+                         row.getCell(i).getCellStyle().getLeftBorderColor(),
+                         "cell 3," + i + " should have correct left border color" );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(4);
     for ( int i = 0; i < colorClasses.size(); i++ )
     {
-      assertColorEquals( "cell 4," + i + " should have correct top border color",
-                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
-                         row.getCell(i).getCellStyle().getTopBorderColor() );
-      assertColorEquals( "cell 4," + i + " should have correct bottom border color",
-                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
-                         row.getCell(i).getCellStyle().getBottomBorderColor() );
-      assertColorEquals( "cell 4," + i + " should have correct right border color",
-                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
-                         row.getCell(i).getCellStyle().getRightBorderColor() );
-      assertColorEquals( "cell 4," + i + " should have correct left border color",
-                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
-                         row.getCell(i).getCellStyle().getLeftBorderColor() );
+      assertColorEquals( templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
+                         row.getCell(i).getCellStyle().getTopBorderColor(),
+                         "cell 4," + i + " should have correct top border color" );
+      assertColorEquals( templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
+                         row.getCell(i).getCellStyle().getBottomBorderColor(),
+                         "cell 4," + i + " should have correct bottom border color" );
+      assertColorEquals( templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
+                         row.getCell(i).getCellStyle().getRightBorderColor(),
+                         "cell 4," + i + " should have correct right border color" );
+      assertColorEquals( templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
+                         row.getCell(i).getCellStyle().getLeftBorderColor(),
+                         "cell 4," + i + " should have correct left border color" );
     }
   }
 
-  private void assertColorEquals(String message, HSSFWorkbook workbook, HSSFColorPredefined intendedColor, short colorIndex)
+  private void assertColorEquals(HSSFWorkbook workbook, HSSFColorPredefined intendedColor, short colorIndex, String message)
     throws Exception
   {
     HSSFPalette palette = workbook.getCustomPalette();
     HSSFColor actualColor = palette.getColor(colorIndex);
-    assertTrue(message + " Intended: " + intendedColor.getTriplet() + " Actual: " + actualColor.getTriplet(),
-               Arrays.equals(intendedColor.getTriplet(), actualColor.getTriplet()));
+    assertTrue(Arrays.equals(intendedColor.getTriplet(), actualColor.getTriplet()),
+            message + " Intended: " + intendedColor.getTriplet() + " Actual: " + actualColor.getTriplet());
   }
 
-  private void assertColorEquals(String message, HSSFWorkbook workbook, short intendedIndex, short actualIndex)
+  private void assertColorEquals(HSSFWorkbook workbook, short intendedIndex, short actualIndex, String message)
     throws Exception
   {
     HSSFPalette palette = workbook.getCustomPalette();
     HSSFColor intendedColor = palette.getColor(intendedIndex);
     HSSFColor actualColor = palette.getColor(actualIndex);
-    assertTrue(message + " Intended: " + intendedColor.getTriplet() + " Actual: " + actualColor.getTriplet(),
-               Arrays.equals(intendedColor.getTriplet(), actualColor.getTriplet()));
+    assertTrue(Arrays.equals(intendedColor.getTriplet(), actualColor.getTriplet()),
+            message + " Intended: " + intendedColor.getTriplet() + " Actual: " + actualColor.getTriplet());
   }
 
+  @Test
   public void testDataFormat() throws Exception
   {
     List<String> formats = createTestFormats();
@@ -181,11 +188,12 @@ public class StyleTagTest extends TagTestBase
 
     for ( int i=0; i < formats.size(); i++ )
     {
-      assertEquals( "cell " + i + " data format should be correct.", dataFormat.getFormat((String) formats.get(i)),
-                    row.getCell(i).getCellStyle().getDataFormat() );
+      assertEquals( dataFormat.getFormat((String) formats.get(i)), row.getCell(i).getCellStyle().getDataFormat(),
+              "cell " + i + " data format should be correct." );
     }
   }
 
+  @Test
   public void testBackgroundAndForegroundColors() throws Exception
   {
     ArrayList<HSSFColorPredefined> colorClasses = getColorClasses();
@@ -195,27 +203,28 @@ public class StyleTagTest extends TagTestBase
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
     for ( int i = 0; i < colorClasses.size(); i++ )
-      assertColorEquals( "cell 0," + i + " should have correct foreground color",
-                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
-                         row.getCell(i).getCellStyle().getFillForegroundColor() );
+      assertColorEquals( templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
+                         row.getCell(i).getCellStyle().getFillForegroundColor(),
+                         "cell 0," + i + " should have correct foreground color" );
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(1);
     for ( int i = 0; i < colorClasses.size(); i++ )
-      assertColorEquals( "cell 1," + i + " should have correct background color",
-                         templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
-                         row.getCell(i).getCellStyle().getFillBackgroundColor() );
+      assertColorEquals( templateContext.getWorkbook(), (HSSFColorPredefined) colorClasses.get(i),
+                         row.getCell(i).getCellStyle().getFillBackgroundColor(),
+                         "cell 1," + i + " should have correct background color" );
   }
 
+  @Test
   public void testFillPattern() throws Exception
   {
-	FillPatternType[] fillPatterns = new FillPatternType[] {  FillPatternType.ALT_BARS, FillPatternType.BIG_SPOTS, FillPatternType.BRICKS,
-										  FillPatternType.DIAMONDS, FillPatternType.FINE_DOTS, FillPatternType.NO_FILL,
-										  FillPatternType.SOLID_FOREGROUND, FillPatternType.SPARSE_DOTS,
-										  FillPatternType.SQUARES, FillPatternType.THICK_BACKWARD_DIAG,
-										  FillPatternType.THICK_FORWARD_DIAG, FillPatternType.THICK_HORZ_BANDS,
-										  FillPatternType.THICK_VERT_BANDS, FillPatternType.THIN_BACKWARD_DIAG,
-										  FillPatternType.THIN_FORWARD_DIAG, FillPatternType.THIN_HORZ_BANDS,
-										  FillPatternType.THIN_VERT_BANDS };
+    FillPatternType[] fillPatterns = new FillPatternType[] {  FillPatternType.ALT_BARS, FillPatternType.BIG_SPOTS, FillPatternType.BRICKS,
+                                          FillPatternType.DIAMONDS, FillPatternType.FINE_DOTS, FillPatternType.NO_FILL,
+                                          FillPatternType.SOLID_FOREGROUND, FillPatternType.SPARSE_DOTS,
+                                          FillPatternType.SQUARES, FillPatternType.THICK_BACKWARD_DIAG,
+                                          FillPatternType.THICK_FORWARD_DIAG, FillPatternType.THICK_HORZ_BANDS,
+                                          FillPatternType.THICK_VERT_BANDS, FillPatternType.THIN_BACKWARD_DIAG,
+                                          FillPatternType.THIN_FORWARD_DIAG, FillPatternType.THIN_HORZ_BANDS,
+                                          FillPatternType.THIN_VERT_BANDS };
 
     String[] params = new String[] {  "alt-bars", "big-spots", "bricks", "diamonds", "fine-dots", "no-fill",
                                       "solid-foreground", "sparse-dots", "squares", "thick-backward-diag",
@@ -233,39 +242,42 @@ public class StyleTagTest extends TagTestBase
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
     for ( int i=0; i < fillPatterns.length; i++ )
     {
-      assertEquals( "column " + i + " should have " + params[i] + " pattern.", fillPatterns[i],
-                    row.getCell(i).getCellStyle().getFillPattern() );
+      assertEquals( fillPatterns[i], row.getCell(i).getCellStyle().getFillPattern(),
+              "column " + i + " should have " + params[i] + " pattern." );
     }
   }
 
+  @Test
   public void testFlags() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("style_flags.sst?flag=false");
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
 
-    assertFalse( "hidden should be false.", row.getCell(0).getCellStyle().getHidden() );
-    assertFalse( "locked should be false.", row.getCell(0).getCellStyle().getLocked() );
-    assertFalse( "hidden should be false.", row.getCell(0).getCellStyle().getWrapText() );
+    assertFalse( row.getCell(0).getCellStyle().getHidden(), "hidden should be false." );
+    assertFalse( row.getCell(0).getCellStyle().getLocked(), "locked should be false." );
+    assertFalse( row.getCell(0).getCellStyle().getWrapText(), "hidden should be false." );
 
     templateContext = renderWorkbook("style_flags.sst?flag=true");
     row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
 
-    assertTrue( "hidden should be true.", row.getCell(0).getCellStyle().getHidden() );
-    assertTrue( "locked should be true.", row.getCell(0).getCellStyle().getLocked() );
-    assertTrue( "hidden should be true.", row.getCell(0).getCellStyle().getWrapText() );
+    assertTrue( row.getCell(0).getCellStyle().getHidden(), "hidden should be true." );
+    assertTrue( row.getCell(0).getCellStyle().getLocked(), "locked should be true." );
+    assertTrue( row.getCell(0).getCellStyle().getWrapText(), "hidden should be true." );
 
   }
 
+  @Test
   public void testIndentationAndRotation() throws Exception
   {
     int indention = 15;
     SsTemplateContext templateContext = renderWorkbook("style_indent_rotate.sst?indention="+indention+"&rotation=16");
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
 
-    assertEquals( "indention should be "+indention+".", indention, row.getCell(0).getCellStyle().getIndention() );
-    assertEquals( "rotation should be 16.", 16, row.getCell(0).getCellStyle().getRotation() );
+    assertEquals( indention, row.getCell(0).getCellStyle().getIndention(), "indention should be "+indention+"." );
+    assertEquals( 16, row.getCell(0).getCellStyle().getRotation(), "rotation should be 16." );
   }
 
+  @Test
   public void testVerticalAlignStyle() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("style_valign.sst?valign1=bottom&valign2=center" +
@@ -278,36 +290,39 @@ public class StyleTagTest extends TagTestBase
     assertEquals( VerticalAlignment.TOP, row.getCell(3).getCellStyle().getVerticalAlignment() );
   }
 
+  @Test
   public void testFontName() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("style_font_name.sst?fn=Arial&fn=Helvetica" +
                                                   "&fn=NONExistantFont");
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals( "font name", "Arial", findFont(row, 0, templateContext).getFontName() );
-    assertEquals( "font name", "Helvetica", findFont(row, 1, templateContext).getFontName() );
-    assertEquals( "font name", "NONExistantFont", findFont(row, 2, templateContext).getFontName() );
+    assertEquals( "Arial", findFont(row, 0, templateContext).getFontName(), "font name" );
+    assertEquals( "Helvetica", findFont(row, 1, templateContext).getFontName(), "font name" );
+    assertEquals( "NONExistantFont", findFont(row, 2, templateContext).getFontName(), "font name" );
   }
 
+  @Test
   public void testFontHeightBoldItalicAndStrikeout() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("style_font_style.sst?fontHeight=240&italic=true&strikeout=true&bold=true");
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals( "fontHeight", 240, findFont(row, 0, templateContext).getFontHeight() );
-    assertTrue( "bold is true", findFont(row, 0, templateContext).getBold() );
-    assertTrue( "italic is true", findFont(row, 0, templateContext).getItalic() );
-    assertTrue( "strikeout is true", findFont(row, 0, templateContext).getStrikeout() );
+    assertEquals( 240, findFont(row, 0, templateContext).getFontHeight(), "fontHeight" );
+    assertTrue( findFont(row, 0, templateContext).getBold(), "bold is true" );
+    assertTrue( findFont(row, 0, templateContext).getItalic(), "italic is true" );
+    assertTrue( findFont(row, 0, templateContext).getStrikeout(), "strikeout is true" );
 
     templateContext = renderWorkbook("style_font_style.sst?fontHeight=180&italic=false&strikeout=false&bold=false");
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals( "fontHeight", 180, findFont(row, 0, templateContext).getFontHeight() );
-    assertFalse( "bold is false", findFont(row, 0, templateContext).getBold() );
-    assertFalse( "italic is false", findFont(row, 0, templateContext).getItalic() );
-    assertFalse( "strikeout is false", findFont(row, 0, templateContext).getStrikeout() );
+    assertEquals( 180, findFont(row, 0, templateContext).getFontHeight(), "fontHeight" );
+    assertFalse( findFont(row, 0, templateContext).getBold(), "bold is false" );
+    assertFalse( findFont(row, 0, templateContext).getItalic(), "italic is false" );
+    assertFalse( findFont(row, 0, templateContext).getStrikeout(), "strikeout is false" );
   }
 
+  @Test
   public void testFontEnumerationProperties() throws Exception
   {
     short[] typeOffsets = new short[] { HSSFFont.SS_NONE, HSSFFont.SS_SUB, HSSFFont.SS_SUPER };
@@ -329,32 +344,33 @@ public class StyleTagTest extends TagTestBase
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
     for ( short i=0; i < typeOffsets.length; i++ )
     {
-      assertEquals( "cell 0," + i + " should have correct typeOffset.", typeOffsets[i],
-                    findFont(row, i, templateContext).getTypeOffset() );
+      assertEquals( typeOffsets[i], findFont(row, i, templateContext).getTypeOffset(),
+              "cell 0," + i + " should have correct typeOffset." );
     }
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(1);
     for ( short i=0; i < isBold.length; i++ )
     {
-      assertEquals( "cell 1," + i + " should have correct fontWeight.", isBold[i],
-                    findFont(row, i, templateContext).getBold() );
+      assertEquals( isBold[i], findFont(row, i, templateContext).getBold(),
+              "cell 1," + i + " should have correct fontWeight." );
     }
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(2);
     for ( short i=0; i < fontColors.length; i++ )
     {
-      assertColorEquals( "cell 2," + i + " should have correct fontColor.", templateContext.getWorkbook(),
-                         fontColors[i], findFont(row, i, templateContext).getColor() );
+      assertColorEquals( templateContext.getWorkbook(), fontColors[i], findFont(row, i, templateContext).getColor(),
+                         "cell 2," + i + " should have correct fontColor.");
     }
 
     row = templateContext.getWorkbook().getSheetAt(0).getRow(3);
     for ( short i=0; i < underlines.length; i++ )
     {
-      assertEquals( "cell 3," + i + " should have correct underline.", underlines[i],
-                    findFont(row, i, templateContext).getUnderline() );
+      assertEquals( underlines[i], findFont(row, i, templateContext).getUnderline(),
+              "cell 3," + i + " should have correct underline." );
     }
   }
 
+  @Test
   public void testInheritance() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("style_inheritance.sst?alignment1=right&border1=thin" +
@@ -362,18 +378,19 @@ public class StyleTagTest extends TagTestBase
                                                   "&fontWeight1=normal&fontWeight2=bold");
 
     HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(0).getCellStyle();
-    assertEquals( "alignment should be inherited from parent style", HorizontalAlignment.RIGHT,
-                  cellStyle.getAlignment());
-    assertEquals( "border should be overide parent style", BorderStyle.THICK,
-                  cellStyle.getBorderLeft());
-    assertColorEquals( "background should not be inherited", templateContext.getWorkbook(), HSSFColorPredefined.AQUA.getIndex(),
-                       cellStyle.getFillBackgroundColor() );
+    assertEquals( HorizontalAlignment.RIGHT, cellStyle.getAlignment(),
+            "alignment should be inherited from parent style" );
+    assertEquals( BorderStyle.THICK, cellStyle.getBorderLeft(),
+            "border should be overide parent style" );
+    assertColorEquals( templateContext.getWorkbook(), HSSFColorPredefined.AQUA.getIndex(),
+                       cellStyle.getFillBackgroundColor(), "background should not be inherited" );
 
     HSSFFont font = templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex());
-    assertEquals( "font height should be inherited from parent", 145, font.getFontHeight() );
-    assertEquals( "font weight should overide that of parent", true, font.getBold() );
+    assertEquals( 145, font.getFontHeight(), "font height should be inherited from parent" );
+    assertEquals( true, font.getBold(), "font weight should overide that of parent" );
   }
 
+  @Test
   public void testStyleCaching() throws Exception
   {
     Map<String, String> params = new HashMap<String, String>();
@@ -393,33 +410,33 @@ public class StyleTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("style_cache.sst?" + mapToParams(params));
 
     HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(0).getCellStyle();
-    assertNotNull("Style named bob should not be null", cellStyle );
-    assertEquals( "style's border should be thin", BorderStyle.THIN, cellStyle.getBorderTop());
-    assertEquals( "style's fillPattern should be diamonds", FillPatternType.DIAMONDS, cellStyle.getFillPattern() );
-    assertEquals( "style's fontHeight should be 240", 240,
-                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getFontHeight() );
+    assertNotNull( cellStyle, "Style named bob should not be null" );
+    assertEquals( BorderStyle.THIN, cellStyle.getBorderTop(), "style's border should be thin" );
+    assertEquals( FillPatternType.DIAMONDS, cellStyle.getFillPattern(), "style's fillPattern should be diamonds" );
+    assertEquals( 240, templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getFontHeight(),
+            "style's fontHeight should be 240" );
 
 
     cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(1).getCellStyle();
-    assertNotNull("Style named 'bob jeff harry' should not be null", cellStyle );
-    assertEquals( "style's border should be thin", BorderStyle.THIN, cellStyle.getBorderTop());
-    assertEquals( "style's fillPattern should be diamonds", FillPatternType.BRICKS, cellStyle.getFillPattern() );
-    assertEquals( "style's fontHeight should be 240", 222,
-                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getFontHeight() );
-    assertEquals( "style's fontHeight should be 240", true,
-                  templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getBold() );
-    assertEquals( "style's alignment should be right", HorizontalAlignment.RIGHT, cellStyle.getAlignment());
+    assertNotNull( cellStyle, "Style named 'bob jeff harry' should not be null");
+    assertEquals( BorderStyle.THIN, cellStyle.getBorderTop(), "style's border should be thin" );
+    assertEquals( FillPatternType.BRICKS, cellStyle.getFillPattern(), "style's fillPattern should be diamonds" );
+    assertEquals( 222, templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getFontHeight(), "style's fontHeight should be 222" );
+    assertEquals( true, templateContext.getWorkbook().getFontAt(cellStyle.getFontIndex()).getBold(), "style's font should be bold" );
+    assertEquals( HorizontalAlignment.RIGHT, cellStyle.getAlignment(), "style's alignment should be right" );
   }
 
+  @Test
   public void testRowHeightAndColumnWidth() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("style_height_width.sst?rowHeight=300&columnWidth=20");
 
     HSSFSheet sheet = templateContext.getWorkbook().getSheetAt(0);
-    assertEquals( "column width should be 20", 20, sheet.getColumnWidth(0) );
-    assertEquals( "row height should be 300", 300, sheet.getRow(0).getHeight() );
+    assertEquals( 20, sheet.getColumnWidth(0), "column width should be 20" );
+    assertEquals( 300, sheet.getRow(0).getHeight(), "row height should be 300" );
   }
 
+  @Test
   public void testAutoColumnWidth() throws Exception
   {
     String str1 = "short+str";
@@ -428,18 +445,9 @@ public class StyleTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("style_width_auto.sst?str1="+str1+"&str2="+str2+"&str3="+str3);
 
     HSSFSheet sheet = templateContext.getWorkbook().getSheetAt(0);
-    assertEquals( "column width should be 256*the length the longest string +2",
-                  256*(Math.max(Math.max(str1.length(),str2.length()),str3.length())+2), sheet.getColumnWidth(0) );
+    assertEquals( 256*(Math.max(Math.max(str1.length(),str2.length()),str3.length())+2), sheet.getColumnWidth(0),
+            "column width should be 256*the length the longest string +2" );
   }
-
-  /* hssft file doesn't exist
-  public void testSheetBackground() throws Exception
-  {
-    InvocationContext context = getTestInvocation("style_test18.sst");
-    SsTemplateContext templateContext = renderWorkbook(context);
-    templateContext.getWorkbook().write(new FileOutputStream("style_test18.xls"));
-  }
-  */
 
   private String paramListFromArray(String param, String[] values)
   {

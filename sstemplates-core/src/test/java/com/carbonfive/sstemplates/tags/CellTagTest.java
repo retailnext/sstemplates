@@ -5,6 +5,12 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 /**
  * 
  * @author sivoh
@@ -12,31 +18,29 @@ import com.carbonfive.sstemplates.*;
  */
 public class CellTagTest extends TagTestBase
 {
-  public CellTagTest( String name )
-  {
-    super(name);
-  }
-
+  @Test
   public void testCreateCell() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("cell_column.sst");
 
     HSSFSheet sheet = templateContext.getWorkbook().getSheetAt(0);
     HSSFRow row = sheet.getRow(0);
-    assertNotNull( "Cell should exist at explicit index 1", row.getCell(1));
-    assertNotNull( "Cell should exist at explicit index 4", row.getCell(4));
-    assertNotNull( "Cell should exist at explicit index 8", row.getCell(8));
-    assertNotNull( "Cell should exist at contextual index 9", row.getCell(9));
+    assertNotNull(row.getCell(1), "Cell should exist at explicit index 1");
+    assertNotNull(row.getCell(4), "Cell should exist at explicit index 4");
+    assertNotNull(row.getCell(8), "Cell should exist at explicit index 8");
+    assertNotNull(row.getCell(9), "Cell should exist at contextual index 9");
   }
 
+  @Test
   public void testCellContents() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("cell_content.sst");
 
     HSSFCell cell = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(0);
-    assertEquals( "Cell content has been set", "Test Cell Contents", cell.getStringCellValue() );
+    assertEquals( "Test Cell Contents", cell.getStringCellValue(), "Cell content has been set" );
   }
 
+  @Test
   public void testCellType() throws Exception
   {
     SsTemplateContext templateContext =
@@ -44,33 +48,35 @@ public class CellTagTest extends TagTestBase
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
 
-    assertEquals( "Cell type has been set to blank", CellType.BLANK, row.getCell(0).getCellType() );
+    assertEquals( CellType.BLANK, row.getCell(0).getCellType(), "Cell type has been set to blank" );
 
-    assertEquals( "Cell type has been set to boolean", CellType.BOOLEAN, row.getCell(1).getCellType() );
-    assertTrue( "Boolean cell is set to true", row.getCell(1).getBooleanCellValue() );
+    assertEquals( CellType.BOOLEAN, row.getCell(1).getCellType(), "Cell type has been set to boolean" );
+    assertTrue( row.getCell(1).getBooleanCellValue(), "Boolean cell is set to true" );
 
-    assertEquals( "Cell type has been set to error", CellType.ERROR, row.getCell(2).getCellType() );
+    assertEquals( CellType.ERROR, row.getCell(2).getCellType(), "Cell type has been set to error" );
 
-    assertEquals( "Cell type has been set to formula", CellType.FORMULA, row.getCell(3).getCellType() );
+    assertEquals( CellType.FORMULA, row.getCell(3).getCellType(), "Cell type has been set to formula" );
 
-    assertEquals( "Cell type has been set to numeric", CellType.NUMERIC, row.getCell(4).getCellType() );
-    assertTrue( "Numeric cell is set to test value", 2342.32 == row.getCell(4).getNumericCellValue() );
+    assertEquals( CellType.NUMERIC, row.getCell(4).getCellType(), "Cell type has been set to numeric" );
+    assertTrue( 2342.32 == row.getCell(4).getNumericCellValue(), "Numeric cell is set to test value" );
 
-    assertEquals( "Cell type has been set to string", CellType.STRING, row.getCell(5).getCellType() );
-    assertEquals( "String cell is set to test value", "test string", row.getCell(5).getStringCellValue() );
+    assertEquals( CellType.STRING, row.getCell(5).getCellType(), "Cell type has been set to string" );
+    assertEquals( "test string", row.getCell(5).getStringCellValue(), "String cell is set to test value" );
   }
 
+  @Test
   public void testBlankCell() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("cell_blank.sst");
 
     HSSFSheet sheet = templateContext.getWorkbook().getSheetAt(0);
     HSSFRow row = sheet.getRow(0);
-    assertEquals( "Cell content has been set", "stuff", row.getCell(0).getStringCellValue() );
-    assertEquals( "Blank cell", "", row.getCell(1).getStringCellValue() );
-    assertEquals( "Blank cell", CellType.BLANK, row.getCell(1).getCellType());
+    assertEquals( "stuff", row.getCell(0).getStringCellValue(), "Cell content has been set" );
+    assertEquals( "", row.getCell(1).getStringCellValue(), "Blank cell" );
+    assertEquals( CellType.BLANK, row.getCell(1).getCellType(), "Blank cell" );
   }
 
+  @Test
   public void testRegion() throws Exception
   {
     String[][] cellValues = {{ "00", "01", "02", "03", "04", "05", "06" },
@@ -87,19 +93,19 @@ public class CellTagTest extends TagTestBase
     for (int i=0; i < cellValues.length; i++ )
     {
       HSSFRow row = sheet.getRow(i);
-      assertNotNull("row should not be null", row );
+      assertNotNull(row, "row should not be null");
       for ( int j=0; j < cellValues[i].length; j++ )
       {
         if ( cellValues[i][j] != null )
         {
-          assertNotNull("spreadsheet with regions has non-null value at " + i + "," + j, row.getCell(j) );
-          assertEquals("spreadsheet with regions has incorrect value at " + i + "," + j, cellValues[i][j],
-                       row.getCell(j).getRichStringCellValue().getString() );
+          assertNotNull(row.getCell(j), "spreadsheet with regions has non-null value at " + i + "," + j);
+          assertEquals(cellValues[i][j], row.getCell(j).getRichStringCellValue().getString(),
+                "spreadsheet with regions has incorrect value at " + i + "," + j);
         }
       }
     }
 
-    assertEquals( "Sheet should have 3 regions", 3, sheet.getNumMergedRegions() );
+    assertEquals(3, sheet.getNumMergedRegions(), "Sheet should have 3 regions");
     assertRegionEquals(sheet.getMergedRegion(0), 0, 2, 1, 1);
     assertRegionEquals(sheet.getMergedRegion(1), 1, 2, 3, 5);
     assertRegionEquals(sheet.getMergedRegion(2), 4, 4, 0, 2);
@@ -107,10 +113,10 @@ public class CellTagTest extends TagTestBase
 
   private void assertRegionEquals(CellRangeAddress region, int startRow, int endRow, int startColumn, int endColumn)
   {
-    assertEquals( "Region should start at row " + startRow, startRow, region.getFirstRow() );
-    assertEquals( "Region should start at column " + startColumn, startColumn, region.getFirstColumn() );
-    assertEquals( "Region should end at row " + endRow, endRow, region.getLastRow() );
-    assertEquals( "Region should end at column " + endColumn, endColumn, region.getLastColumn() );
+    assertEquals( startRow, region.getFirstRow(), "Region should start at row " + startRow );
+    assertEquals( startColumn, region.getFirstColumn(), "Region should start at column " + startColumn );
+    assertEquals( endRow, region.getLastRow(), "Region should end at row " + endRow );
+    assertEquals( endColumn, region.getLastColumn(), "Region should end at column " + endColumn );
   }
 
   public void childRenderTest( SsTemplateContext context )

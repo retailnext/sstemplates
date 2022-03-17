@@ -4,6 +4,12 @@ import org.apache.poi.hssf.usermodel.*;
 import org.springframework.mock.web.*;
 import com.carbonfive.sstemplates.servlet.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 /**
  * 
  * @author Alex Cruikshank
@@ -15,6 +21,7 @@ public class SsTemplateContextTest
 
   private MockHttpServletRequest request;
 
+  @BeforeEach
   public void setUp() throws Exception
   {
     super.setUp();
@@ -23,6 +30,7 @@ public class SsTemplateContextTest
     request.setMethod("POST");
   }
 
+  @Test
   public void testFontCaching() throws Exception
   {
     request.setServletPath("/templates/servlet_basic.sst");
@@ -44,8 +52,8 @@ public class SsTemplateContextTest
     context.createFont(fontName,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
     context.createFont(fontName,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
     HSSFFont font = context.createFont(fontName,fontHeight,color,bold,italic,strikeout,underline,typeOffset);
-    assertNotNull( "context should have created a font", font );
-    assertEquals( "Only one font should have been added to the workbook", initialFontCount+1,
-                  context.getWorkbook().getNumberOfFonts() );
+    assertNotNull( font, "context should have created a font" );
+    assertEquals( initialFontCount+1,
+                  context.getWorkbook().getNumberOfFonts(), "Only one font should have been added to the workbook" );
   }
 }

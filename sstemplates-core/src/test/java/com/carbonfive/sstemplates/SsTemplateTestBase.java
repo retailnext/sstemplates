@@ -1,37 +1,29 @@
 package com.carbonfive.sstemplates;
 
 import com.carbonfive.sstemplates.tags.*;
-import junit.framework.*;
 
 import javax.servlet.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * 
  * @author sivoh
  * @version $REVISION
  */
-public abstract class SsTemplateTestBase extends TestCase
+public abstract class SsTemplateTestBase
 {
   private SsTemplateProcessor processor;
   private File templateDir;
 
-  public SsTemplateTestBase(String s)
-  {
-    super(s);
-  }
-
+  @BeforeEach
   protected void setUp() throws Exception
   {
     processor = SsTemplateProcessor.getInstance();
       URL url = getClass().getResource("/test/templates");
       templateDir = new File(URLDecoder.decode(url.getFile(), "UTF8"));
-  }
-
-  protected void tearDown() throws Exception
-  {
   }
 
   protected SsTemplateContext getHssfTemplateContext() throws ServletException

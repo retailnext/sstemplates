@@ -4,6 +4,10 @@ import java.util.*;
 import org.apache.poi.hssf.usermodel.*;
 import com.carbonfive.sstemplates.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 /**
  * 
  * @author sivoh
@@ -11,11 +15,8 @@ import com.carbonfive.sstemplates.*;
  */
 public class SetTagTest extends TagTestBase
 {
-  public SetTagTest( String name )
-  {
-    super(name);
-  }
 
+  @Test
   public void testSetters() throws Exception
   {
     Map<String, Object> attrs = new HashMap<String, Object>();

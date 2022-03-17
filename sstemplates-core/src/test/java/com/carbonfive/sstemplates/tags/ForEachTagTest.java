@@ -4,6 +4,11 @@ import java.util.*;
 import org.apache.poi.hssf.usermodel.*;
 import com.carbonfive.sstemplates.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+
 /**
  * 
  * @author sivoh
@@ -11,22 +16,19 @@ import com.carbonfive.sstemplates.*;
  */
 public class ForEachTagTest extends TagTestBase
 {
-  public ForEachTagTest( String name )
-  {
-    super(name);
-  }
-
+  @Test
   public void testArray() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("foreach_array.sst?x=A&x=B&x=C&x=D");
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals( "Cell 0 should be A", "A", row.getCell(0).getStringCellValue() );
-    assertEquals( "Cell 1 should be B", "B", row.getCell(1).getStringCellValue() );
-    assertEquals( "Cell 2 should be C", "C", row.getCell(2).getStringCellValue() );
-    assertEquals( "Cell 3 should be D", "D", row.getCell(3).getStringCellValue() );
+    assertEquals( "A", row.getCell(0).getStringCellValue(), "Cell 0 should be A" );
+    assertEquals( "B", row.getCell(1).getStringCellValue(), "Cell 1 should be B" );
+    assertEquals( "C", row.getCell(2).getStringCellValue(), "Cell 2 should be C" );
+    assertEquals( "D", row.getCell(3).getStringCellValue(), "Cell 3 should be D" );
   }
 
+  @Test
   public void testCollection() throws Exception
   {
     List<Integer> c = new ArrayList<Integer>();
@@ -39,11 +41,12 @@ public class ForEachTagTest extends TagTestBase
     SsTemplateContext templateContext = renderWorkbook("foreach_collection.sst", attrs);
 
     HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(0);
-    assertEquals( "Cell 3 should be 0", 0, (int) row.getCell(3).getNumericCellValue() );
-    assertEquals( "Cell 5 should be 1", 1, (int) row.getCell(5).getNumericCellValue() );
-    assertEquals( "Cell 8 should be 2", 2, (int) row.getCell(8).getNumericCellValue() );
+    assertEquals( 0, (int) row.getCell(3).getNumericCellValue(), "Cell 3 should be 0" );
+    assertEquals( 1, (int) row.getCell(5).getNumericCellValue(), "Cell 5 should be 1" );
+    assertEquals( 2, (int) row.getCell(8).getNumericCellValue(), "Cell 8 should be 2" );
   }
 
+  @Test
   public void testMap() throws Exception
   {
     Map<String, String> map = new LinkedHashMap<String, String>();
@@ -63,6 +66,7 @@ public class ForEachTagTest extends TagTestBase
     assertEquals("Three", sheet.getRow(2).getCell(1).getStringCellValue());
   }
 
+  @Test
   public void testAvoidIndexConflict() throws Exception
   {
     Object[] o = new Object[10];
@@ -76,11 +80,12 @@ public class ForEachTagTest extends TagTestBase
       HSSFRow row = templateContext.getWorkbook().getSheetAt(0).getRow(i);
       for (int j=0; j < 10; j++ )
       {
-        assertEquals( "Cell "+i+","+j+" should be " + (5*i+7*j), (5*i+7*j), (int) row.getCell(j).getNumericCellValue() );
+        assertEquals( (5*i+7*j), (int) row.getCell(j).getNumericCellValue(), "Cell "+i+","+j+" should be " + (5*i+7*j) );
       }
     }
   }
 
+  @Test
   public void testHandleCollectionNotFound() throws Exception
   {
     try
@@ -94,6 +99,7 @@ public class ForEachTagTest extends TagTestBase
     }
   }
 
+  @Test
   public void testForEachArray() throws Exception
   {
     Object[] arr = new Object[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };

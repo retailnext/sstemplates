@@ -3,6 +3,11 @@ package com.carbonfive.sstemplates.tags;
 import org.apache.poi.hssf.usermodel.*;
 import com.carbonfive.sstemplates.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
+
 /**
  * 
  * @author sivoh
@@ -10,11 +15,8 @@ import com.carbonfive.sstemplates.*;
  */
 public class IfTagTest extends TagTestBase
 {
-  public IfTagTest( String name )
-  {
-    super(name);
-  }
 
+  @Test
   public void testIf() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("if.sst");

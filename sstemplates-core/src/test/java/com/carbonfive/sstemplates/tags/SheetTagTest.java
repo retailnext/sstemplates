@@ -4,6 +4,12 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import com.carbonfive.sstemplates.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 /**
  * 
  * @author sivoh
@@ -11,31 +17,29 @@ import com.carbonfive.sstemplates.*;
  */
 public class SheetTagTest extends TagTestBase
 {
-  public SheetTagTest( String name )
-  {
-    super(name);
-  }
-
+  @Test
   public void testCreateSheet() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("sheet_test1.sst?sheet1=alpha&sheet2=beta&sheet3=gamma&sheet4=delta");
 
     HSSFWorkbook workbook = templateContext.getWorkbook();
-    assertEquals( "Sheet 1 name should be alpha", "alpha", workbook.getSheetName(0));
-    assertEquals( "Sheet 2 name should be beta", "beta", workbook.getSheetName(1));
-    assertEquals( "Sheet 3 name should be gamma", "gamma", workbook.getSheetName(2));
-    assertEquals( "Sheet 4 name should be delta", "delta", workbook.getSheetName(3));
+    assertEquals( "alpha", workbook.getSheetName(0), "Sheet 1 name should be alpha" );
+    assertEquals( "beta", workbook.getSheetName(1), "Sheet 2 name should be beta" );
+    assertEquals( "gamma", workbook.getSheetName(2), "Sheet 3 name should be gamma" );
+    assertEquals( "delta", workbook.getSheetName(3), "Sheet 4 name should be delta" );
   }
 
+  @Test
   public void testRowReset() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("sheet_test4.sst");
 
     HSSFWorkbook workbook = templateContext.getWorkbook();
-    assertEquals( "Sheet 1 should have cell", "value", workbook.getSheetAt(0).getRow(0).getCell(0).getStringCellValue());
-    assertEquals( "Sheet 2 should have cell", "value", workbook.getSheetAt(1).getRow(0).getCell(0).getStringCellValue());
+    assertEquals( "value", workbook.getSheetAt(0).getRow(0).getCell(0).getStringCellValue(), "Sheet 1 should have cell" );
+    assertEquals( "value", workbook.getSheetAt(1).getRow(0).getCell(0).getStringCellValue(), "Sheet 2 should have cell" );
   }
 
+  @Test
   public void testSheetContext() throws Exception
   {
     WorkbookTag renderTree = getRenderTree("sheet_test2.sst");
@@ -45,16 +49,17 @@ public class SheetTagTest extends TagTestBase
     sheetTag.addChildTag(testTag);
 
     renderTree.render(getHssfTemplateContext());
-    assertTrue( "Sheet tag rendered children", testTag.hasTagBeenRendered());
+    assertTrue( testTag.hasTagBeenRendered(), "Sheet tag rendered children" );
   }
 
+  @Test
   public void testDefinesStyle() throws Exception
   {
     SsTemplateContext templateContext = renderWorkbook("sheet_test3.sst?style=fred");
     HSSFCellStyle cellStyle = templateContext.getWorkbook().getSheetAt(0).getRow(0).getCell(0).getCellStyle();
 
-    assertNotNull( "Style defined in sheet is not null", cellStyle );
-    assertEquals( "Style should have thin top border", BorderStyle.THIN, cellStyle.getBorderTop() );
+    assertNotNull( cellStyle, "Style defined in sheet is not null" );
+    assertEquals( BorderStyle.THIN, cellStyle.getBorderTop(), "Style should have thin top border" );
   }
 
   public void childRenderTest( SsTemplateContext context )
