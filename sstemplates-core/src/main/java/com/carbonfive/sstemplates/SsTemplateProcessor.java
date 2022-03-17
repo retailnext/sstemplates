@@ -7,7 +7,6 @@ import org.xml.sax.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.*;
 
 /**
  * @author sivoh
@@ -15,8 +14,6 @@ import java.util.logging.*;
  */
 public class SsTemplateProcessor
 {
-  private static final Logger log = Logger.getLogger(SsTemplateProcessor.class.getName());
-
   @SuppressWarnings("unchecked")
   private static final Class<SsTemplateTag>[] DEFAULT_TAGS = new Class[]
     { SheetTag.class, RowTag.class, CellTag.class, ForEachTag.class, IfTag.class,
@@ -118,7 +115,6 @@ public class SsTemplateProcessor
     }
     catch ( Exception e )
     {
-      log.log(Level.SEVERE,"Error instantiating class: " + tagClass.getName(), e);
       throw new SsTemplateException( "Error instantiating class: " + tagClass.getName(), e );
     }
     return tag;

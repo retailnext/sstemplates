@@ -4,13 +4,10 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.*;
 
 import java.io.*;
-import java.util.logging.*;
 import com.carbonfive.sstemplates.*;
 
 public class WorkbookTag extends BaseTag
 {
-  private static final Logger log = Logger.getLogger(WorkbookTag.class.getName());
-
   private String template = null;
   private String bgcolor = null;
 
@@ -60,7 +57,6 @@ public class WorkbookTag extends BaseTag
     String templateName = (String) parseExpression(template,String.class,context);
     File file = context.findFileInTemplateDirectory(templateName);
 
-    log.info( "loading workbook template: " + file );
     if (( ! file.exists() ) || ( file.isDirectory() ))
       throw new IOException( "Could not find template workbook: " + templateName );
 

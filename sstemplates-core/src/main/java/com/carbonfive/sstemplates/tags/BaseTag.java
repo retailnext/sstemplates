@@ -5,7 +5,6 @@ import org.apache.commons.el.*;
 
 import javax.servlet.jsp.el.*;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * 
@@ -14,8 +13,6 @@ import java.util.logging.Logger;
  */
 public abstract class BaseTag implements SsTemplateTag
 {
-  protected static final Logger log = Logger.getLogger(BaseTag.class.getName());
-
   List<SsTemplateTag> childTags = new ArrayList<SsTemplateTag>();
   SsTemplateTag parentTag = null;
   ExpressionEvaluatorImpl evaluator = new ExpressionEvaluatorImpl();
@@ -64,7 +61,6 @@ public abstract class BaseTag implements SsTemplateTag
 
     try
     {
-      log.fine( "Evaluating expression " + expression );
       return evaluator.evaluate( expression, expectedType, context, context );
     }
     catch ( ELException ele )

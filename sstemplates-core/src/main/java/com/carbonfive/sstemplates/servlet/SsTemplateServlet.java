@@ -2,7 +2,6 @@ package com.carbonfive.sstemplates.servlet;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import org.apache.poi.hssf.usermodel.*;
@@ -18,8 +17,6 @@ public class SsTemplateServlet extends HttpServlet
 {
   private static final long serialVersionUID = 1L;
 
-  private static final Logger log = Logger.getLogger(SsTemplateServlet.class.getName());
-
   private static final String CUSTOM_TAGS_PARAM_KEY = "customTags";
 
   private ServletContext  context = null;
@@ -34,8 +31,6 @@ public class SsTemplateServlet extends HttpServlet
     this.context = config.getServletContext();
     try { this.processor = (ServletSsTemplateProcessor) ServletSsTemplateProcessor.getInstance(customTags); }
     catch (SsTemplateException he) { throw new ServletException(he); }
-
-    log.info("Spreadsheet Templates servlet initialized.");
   }
 
   private Collection<Class<SsTemplateTag>> getCustomTags(String names)

@@ -1,7 +1,5 @@
 package com.carbonfive.sstemplates.tags;
 
-import java.util.logging.*;
-import com.carbonfive.sstemplates.servlet.*;
 import com.carbonfive.sstemplates.*;
 
 /**
@@ -11,9 +9,6 @@ import com.carbonfive.sstemplates.*;
  */
 public abstract class TagTestBase extends SsTemplateTestBase
 {
-  protected static final Logger log = Logger.getLogger(SsTemplateServlet.class.getName());
-
-
   public abstract void childRenderTest( SsTemplateContext context )
     throws SsTemplateException;
 
