@@ -46,9 +46,8 @@
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>11.0.8</version>
+                <version>9.4.45.v20220203</version>
                 <configuration>
-                    <contextPath>/</contextPath>
                     <scanIntervalSeconds>5</scanIntervalSeconds>
                 </configuration>
             </plugin>
