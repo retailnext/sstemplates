@@ -18,7 +18,7 @@
     <properties>
         <java.source>1.8</java.source>
         <java.target>1.8</java.target>
-
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>5.3.16</spring.version>
     </properties>
 
@@ -132,7 +132,6 @@
                 <configuration>
                     <source>${java.source}</source>
                     <target>${java.target}</target>
-                    <encoding>utf-8</encoding>
                 </configuration>
             </plugin>
             <plugin>
