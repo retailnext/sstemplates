@@ -19,6 +19,12 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- Provided -->
 
         <dependency>
