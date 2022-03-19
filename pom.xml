@@ -137,6 +137,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
@@ -144,4 +145,17 @@
         <finalName>${project.artifactId}</finalName>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/retailnext/sstemplates</url>
+        </repository>
+    </distributionManagement>
+
+    <scm>
+        <connection>scm:git:https://github.com/retailnext/sstemplates.git</connection>
+        <url>scm:git:https://github.com/retailnext/sstemplates.git</url>
+        <developerConnection>scm:git:https://github.com/retailnext/sstemplates.git</developerConnection>
+    </scm>
 </project>
