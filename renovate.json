@@ -1,5 +1,13 @@
 {
   "extends": [
     "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "org.eclipse.jetty:jetty-maven-plugin"
+      ],
+      "allowedVersions": "<10"
+    }
   ]
 }
