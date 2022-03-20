@@ -107,8 +107,6 @@
     </dependencies>
   </dependencyManagement>
   <build>
-    <defaultGoal>install</defaultGoal>
-    <finalName>${project.artifactId}</finalName>
     <pluginManagement>
       <plugins>
         <plugin>
