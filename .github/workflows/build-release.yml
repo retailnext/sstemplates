@@ -19,7 +19,6 @@ jobs:
           java-version: '8'
           distribution: 'zulu'
       - name: Deploy Release with Maven
-        if: ${{ endsWith(steps.project.outputs.version, '-SNAPSHOT') }}
         run: >
           mvn --batch-mode --no-transfer-progress \ 
           -Drevision="${GITHUB_REF_NAME##v}" \
