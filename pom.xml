@@ -30,8 +30,8 @@
     </repository>
   </distributionManagement>
   <properties>
-    <java.source>1.8</java.source>
-    <java.target>1.8</java.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <revision>1.0-SNAPSHOT</revision>
     <tag>HEAD</tag>
@@ -181,14 +181,6 @@
           <sortDependencies>scope,groupId,artifactId</sortDependencies>
           <sortPlugins>groupId,artifactId</sortPlugins>
           <sortProperties>true</sortProperties>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>${java.source}</source>
-          <target>${java.target}</target>
         </configuration>
       </plugin>
       <plugin>
