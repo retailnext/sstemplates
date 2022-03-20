@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.retailnext</groupId>
   <artifactId>sstemplates</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>${revision}</version>
   <packaging>pom</packaging>
   <name>SSTemplates</name>
   <licenses>
@@ -19,8 +19,8 @@
   </modules>
   <scm>
     <connection>scm:git:https://github.com/retailnext/sstemplates.git</connection>
-    <developerConnection>scm:git:https://github.com/retailnext/sstemplates.git</developerConnection>
-    <url>scm:git:https://github.com/retailnext/sstemplates.git</url>
+    <tag>${tag}</tag>
+    <url>https://github.com/retailnext/sstemplates/tree/${tree}</url>
   </scm>
   <distributionManagement>
     <repository>
@@ -33,6 +33,9 @@
     <java.source>1.8</java.source>
     <java.target>1.8</java.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <revision>1.0-SNAPSHOT</revision>
+    <tag>HEAD</tag>
+    <tree>main</tree>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -146,6 +149,30 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.0.0-M5</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.2.7</version>
+        <configuration>
+          <flattenMode>oss</flattenMode>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+            <phase>process-resources</phase>
+          </execution>
+          <execution>
+            <id>flatten.clean</id>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <phase>clean</phase>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

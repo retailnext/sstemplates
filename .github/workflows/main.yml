@@ -35,6 +35,6 @@ jobs:
           java-version: '8'
           distribution: 'zulu'
       - name: Deploy with Maven
-        run: mvn --batch-mode --no-transfer-progress deploy
+        run: mvn --batch-mode --no-transfer-progress -Dtree=${{ github.sha }} deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

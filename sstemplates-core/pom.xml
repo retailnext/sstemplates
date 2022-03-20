@@ -4,8 +4,7 @@
   <parent>
     <groupId>net.retailnext</groupId>
     <artifactId>sstemplates</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
+    <version>${revision}</version>
   </parent>
   <artifactId>sstemplates-core</artifactId>
   <packaging>jar</packaging>
@@ -16,6 +15,10 @@
     <name>Carbon Five, Inc.</name>
     <url>http://www.carbonfive.com/</url>
   </organization>
+  <scm>
+    <!-- connection is (re-)set to stop the flattened pom from having an invalid suffix added -->
+    <connection>scm:git:https://github.com/retailnext/sstemplates.git</connection>
+  </scm>
   <dependencies>
     <dependency>
       <groupId>commons-beanutils</groupId>
