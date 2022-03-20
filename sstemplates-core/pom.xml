@@ -9,12 +9,7 @@
   <artifactId>sstemplates-core</artifactId>
   <packaging>jar</packaging>
   <name>SSTemplates Core</name>
-  <description><![CDATA[SSTemplates is a markup language for Excel spreadsheets.]]></description>
-  <url>http://www.carbonfive.com</url>
-  <organization>
-    <name>Carbon Five, Inc.</name>
-    <url>http://www.carbonfive.com/</url>
-  </organization>
+  <description>SSTemplates is a markup language for Excel spreadsheets.</description>
   <scm>
     <!-- connection is (re-)set to stop the flattened pom from having an invalid suffix added -->
     <connection>scm:git:https://github.com/retailnext/sstemplates.git</connection>
