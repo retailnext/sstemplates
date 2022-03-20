@@ -5,10 +5,11 @@ on:
     branches:
       - main
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.project.outputs.version }}
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v3
       - name: Set up Zulu 8
@@ -22,19 +23,8 @@ jobs:
       - name: Extract Maven project version
         run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
         id: project
-  publish:
-    needs:
-      - test
-    if: ${{ endsWith(needs.test.outputs.version, '-SNAPSHOT') }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Zulu 8
-        uses: actions/setup-java@v2
-        with:
-          java-version: '8'
-          distribution: 'zulu'
-      - name: Deploy with Maven
-        run: mvn --batch-mode --no-transfer-progress -Dtree=${{ github.sha }} deploy
+      - name: Deploy Snapshot with Maven
+        if: ${{ endsWith(steps.project.outputs.version, '-SNAPSHOT') }}
+        run: mvn --batch-mode --no-transfer-progress -Dmaven.test.skip=true -Dtree=${{ github.sha }} deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
