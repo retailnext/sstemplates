@@ -20,10 +20,10 @@ jobs:
           distribution: 'zulu'
       - name: Deploy Release with Maven
         run: >
-          mvn --batch-mode --no-transfer-progress \ 
-          -Drevision="${GITHUB_REF_NAME##v}" \
-          -Dtag="${{ github.ref_name }}" \
-          -Dtree="${{ github.ref_name }}" \
+          mvn --batch-mode --no-transfer-progress
+          -Drevision=${GITHUB_REF_NAME##v}
+          -Dtag=${{ github.ref_name }}
+          -Dtree=${{ github.ref_name }}
           deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
