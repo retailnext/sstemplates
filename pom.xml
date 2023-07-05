@@ -30,10 +30,10 @@
     </repository>
   </distributionManagement>
   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <revision>1.0.0-SNAPSHOT</revision>
+    <revision>2.0.0-SNAPSHOT</revision>
     <tag>HEAD</tag>
     <tree>main</tree>
   </properties>
