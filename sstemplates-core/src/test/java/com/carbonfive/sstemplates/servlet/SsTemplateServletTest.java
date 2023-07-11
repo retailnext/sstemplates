@@ -1,6 +1,6 @@
 package com.carbonfive.sstemplates.servlet;
 
-import javax.servlet.http.*;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.mock.web.*;
 import com.carbonfive.sstemplates.*;
 import com.carbonfive.sstemplates.tags.*;

@@ -1,9 +1,8 @@
 package com.carbonfive.sstemplates.tags;
 
 import com.carbonfive.sstemplates.*;
-import org.apache.commons.el.*;
 
-import javax.servlet.jsp.el.*;
+import javax.el.ValueExpression;
 import java.util.*;
 
 /**
@@ -15,7 +14,6 @@ public abstract class BaseTag implements SsTemplateTag
 {
   List<SsTemplateTag> childTags = new ArrayList<SsTemplateTag>();
   SsTemplateTag parentTag = null;
-  ExpressionEvaluatorImpl evaluator = new ExpressionEvaluatorImpl();
 
   protected void renderChildren( SsTemplateContext context )
     throws SsTemplateException
@@ -57,16 +55,10 @@ public abstract class BaseTag implements SsTemplateTag
   public Object parseExpression( String expression, Class<?> expectedType, SsTemplateContext context )
     throws SsTemplateException
   {
-    if (expression == null) return null;
+    if (expression == null || expression.isBlank()) return null;
 
-    try
-    {
-      return evaluator.evaluate( expression, expectedType, context, context );
-    }
-    catch ( ELException ele )
-    {
-      throw new SsTemplateException( "Error parsing expression " + expression, ele );
-    }
+    ValueExpression valueExpression = context.getExpressionFactory().createValueExpression(context, expression, expectedType);
+    return valueExpression.getValue(context);
   }
 
   public Integer parseInteger( String expression, SsTemplateContext context )

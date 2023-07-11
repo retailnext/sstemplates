@@ -1,8 +1,11 @@
 package com.carbonfive.sstemplates.servlet;
 
 import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.mock.web.*;
 import com.carbonfive.sstemplates.*;
 import com.carbonfive.sstemplates.tags.*;
@@ -68,7 +71,7 @@ public abstract class SsTemplateServletTestBase
       for (Iterator<String> it = attributes.keySet().iterator(); it.hasNext();)
       {
         String key = (String) it.next();
-        templateContext.getRequest().setAttribute(key,attributes.get(key));
+        request.setAttribute(key,attributes.get(key));
       }
     }
     renderTree.render(templateContext);

@@ -2,10 +2,11 @@ package com.carbonfive.sstemplates;
 
 import com.carbonfive.sstemplates.tags.*;
 
-import javax.servlet.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
 
 /**

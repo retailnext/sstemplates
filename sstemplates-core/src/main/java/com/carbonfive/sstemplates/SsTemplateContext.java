@@ -3,89 +3,100 @@ package com.carbonfive.sstemplates;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
-import javax.servlet.jsp.el.*;
+
+import de.odysseus.el.util.SimpleResolver;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.hssf.*;
 import com.carbonfive.sstemplates.tags.SsTemplateTag;
 
-public interface SsTemplateContext extends VariableResolver, FunctionMapper
+import javax.el.*;
+
+public abstract class SsTemplateContext extends ELContext
 {
-  Object setPageVariable( String key, Object value );
+  private final ELResolver resolver;
 
-  void unsetPageVariable( String key, Object oldValue );
+  public SsTemplateContext() {
+    this.resolver = new SimpleResolver();
+  }
 
-  Object getPageVariable( String key );
+  @Override
+  public ELResolver getELResolver() {
+    return this.resolver;
+  }
 
-  Object resolveVariable( String name );
+  public abstract void setPageVariable(String key, Object value);
 
-  HSSFFont createFont( String name, short fontHeight, short color, boolean bold, boolean italic,
+  public abstract void unsetPageVariable( String key, Object oldValue );
+
+  public abstract Object getPageVariable( String key );
+
+  public abstract HSSFFont createFont( String name, short fontHeight, short color, boolean bold, boolean italic,
                        boolean strikeout, byte underline, short typeOffset );
 
-  void incrementCellIndex();
+  public abstract void incrementCellIndex();
 
-  void incrementRowIndex();
+  public abstract void incrementRowIndex();
 
-  CellRangeAddress getRegionForCurrentLocation();
+  public abstract CellRangeAddress getRegionForCurrentLocation();
 
-  String addStyleData( String name, HssfStyleData data );
+  public abstract String addStyleData( String name, HssfStyleData data );
 
-  HSSFCellStyle getNamedStyle( String name )
+  public abstract HSSFCellStyle getNamedStyle( String name )
     throws SsTemplateException;
 
-  HssfStyleData getNamedStyleData( String name )
+  public abstract HssfStyleData getNamedStyleData( String name )
     throws SsTemplateException;
 
-  boolean hasCachedStyleData(String name);
+  public abstract boolean hasCachedStyleData(String name);
 
-  HSSFWorkbook getWorkbook();
+  public abstract HSSFWorkbook getWorkbook();
 
-  void setWorkbook(HSSFWorkbook workbook);
+  public abstract void setWorkbook(HSSFWorkbook workbook);
 
-  HSSFSheet getSheet();
+  public abstract HSSFSheet getSheet();
 
-  void setSheet(HSSFSheet sheet);
+  public abstract void setSheet(HSSFSheet sheet);
 
-  HSSFRow getRow();
+  public abstract HSSFRow getRow();
 
-  void setRow(HSSFRow row);
+  public abstract void setRow(HSSFRow row);
 
-  int getRowIndex();
+  public abstract int getRowIndex();
 
-  void setRowIndex(int rowIndex);
+  public abstract void setRowIndex(int rowIndex);
 
-  int getColumnIndex();
+  public abstract int getColumnIndex();
 
-  void setColumnIndex(int columnIndex);
+  public abstract void setColumnIndex(int columnIndex);
 
-  String getCurrentStyle();
+  public abstract String getCurrentStyle();
 
-  void setCurrentStyle(String currentStyle);
+  public abstract void setCurrentStyle(String currentStyle);
 
-  HssfCellAccumulator getNamedAccumulator(String name);
+  public abstract HssfCellAccumulator getNamedAccumulator(String name);
 
-  void registerMethod(String name, Method m);
+  public abstract void registerMethod(String name, Method m);
 
-  // no prefix support
-  Method resolveFunction(String prefix, String name);
+  public abstract Collection<SsTemplateTag> parseIncludeFile(String parsedTemplate) throws SsTemplateException;
 
-  Collection<SsTemplateTag> parseIncludeFile(String parsedTemplate) throws SsTemplateException;
+  public abstract File findFileInTemplateDirectory(String path);
 
-  public File findFileInTemplateDirectory(String path);
+  public abstract Object getCustomValue(Object key);
 
-  Object getCustomValue(Object key);
+  public abstract void setCustomValue(Object key, Object value);
 
-  void setCustomValue(Object key, Object value);
+  public abstract short getColorIndex(short[] triplet) throws SsTemplateException;
 
-  short getColorIndex(short[] triplet) throws SsTemplateException;
+  public abstract void setBackgroundColor(short[] triplet);
 
-  void setBackgroundColor(short[] triplet);
+  public abstract short[] getBackgroundColor();
 
-  short[] getBackgroundColor();
+  public abstract int getMaxRowIndex();
+  public abstract int getMaxColumnIndex();
 
-  public int getMaxRowIndex();
-  public int getMaxColumnIndex();
+  public abstract void setPageBreaks(int firstPageBreak, int nextPageBreak);
+  public abstract int nextPageBreak(int row);
 
-  public void setPageBreaks(int firstPageBreak, int nextPageBreak);
-  public int nextPageBreak(int row);
+  public abstract ExpressionFactory getExpressionFactory();
 }
