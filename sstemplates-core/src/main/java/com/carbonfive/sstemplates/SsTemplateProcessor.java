@@ -5,6 +5,7 @@ import org.apache.commons.digester3.Digester;
 import org.apache.poi.hssf.usermodel.*;
 import org.xml.sax.*;
 
+import javax.el.ExpressionFactory;
 import java.io.*;
 import java.util.*;
 
@@ -27,7 +28,14 @@ public class SsTemplateProcessor
   private Map<String, RenderTreeEntry> renderTreeCache = null;
   private Collection<Class<SsTemplateTag>> customTags = null;
 
+  private final ExpressionFactory expressionFactory;
+
   private static Map<Collection<Class<SsTemplateTag>>, SsTemplateProcessor> processorCache = Collections.synchronizedMap(new HashMap<Collection<Class<SsTemplateTag>>, SsTemplateProcessor>());
+
+  static {
+    System.setProperty("javax.el.ExpressionFactory", "de.odysseus.el.ExpressionFactoryImpl");
+    System.setProperty("javax.el.nullProperties", "true");
+  }
 
   public static SsTemplateProcessor getInstance()
     throws SsTemplateException
@@ -67,6 +75,7 @@ public class SsTemplateProcessor
   protected SsTemplateProcessor(Collection<Class<SsTemplateTag>> customTags, boolean cacheTemplates)
       throws SsTemplateException
   {
+    this.expressionFactory = ExpressionFactory.newInstance();
     this.customTags = customTags;
     if ( cacheTemplates )
       this.renderTreeCache = new HashMap<String, RenderTreeEntry>();
@@ -83,7 +92,7 @@ public class SsTemplateProcessor
     throws SsTemplateException
   {
     WorkbookTag renderTree = retrieveRenderTree(templateFile.getAbsolutePath());
-    SsTemplateContext templateContext = new SsTemplateContextImpl(this, templateDir, context);
+    SsTemplateContext templateContext = new SsTemplateContextImpl(this, templateDir, this.expressionFactory, context);
 
     renderTree.render(templateContext);
     return templateContext.getWorkbook();
@@ -91,7 +100,7 @@ public class SsTemplateProcessor
 
   protected SsTemplateContext createTemplateContext(File templateDir)
   {
-    return new SsTemplateContextImpl(this, templateDir);
+    return new SsTemplateContextImpl(this, templateDir, this.expressionFactory);
   }
 
   protected Collection<SsTemplateTag> parseIncludeFile(File templateFile)
@@ -195,6 +204,10 @@ public class SsTemplateProcessor
     }
 
     return (WorkbookTag) digester.getRoot();
+  }
+
+  public ExpressionFactory getExpressionFactory() {
+    return this.expressionFactory;
   }
 
   private class RenderTreeEntry

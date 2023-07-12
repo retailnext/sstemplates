@@ -1,5 +1,6 @@
 package com.carbonfive.sstemplates.examples;
 
+import java.net.URL;
 import java.util.*;
 import java.io.*;
 import org.apache.poi.hssf.usermodel.*;
@@ -9,9 +10,13 @@ public class StandAlone
 {
   public static void main(String args[]) throws Exception
   {
-    File template = new File(System.getProperty("project.root"), "examples/test.templates/standalone.sst");
+    URL templateResource = StandAlone.class.getClassLoader().getResource("standalone.sst");
+    if(templateResource == null) {
+      return;
+    }
+    File template = new File(templateResource.toURI());
 
-    Map<String, Object> context = new HashMap<String, Object>();
+    Map<String, Object> context = new HashMap<>();
     context.put("stringValue", "Ralph");
     context.put("listValue", new String[] { "Sue", "Amy", "Donna" });
 
@@ -19,14 +24,8 @@ public class StandAlone
     HSSFWorkbook workbook = processor.process(template, context);
 
     File xls = new File(System.getProperty("project.root"), "standalone.xls");
-    OutputStream out = new FileOutputStream(xls);
-    try
-    {
+    try (OutputStream out = new FileOutputStream(xls)) {
       workbook.write(out);
-    }
-    finally
-    {
-      out.close();
     }
   }
 }

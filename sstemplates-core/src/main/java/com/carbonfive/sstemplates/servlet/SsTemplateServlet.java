@@ -2,8 +2,13 @@ package com.carbonfive.sstemplates.servlet;
 
 import java.io.*;
 import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.*;
 import com.carbonfive.sstemplates.*;
 import com.carbonfive.sstemplates.tags.*;
@@ -19,7 +24,7 @@ public class SsTemplateServlet extends HttpServlet
 
   private static final String CUSTOM_TAGS_PARAM_KEY = "customTags";
 
-  private ServletContext  context = null;
+  private ServletContext context = null;
   private ServletSsTemplateProcessor processor;
 
   public void init( ServletConfig config ) throws ServletException
@@ -60,7 +65,7 @@ public class SsTemplateServlet extends HttpServlet
     return tags;
   }
 
-  public void doGet( HttpServletRequest request, HttpServletResponse response )
+  public void doGet(HttpServletRequest request, HttpServletResponse response )
     throws ServletException, IOException
   {
     File templateFile = getTemplateFile(request);

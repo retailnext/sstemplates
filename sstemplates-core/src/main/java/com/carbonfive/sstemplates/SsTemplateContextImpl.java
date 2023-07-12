@@ -3,6 +3,7 @@ package com.carbonfive.sstemplates;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+
 import org.apache.commons.lang3.builder.*;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -10,23 +11,28 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import com.carbonfive.sstemplates.hssf.*;
 import com.carbonfive.sstemplates.tags.SsTemplateTag;
 
+import javax.el.ExpressionFactory;
+import javax.el.FunctionMapper;
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
+
 /**
  * This class acts as an EL VariableResolver, but does not support the pageContext implicit object.
  * @author sivoh
  * @version $REVISION
  */
 public class SsTemplateContextImpl
-    implements SsTemplateContext
+    extends SsTemplateContext
 {
   private static final String UNNAMED_STYLE_PREFIX = "!!!UNNAMED";
 
-  private Map<String, Object>  pageScope       = new HashMap<String, Object>();
+  private final ExpressionFactory expressionFactory;
   private Map<FontKey, HSSFFont> fontCache       = new HashMap<FontKey, HSSFFont>();
   private Map<String, HssfStyleData> styleDataCache  = new HashMap<String, HssfStyleData>();
   private Map<HssfStyleData, String> styleDataInverseCache  = new HashMap<HssfStyleData, String>();
   private Map<String, CachedStyle> styleCache   = new HashMap<String, CachedStyle>();
-  private Map<String, HssfCellAccumulator> accumulatorCache = new HashMap<String, HssfCellAccumulator>();
-  private Map<String, Method>   functions       = new HashMap<String, Method>();
+  private final SsTemplateVariableMapper variables;
+  private final SsTemplateFunctionMapper functions = new SsTemplateFunctionMapper();
   private Map<Object, Object>   customValues    = new HashMap<Object, Object>();
   private HSSFWorkbook          workbook        = null;
   private HSSFSheet             sheet           = null;
@@ -44,17 +50,29 @@ public class SsTemplateContextImpl
   protected File                templateDir     = null;
   private short[]               backgroundColor = null;
 
-  public SsTemplateContextImpl(SsTemplateProcessor processor, File templateDir)
+  public SsTemplateContextImpl(SsTemplateProcessor processor, File templateDir, ExpressionFactory expressionFactory)
+  {
+    this(processor, templateDir, expressionFactory, new SsTemplateVariableMapper(expressionFactory));
+  }
+
+  public SsTemplateContextImpl(SsTemplateProcessor processor, File templateDir, ExpressionFactory expressionFactory, SsTemplateVariableMapper ssTemplateVariableMapper)
   {
     this.processor = processor;
     this.templateDir = templateDir;
+    this.expressionFactory = expressionFactory;
+    this.variables = ssTemplateVariableMapper;
     initStyles();
   }
 
-  public SsTemplateContextImpl(SsTemplateProcessor processor, File templateDir, Map<String, Object> context)
+  public SsTemplateContextImpl(SsTemplateProcessor processor, File templateDir, ExpressionFactory expressionFactory, Map<String, Object> context)
   {
-    this(processor, templateDir);
-    pageScope = new HashMap<String, Object>(context);
+    this(processor, templateDir, expressionFactory);
+    for (Map.Entry<String, Object> entry: context.entrySet()){
+      if (entry.getValue() == null) {
+        continue;
+      }
+      variables.setVariable(entry.getKey(), entry.getValue());
+    }
   }
 
   private void initStyles()
@@ -82,37 +100,30 @@ public class SsTemplateContextImpl
     return new File(templateDir, file);
   }
 
-  public Object setPageVariable( String key, Object value )
+  public void setPageVariable(String key, Object value )
   {
-    return pageScope.put(key,value);
+    variables.setVariable(key, value);
   }
 
   public void unsetPageVariable( String key, Object oldValue )
   {
     if ( oldValue != null )
-      pageScope.put(key,oldValue);
+      variables.setVariable(key, oldValue);
     else
-      pageScope.remove(key);
+      variables.removeVariable(key);
   }
 
   public Object getPageVariable( String key )
   {
-    return pageScope.get(key);
-  }
-
-  public Object resolveVariable( String name )
-  {
-    if ( "pageScope".equals( name ) )
-      return pageScope;
-
-    if ( "accumulator".equals( name ) )
-      return accumulatorCache;
-
-    // otherwise, try to find the name in page, request, session, then application scope
-    if ( pageScope.containsKey( name ) )
-      return pageScope.get(name);
-
-    return null;
+    if (key == null) {
+      return null;
+    }
+    ValueExpression valueExpression = variables.resolveVariable(key);
+    if (valueExpression != null) {
+      return valueExpression.getValue(this);
+    } else {
+      return null;
+    }
   }
 
   public HSSFFont createFont( String name, short fontHeight, short color, boolean bold, boolean italic,
@@ -291,26 +302,12 @@ public class SsTemplateContextImpl
 
   public HssfCellAccumulator getNamedAccumulator(String name)
   {
-    HssfCellAccumulator acc = accumulatorCache.get(name);
-
-    if (acc == null)
-    {
-      acc = new HssfCellAccumulator();
-      accumulatorCache.put(name, acc);
-    }
-
-    return acc;
+    return variables.getAccumulator(name);
   }
 
   public void registerMethod(String name, Method m)
   {
-    functions.put(name, m);
-  }
-
-  // no prefix support
-  public Method resolveFunction(String prefix, String name)
-  {
-    return functions.get(name);
+    functions.setFunction("", name, m);
   }
 
   public Object getCustomValue(Object key)
@@ -376,6 +373,21 @@ public class SsTemplateContextImpl
     if ((firstPageBreak <= 0) || (nextPageBreak <= 0)) return Short.MAX_VALUE;
     if (row < firstPageBreak) return firstPageBreak;
     return firstPageBreak + ((row - firstPageBreak)/nextPageBreak + 1)*nextPageBreak;
+  }
+
+  @Override
+  public FunctionMapper getFunctionMapper() {
+    return functions;
+  }
+
+  @Override
+  public VariableMapper getVariableMapper() {
+    return variables;
+  }
+
+  @Override
+  public ExpressionFactory getExpressionFactory() {
+    return this.expressionFactory;
   }
 
   private class Color

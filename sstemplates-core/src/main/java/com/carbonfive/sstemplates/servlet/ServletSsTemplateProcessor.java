@@ -2,10 +2,10 @@ package com.carbonfive.sstemplates.servlet;
 
 import com.carbonfive.sstemplates.*;
 import com.carbonfive.sstemplates.tags.*;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.poi.hssf.usermodel.*;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
 
@@ -47,6 +47,6 @@ public class ServletSsTemplateProcessor
 
   protected SsTemplateServletContext createTemplateContext(HttpServletRequest request, ServletContext context, File templateDir)
   {
-    return new SsTemplateServletContext(request, context, this, templateDir);
+    return new SsTemplateServletContext(request, context, this, templateDir, getExpressionFactory());
   }
 }
