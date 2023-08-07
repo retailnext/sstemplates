@@ -1,6 +1,12 @@
 ---
 name: "CodeQL"
 
+env:
+  # renovate: datasource=java-version depName=java-jdk
+  JAVA_VERSION: '17'
+  # renovate: datasource=maven depName=org.apache.maven:maven
+  MAVEN_VERSION: '3.9.3'
+
 on:
   push:
     branches: [ "main" ]
@@ -48,13 +54,13 @@ jobs:
     - name: Set up Maven
       uses: stCarolas/setup-maven@v4.5
       with:
-        maven-version: 3.9.3
+        maven-version: ${{ env.MAVEN_VERSION }}
 
-    - name: Set up Zulu 17
+    - name: Set up Java
       uses: actions/setup-java@v3
       with:
-        java-version: '17'
-        distribution: 'zulu'
+        java-version: ${{ env.JAVA_VERSION }}
+        distribution: 'temurin'
         cache: 'maven'
 
     - name: Build with Maven
