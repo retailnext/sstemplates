@@ -34,6 +34,6 @@ jobs:
         id: project
       - name: Deploy Snapshot to GitHub Packages
         if: ${{ endsWith(steps.project.outputs.version, '-SNAPSHOT') }}
-        run: mvn --batch-mode --no-transfer-progress -Dmaven.test.skip=true -Dtree=${{ github.sha }} deploy
+        run: mvn --batch-mode --no-transfer-progress -Dmaven.test.skip=true -Dtree=${{ github.sha }} deploy -P github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
