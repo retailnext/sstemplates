@@ -6,7 +6,7 @@ on:
       - main
 env:
   # renovate: datasource=java-version depName=java-jdk
-  JAVA_VERSION: '17.0.8+7'
+  JAVA_VERSION: '17.0.10+7'
   # renovate: datasource=maven depName=org.apache.maven:maven
   MAVEN_VERSION: '3.9.4'
 jobs:
