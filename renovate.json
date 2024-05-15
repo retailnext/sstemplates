@@ -3,7 +3,7 @@
   "extends": [
     "config:best-practices",
     ":enableVulnerabilityAlerts",
-    "regexManagers:githubActionsVersions",
+    "customManagers:githubActionsVersions",
     ":automergeAll"
   ],
   "labels": [
