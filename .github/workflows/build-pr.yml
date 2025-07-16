@@ -5,7 +5,7 @@ env:
   # renovate: datasource=java-version depName=java-jdk
   JAVA_VERSION: '24.0.1+9'
   # renovate: datasource=maven depName=org.apache.maven:maven
-  MAVEN_VERSION: '3.9.10'
+  MAVEN_VERSION: '3.9.11'
 jobs:
   build:
     runs-on: ubuntu-latest
