@@ -2,7 +2,7 @@
 name: "CodeQL"
 env:
   # renovate: datasource=java-version depName=java-jdk
-  JAVA_VERSION: '24.0.2+12'
+  JAVA_VERSION: '25.0.0+36.0.LTS'
   # renovate: datasource=maven depName=org.apache.maven:maven
   MAVEN_VERSION: '3.9.11'
 on:
