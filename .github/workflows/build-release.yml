@@ -18,7 +18,7 @@ jobs:
       packages: write
     if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, 'v') }}
     steps:
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
       - name: Set up Maven
         uses: stCarolas/setup-maven@07fbbe97d97ef44336b7382563d66743297e442f # v4.5
         with:
