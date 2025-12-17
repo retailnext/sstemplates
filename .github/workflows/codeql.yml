@@ -4,7 +4,7 @@ env:
   # renovate: datasource=java-version depName=java-jdk
   JAVA_VERSION: '25.0.1+8.0.LTS'
   # renovate: datasource=maven depName=org.apache.maven:maven
-  MAVEN_VERSION: '3.9.11'
+  MAVEN_VERSION: '3.9.12'
 on:
   push:
     branches: ["main"]
