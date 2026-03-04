@@ -37,8 +37,8 @@ public class ServletSsTemplateProcessor
   public HSSFWorkbook process(HttpServletRequest request, ServletContext context, File templateDir, File templateFile)
     throws SsTemplateException
   {
-    WorkbookTag renderTree = retrieveRenderTree(templateFile.getAbsolutePath());
     SsTemplateContext templateContext = createTemplateContext(request, context, templateDir);
+    WorkbookTag renderTree = retrieveRenderTree(templateFile.getAbsolutePath(), templateContext.getTemplateDirCanonicalPath());
 
     renderTree.render(templateContext);
 

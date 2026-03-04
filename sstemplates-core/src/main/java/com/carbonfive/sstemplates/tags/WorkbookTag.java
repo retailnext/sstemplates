@@ -57,11 +57,19 @@ public class WorkbookTag extends BaseTag
     String templateName = (String) parseExpression(template,String.class,context);
     File file = context.findFileInTemplateDirectory(templateName);
 
+    String canonicalPath = file.getCanonicalPath();
+    String trustedRoot = context.getTemplateDirCanonicalPath();
+    if ( !canonicalPath.startsWith(trustedRoot + File.separator) && !canonicalPath.equals(trustedRoot) )
+      throw new IOException( "Path traversal not allowed: " + templateName );
+
     if (( ! file.exists() ) || ( file.isDirectory() ))
       throw new IOException( "Could not find template workbook: " + templateName );
 
-    POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
-    return new HSSFWorkbook(fs);
+    try (FileInputStream fis = new FileInputStream(canonicalPath);
+         POIFSFileSystem fs = new POIFSFileSystem(fis))
+    {
+      return new HSSFWorkbook(fs);
+    }
   }
 
   public String getTemplate()

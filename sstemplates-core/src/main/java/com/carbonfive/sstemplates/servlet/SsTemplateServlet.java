@@ -26,6 +26,7 @@ public class SsTemplateServlet extends HttpServlet
 
   private ServletContext context = null;
   private ServletSsTemplateProcessor processor;
+  private String canonicalDocRoot = null;
 
   public void init( ServletConfig config ) throws ServletException
   {
@@ -34,8 +35,15 @@ public class SsTemplateServlet extends HttpServlet
       customTags = getCustomTags(config.getInitParameter(CUSTOM_TAGS_PARAM_KEY));
 
     this.context = config.getServletContext();
-    try { this.processor = (ServletSsTemplateProcessor) ServletSsTemplateProcessor.getInstance(customTags); }
+    try
+    {
+      this.processor = (ServletSsTemplateProcessor) ServletSsTemplateProcessor.getInstance(customTags);
+      String docRoot = this.context.getRealPath("/");
+      if ( docRoot != null )
+        this.canonicalDocRoot = new File(docRoot).getCanonicalPath();
+    }
     catch (SsTemplateException he) { throw new ServletException(he); }
+    catch (IOException ioe) { throw new ServletException("Cannot resolve document root", ioe); }
   }
 
   private Collection<Class<SsTemplateTag>> getCustomTags(String names)
@@ -68,7 +76,16 @@ public class SsTemplateServlet extends HttpServlet
   public void doGet(HttpServletRequest request, HttpServletResponse response )
     throws ServletException, IOException
   {
-    File templateFile = getTemplateFile(request);
+    File templateFile;
+    try
+    {
+      templateFile = getTemplateFile(request);
+    }
+    catch ( IllegalArgumentException e )
+    {
+      response.sendError( HttpServletResponse.SC_BAD_REQUEST, "Invalid template path" );
+      return;
+    }
 
     if (! templateFile.exists())
     {
@@ -106,9 +123,22 @@ public class SsTemplateServlet extends HttpServlet
   public File getTemplateFile( HttpServletRequest request )
   {
     String path = request.getServletContext().getRealPath(request.getServletPath());
+    boolean resolvedByContainer = ( path != null );
     if ( path == null )
       path = request.getServletPath();
-    return new File(path);
+    File file = new File(path);
+    if ( resolvedByContainer && canonicalDocRoot != null )
+    {
+      try
+      {
+        PathValidation.assertWithinDirectory(file, canonicalDocRoot);
+      }
+      catch ( IOException e )
+      {
+        throw new IllegalArgumentException("Invalid path: " + request.getServletPath(), e);
+      }
+    }
+    return file;
   }
 
   File getTemplateDirectory(HttpServletRequest request)

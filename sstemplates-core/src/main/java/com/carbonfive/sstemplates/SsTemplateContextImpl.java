@@ -48,6 +48,7 @@ public class SsTemplateContextImpl
 
   private SsTemplateProcessor processor       = null;
   protected File                templateDir     = null;
+  private final String          templateDirCanonicalPath;
   private short[]               backgroundColor = null;
 
   public SsTemplateContextImpl(SsTemplateProcessor processor, File templateDir, ExpressionFactory expressionFactory)
@@ -61,6 +62,14 @@ public class SsTemplateContextImpl
     this.templateDir = templateDir;
     this.expressionFactory = expressionFactory;
     this.variables = ssTemplateVariableMapper;
+    try
+    {
+      this.templateDirCanonicalPath = templateDir.getCanonicalPath();
+    }
+    catch ( IOException e )
+    {
+      throw new RuntimeException("Invalid template directory: " + templateDir, e);
+    }
     initStyles();
   }
 
@@ -89,7 +98,7 @@ public class SsTemplateContextImpl
   public Collection<SsTemplateTag> parseIncludeFile(String path)
     throws SsTemplateException
   {
-    return processor.parseIncludeFile(findFileInTemplateDirectory(path));
+    return processor.parseIncludeFile(findFileInTemplateDirectory(path), templateDirCanonicalPath);
   }
 
   public File findFileInTemplateDirectory(String path)
@@ -97,7 +106,21 @@ public class SsTemplateContextImpl
     String file = ( path == null ? "" : path );
     if ( file.startsWith("/") ) file = file.substring(1);
 
-    return new File(templateDir, file);
+    File resolved = new File(templateDir, file);
+    try
+    {
+      PathValidation.assertWithinDirectory(resolved, templateDirCanonicalPath);
+    }
+    catch ( IOException e )
+    {
+      throw new IllegalArgumentException("Invalid path: " + path, e);
+    }
+    return resolved;
+  }
+
+  public String getTemplateDirCanonicalPath()
+  {
+    return templateDirCanonicalPath;
   }
 
   public void setPageVariable(String key, Object value )

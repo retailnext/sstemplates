@@ -91,8 +91,8 @@ public class SsTemplateProcessor
   public HSSFWorkbook process(File templateDir, File templateFile, Map<String, Object> context)
     throws SsTemplateException
   {
-    WorkbookTag renderTree = retrieveRenderTree(templateFile.getAbsolutePath());
     SsTemplateContext templateContext = new SsTemplateContextImpl(this, templateDir, this.expressionFactory, context);
+    WorkbookTag renderTree = retrieveRenderTree(templateFile.getAbsolutePath(), templateContext.getTemplateDirCanonicalPath());
 
     renderTree.render(templateContext);
     return templateContext.getWorkbook();
@@ -103,15 +103,14 @@ public class SsTemplateProcessor
     return new SsTemplateContextImpl(this, templateDir, this.expressionFactory);
   }
 
-  protected Collection<SsTemplateTag> parseIncludeFile(File templateFile)
+  protected Collection<SsTemplateTag> parseIncludeFile(File templateFile, String trustedRootCanonicalPath)
       throws SsTemplateException
   {
-    if ( ! templateFile.exists() )
+    if ( !templateFile.exists() )
     {
-      throw new SsTemplateException( "Could not find template file: " + templateFile);
+      throw new SsTemplateException( "Could not find template file: " + templateFile.getAbsolutePath());
     }
-
-    WorkbookTag tag = retrieveRenderTree(templateFile.getAbsolutePath());
+    WorkbookTag tag = retrieveRenderTree(templateFile.getAbsolutePath(), trustedRootCanonicalPath);
     return tag.getChildTags();
   }
 
@@ -133,6 +132,16 @@ public class SsTemplateProcessor
   {
     digester = new Digester();
     digester.setValidating(false);
+    try
+    {
+      digester.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+      digester.setFeature("http://xml.org/sax/features/external-general-entities", false);
+      digester.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+    }
+    catch ( javax.xml.parsers.ParserConfigurationException | SAXNotRecognizedException | SAXNotSupportedException e )
+    {
+      throw new SsTemplateException("Error configuring XML parser security features", e);
+    }
     digester.addSetProperties("workbook");
 
     for (Iterator<Class<SsTemplateTag>> it = tags.iterator(); it.hasNext();)
@@ -163,13 +172,31 @@ public class SsTemplateProcessor
 
   public synchronized WorkbookTag retrieveRenderTree( String path ) throws SsTemplateException
   {
-    long fileTimestamp = (new File(path)).lastModified();
-    RenderTreeEntry renderTree = renderTreeCache==null ? null : (RenderTreeEntry) renderTreeCache.get( path );
+    String trustedRoot;
+    try { trustedRoot = new File(path).getCanonicalFile().getParent(); }
+    catch ( IOException e ) { trustedRoot = new File(path).getAbsoluteFile().getParent(); }
+    return retrieveRenderTree(path, trustedRoot);
+  }
+
+  protected synchronized WorkbookTag retrieveRenderTree( String path, String trustedRootCanonicalPath ) throws SsTemplateException
+  {
+    String canonicalPath;
+    try { canonicalPath = new File(path).getCanonicalPath(); }
+    catch ( IOException e ) { canonicalPath = new File(path).getAbsolutePath(); }
+
+    if ( !canonicalPath.startsWith(trustedRootCanonicalPath + File.separator)
+         && !canonicalPath.equals(trustedRootCanonicalPath) )
+    {
+      throw new SsTemplateException("Path traversal not allowed: " + canonicalPath);
+    }
+
+    long fileTimestamp = (new File(canonicalPath)).lastModified();
+    RenderTreeEntry renderTree = renderTreeCache==null ? null : (RenderTreeEntry) renderTreeCache.get( canonicalPath );
     if (( renderTree == null ) || ( renderTree.timestamp < fileTimestamp ))
     {
-      renderTree = new RenderTreeEntry( fileTimestamp, parseRenderTree(path) );
+      renderTree = new RenderTreeEntry( fileTimestamp, parseRenderTree(canonicalPath) );
       if ( renderTreeCache != null )
-        renderTreeCache.put( path, renderTree );
+        renderTreeCache.put( canonicalPath, renderTree );
     }
     return renderTree.tree;
   }
@@ -183,16 +210,14 @@ public class SsTemplateProcessor
     throws SsTemplateException
   {
     WorkbookTag workbook = new WorkbookTag();
-    try
+    try (FileReader fr = new FileReader( path ))
     {
       digester.clear();
       digester.push( workbook );
-      FileReader fr = new FileReader( path );
       digester.parse(fr);
       if ( parseException != null  )
         throw new SsTemplateException( "parse error", parseException );
       parseException = null;
-      fr.close();
     }
     catch ( IOException ioe )
     {
