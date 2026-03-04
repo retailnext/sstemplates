@@ -82,6 +82,8 @@ public abstract class SsTemplateContext extends ELContext
 
   public abstract File findFileInTemplateDirectory(String path);
 
+  public abstract String getTemplateDirCanonicalPath();
+
   public abstract Object getCustomValue(Object key);
 
   public abstract void setCustomValue(Object key, Object value);
