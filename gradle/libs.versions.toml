@@ -1,0 +1,30 @@
+[versions]
+commons-beanutils = "1.11.0"
+commons-digester3 = "3.2"
+commons-lang3 = "3.20.0"
+jakarta-servlet = "6.1.0"
+jakarta-servlet-jsp = "4.0.0"
+juel = "2.2.7"
+junit-jupiter = "6.1.0"
+log4j = "2.26.0"
+poi = "5.5.1"
+spring = "7.0.7"
+
+[libraries]
+commons-beanutils = { module = "commons-beanutils:commons-beanutils", version.ref = "commons-beanutils" }
+commons-digester3 = { module = "org.apache.commons:commons-digester3", version.ref = "commons-digester3" }
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3" }
+jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api", version.ref = "jakarta-servlet" }
+jakarta-servlet-jsp-api = { module = "jakarta.servlet.jsp:jakarta.servlet.jsp-api", version.ref = "jakarta-servlet-jsp" }
+juel-api = { module = "de.odysseus.juel:juel-api", version.ref = "juel" }
+juel-impl = { module = "de.odysseus.juel:juel-impl", version.ref = "juel" }
+juel-spi = { module = "de.odysseus.juel:juel-spi", version.ref = "juel" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+poi = { module = "org.apache.poi:poi", version.ref = "poi" }
+spring-core = { module = "org.springframework:spring-core", version.ref = "spring" }
+spring-test = { module = "org.springframework:spring-test", version.ref = "spring" }
+spring-web = { module = "org.springframework:spring-web", version.ref = "spring" }
