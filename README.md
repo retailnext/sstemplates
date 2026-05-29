@@ -12,10 +12,19 @@ work with updated dependencies.
 
 ## Using this Library
 
-Only the `ssetemplates-core` package is published.
+Only the `sstemplates-core` package is published.
 
 Releases starting with 2.x are published to Maven Central in addition to GitHub Packages.
 See the [Releases on GitHub](https://github.com/retailnext/sstemplates/releases) for current dependency
 management information.
 
 Snapshots are published to [GitHub Packages](https://github.com/orgs/retailnext/packages?repo_name=sstemplates).
+
+## Building
+
+This project uses [Gradle](https://gradle.org/). The Gradle wrapper is included so no
+separate installation is needed.
+
+```sh
+./gradlew build
+```
