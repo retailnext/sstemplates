@@ -6,6 +6,6 @@ dependencies {
     implementation(project(":sstemplates-core"))
     implementation(libs.poi)
 
-    providedCompile(libs.jakarta.servlet.api)
-    providedCompile(libs.jakarta.servlet.jsp.api)
+    compileOnly(libs.jakarta.servlet.api)
+    compileOnly(libs.jakarta.servlet.jsp.api)
 }

@@ -82,7 +82,7 @@ publishing {
 signing {
     val signingKey = providers.gradleProperty("signingInMemoryKey").orNull
     val signingPassword = providers.gradleProperty("signingInMemoryKeyPassword").orNull
-    if (signingKey != null) {
+    if (!signingKey.isNullOrBlank()) {
         useInMemoryPgpKeys(signingKey, signingPassword)
         sign(publishing.publications["mavenJava"])
     }
