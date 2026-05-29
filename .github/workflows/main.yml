@@ -32,7 +32,7 @@ jobs:
       - name: Upload coverage report
         uses: actions/upload-code-coverage@abb5995db9e0199b0e2bb9dbd136fce4cb1ec4d3 # v1.3.0
         with:
-          report: build/reports/jacoco/testCodeCoverageReport/cobertura-testCodeCoverageReport.xml
+          file: build/reports/jacoco/testCodeCoverageReport/cobertura-testCodeCoverageReport.xml
           language: Java
           label: code-coverage/jacoco
       - name: Publish Snapshot
