@@ -40,7 +40,7 @@ jobs:
         with: # running setup-java again overwrites the settings.xml
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
-          server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
+          server-id: central # must match central-publishing-maven-plugin publishingServerId
           server-username: MAVEN_USERNAME # env variable for username in deploy
           server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
       - name: Deploy Release to Maven Central
