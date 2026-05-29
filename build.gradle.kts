@@ -1,9 +1,28 @@
 plugins {
     id("com.gradleup.nmcp.aggregation")
+    id("jacoco-report-aggregation")
+    id("name.remal.jacoco-to-cobertura")
 }
 
 group = "net.retailnext"
 version = providers.gradleProperty("version").getOrElse("2.0.0-SNAPSHOT")
+
+dependencies {
+    jacocoAggregation(project(":sstemplates-core"))
+    jacocoAggregation(project(":sstemplates-examples"))
+}
+
+repositories {
+    mavenCentral()
+}
+
+reporting {
+    reports {
+        val testCodeCoverageReport by creating(JacocoCoverageReport::class) {
+            testSuiteName = "test"
+        }
+    }
+}
 
 subprojects {
     group = rootProject.group
@@ -14,6 +33,8 @@ subprojects {
     }
 
     plugins.withType<JavaPlugin> {
+        apply(plugin = "jacoco")
+
         extensions.configure<JavaPluginExtension> {
             toolchain {
                 languageVersion = JavaLanguageVersion.of(17)

@@ -1,3 +1,9 @@
+pluginManagement {
+    plugins {
+        id("name.remal.jacoco-to-cobertura") version "2.0.3"
+    }
+}
+
 plugins {
     id("com.gradleup.nmcp.settings") version "1.5.0"
 }
