@@ -1,6 +1,6 @@
 pluginManagement {
     plugins {
-        id("name.remal.jacoco-to-cobertura") version "2.0.3"
+        id("name.remal.jacoco-to-cobertura") version "2.0.4"
     }
 }
 
