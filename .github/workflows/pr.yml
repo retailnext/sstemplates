@@ -29,7 +29,7 @@ jobs:
           report_paths: '**/build/test-results/test/TEST-*.xml'
       - name: Upload coverage report
         if: github.event.pull_request.head.repo.full_name == github.repository
-        uses: actions/upload-code-coverage@a72ab75b4dee0e479386fb9bf33c8dcf64b9c772 # v1.4.0
+        uses: actions/upload-code-coverage@1c15be36fc3733ba839b1dd643bd9556e4426dc1 # v1.4.1
         with:
           file: build/reports/jacoco/testCodeCoverageReport/cobertura-testCodeCoverageReport.xml
           language: Java
